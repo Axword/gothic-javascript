@@ -32,27 +32,30 @@ export class Player extends Phaser.GameObjects.Container {
   public currentCombatMode: 'idle' | 'melee' | 'ranged' | 'magic' = 'idle';
   private direction: 'down' | 'up' | 'left' | 'right' = 'down';
   
-  private bodySprite: Phaser.GameObjects.Rectangle;
-  private weaponSprite: Phaser.GameObjects.Rectangle;
+  private sprite!: Phaser.GameObjects.Image;
   private label: Phaser.GameObjects.Text;
+
+  getDirectionFrame(): number {
+    const frames: Record<string, number> = { 'down': 0, 'left': 1, 'right': 2, 'up': 3 };
+    return frames[this.direction] || 0;
+  }
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y);
     
-    // Ciało gracza - brązowa postać
-    this.bodySprite = scene.add.rectangle(0, 0, 20, 28, 0x6b4423);
-    this.add(this.bodySprite);
+    // Use sprite texture from ProceduralAssets
+    if (scene.textures.exists('char_player')) {
+      this.sprite = scene.add.image(0, 0, 'char_player', 0);
+      this.sprite.setOrigin(0.5, 0.5);
+    } else {
+      // Fallback rectangle
+      const rect = scene.add.rectangle(0, 0, 20, 28, 0x6b4423);
+      this.add(rect);
+      this.sprite = rect as any;
+    }
+    this.add(this.sprite);
     
-    // Głowa
-    const head = scene.add.rectangle(0, -16, 14, 14, 0xd4a574);
-    this.add(head);
-    
-    // Broń (placeholder)
-    this.weaponSprite = scene.add.rectangle(16, 0, 4, 20, 0x888888);
-    this.weaponSprite.setVisible(false);
-    this.add(this.weaponSprite);
-    
-    // Etykieta
+    // Label
     this.label = scene.add.text(0, -30, '', {
       fontSize: '10px',
       color: '#ffffff',
@@ -72,8 +75,9 @@ export class Player extends Phaser.GameObjects.Container {
 
   setDirection(dir: 'down' | 'up' | 'left' | 'right') {
     this.direction = dir;
-    // Obrót sprite'a
-    this.bodySprite.setRotation(dir === 'right' ? 0 : dir === 'left' ? Math.PI : dir === 'up' ? Math.PI : 0);
+    if (this.sprite && 'setFrame' in this.sprite) {
+      (this.sprite as Phaser.GameObjects.Image).setFrame(this.getDirectionFrame());
+    }
   }
 
   getDirection() { return this.direction; }
@@ -99,31 +103,19 @@ export class Player extends Phaser.GameObjects.Container {
   }
 
   takeDamage(amount: number): number {
-    const effectiveArmor = this.armor * 1; // 1 pkt armor = 1% redukcji... let's use simpler formula
     const reduction = Math.min(this.armor * 0.5, amount * 0.5);
     const finalDamage = Math.max(1, Math.floor(amount - reduction));
     this.hp -= finalDamage;
-    if (this.hp <= 0) {
-      this.hp = 0;
-      this.isAlive = false;
-    }
+    if (this.hp <= 0) { this.hp = 0; this.isAlive = false; }
     return finalDamage;
   }
 
-  heal(amount: number) {
-    this.hp = Math.min(this.maxHp, this.hp + amount);
-  }
-
-  restoreMana(amount: number) {
-    this.mana = Math.min(this.maxMana, this.mana + amount);
-  }
+  heal(amount: number) { this.hp = Math.min(this.maxHp, this.hp + amount); }
+  restoreMana(amount: number) { this.mana = Math.min(this.maxMana, this.mana + amount); }
 
   addXp(amount: number): boolean {
     this.xp += amount;
-    if (this.xp >= this.xpToNext) {
-      this.levelUp();
-      return true;
-    }
+    if (this.xp >= this.xpToNext) { this.levelUp(); return true; }
     return false;
   }
 
@@ -131,18 +123,12 @@ export class Player extends Phaser.GameObjects.Container {
     this.xp -= this.xpToNext;
     this.level++;
     this.xpToNext = Math.floor(100 * Math.pow(1.5, this.level - 1));
-    this.maxHp += 10;
-    this.hp = this.maxHp;
-    this.maxMana += 5;
-    this.skillPoints += 2;
-    this.mana = this.maxMana;
+    this.maxHp += 10; this.hp = this.maxHp;
+    this.maxMana += 5; this.skillPoints += 2; this.mana = this.maxMana;
   }
 
   addToInventory(itemId: string, count: number = 1) {
-    if (!this.inventoryCounts[itemId]) {
-      this.inventory.push(itemId);
-      this.inventoryCounts[itemId] = 0;
-    }
+    if (!this.inventoryCounts[itemId]) { this.inventory.push(itemId); this.inventoryCounts[itemId] = 0; }
     this.inventoryCounts[itemId] = (this.inventoryCounts[itemId] || 0) + count;
   }
 
@@ -156,44 +142,30 @@ export class Player extends Phaser.GameObjects.Container {
     return true;
   }
 
-  getItemCount(itemId: string): number {
-    return this.inventoryCounts[itemId] || 0;
-  }
+  getItemCount(itemId: string): number { return this.inventoryCounts[itemId] || 0; }
 
-  /** Zwraca dane do zapisu */
   getSaveData() {
     return {
-      x: this.x, y: this.y,
-      hp: this.hp, maxHp: this.maxHp,
+      x: this.x, y: this.y, hp: this.hp, maxHp: this.maxHp,
       mana: this.mana, maxMana: this.maxMana,
       strength: this.strength, dexterity: this.dexterity,
       level: this.level, xp: this.xp,
       skillPoints: this.skillPoints, gold: this.gold,
-      equippedWeapon: this.equippedWeapon,
-      equippedArmor: this.equippedArmor,
-      knownSpells: this.knownSpells,
-      faction: this.faction,
-      reputation: { ...this.reputation },
-      inventory: [...this.inventory],
-      inventoryCounts: { ...this.inventoryCounts },
-      skillRanks: { ...this.skillRanks }
+      equippedWeapon: this.equippedWeapon, equippedArmor: this.equippedArmor,
+      knownSpells: this.knownSpells, faction: this.faction,
+      reputation: { ...this.reputation }, inventory: [...this.inventory],
+      inventoryCounts: { ...this.inventoryCounts }, skillRanks: { ...this.skillRanks }
     };
   }
 
   loadSaveData(data: any) {
-    this.hp = data.hp; this.maxHp = data.maxHp;
-    this.mana = data.mana; this.maxMana = data.maxMana;
+    this.hp = data.hp; this.maxHp = data.maxHp; this.mana = data.mana; this.maxMana = data.maxMana;
     this.strength = data.strength; this.dexterity = data.dexterity;
-    this.level = data.level; this.xp = data.xp;
-    this.skillPoints = data.skillPoints; this.gold = data.gold;
-    this.equippedWeapon = data.equippedWeapon;
-    this.equippedArmor = data.equippedArmor;
-    this.knownSpells = data.knownSpells || [];
-    this.faction = data.faction;
-    this.reputation = data.reputation || {};
-    this.inventory = data.inventory || [];
-    this.inventoryCounts = data.inventoryCounts || {};
-    this.skillRanks = data.skillRanks || {};
+    this.level = data.level; this.xp = data.xp; this.skillPoints = data.skillPoints; this.gold = data.gold;
+    this.equippedWeapon = data.equippedWeapon; this.equippedArmor = data.equippedArmor;
+    this.knownSpells = data.knownSpells || []; this.faction = data.faction;
+    this.reputation = data.reputation || {}; this.inventory = data.inventory || [];
+    this.inventoryCounts = data.inventoryCounts || {}; this.skillRanks = data.skillRanks || {};
     this.xpToNext = Math.floor(100 * Math.pow(1.5, this.level - 1));
     this.setPosition(data.x, data.y);
   }

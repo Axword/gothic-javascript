@@ -154,41 +154,74 @@ export class GameScene extends Phaser.Scene {
     const width = this.cameras.main.width * 4;
     const height = this.cameras.main.height * 4;
     
-    this.groundLayer = this.add.tileSprite(0, 0, width, height, '__DEFAULT');
+    // Use generated grass tile texture
+    if (this.textures.exists('tile_grass')) {
+      this.groundLayer = this.add.tileSprite(0, 0, width, height, 'tile_grass');
+    } else {
+      this.groundLayer = this.add.tileSprite(0, 0, width, height, '__DEFAULT');
+      this.groundLayer.setTint(0x3a5a2a);
+    }
     this.groundLayer.setOrigin(0, 0);
-    this.groundLayer.setTint(0x3a5a2a);
     
-    this.add.rectangle(0, 0, width, height, 0xffffff, 0.1).setOrigin(0, 0);
+    // Road layer
+    if (this.textures.exists('tile_road')) {
+      const road = this.add.tileSprite(240, 230, 60, 500, 'tile_road');
+      road.setOrigin(0, 0);
+      road.setDepth(0);
+    }
+    
     this.addProceduralDecorations(width, height);
   }
 
   addProceduralDecorations(width: number, height: number) {
     const rng = new Phaser.Math.RandomDataGenerator(['gothic']);
     
-    for (let i = 0; i < 80; i++) {
-      const x = rng.between(50, width - 50);
-      const y = rng.between(50, height - 50);
-      const treeHeight = rng.between(40, 70);
-      const treeColor = Phaser.Display.Color.GetColor(rng.between(20, 60), rng.between(60, 120), rng.between(20, 50));
-      this.add.rectangle(x - 3, y, 6, treeHeight * 0.4, 0x3d2b1f).setDepth(y);
-      this.add.circle(x, y - treeHeight * 0.3, treeHeight * 0.3, treeColor).setDepth(y + 1);
+    // Trees using generated texture
+    if (this.textures.exists('tree')) {
+      for (let i = 0; i < 50; i++) {
+        const x = rng.between(50, width - 50);
+        const y = rng.between(50, height - 50);
+        // Avoid building areas
+        if (Math.abs(x-200) < 100 && Math.abs(y-200) < 80) continue;
+        if (Math.abs(x-700) < 90 && Math.abs(y-400) < 70) continue;
+        const tree = this.add.image(x, y, 'tree');
+        tree.setDepth(y);
+        tree.setScale(rng.between(8, 12) / 10);
+      }
+    } else {
+      // Fallback circles
+      for (let i = 0; i < 50; i++) {
+        const x = rng.between(50, width - 50);
+        const y = rng.between(50, height - 50);
+        this.add.circle(x, y - 10, rng.between(8, 16), 0x2a5a2a).setDepth(y);
+      }
     }
-    for (let i = 0; i < 30; i++) {
-      const x = rng.between(50, width - 50);
-      const y = rng.between(50, height - 50);
-      this.add.circle(x, y, rng.between(8, 18), 0x666666).setDepth(y);
+    
+    // Rocks
+    if (this.textures.exists('rock')) {
+      for (let i = 0; i < 20; i++) {
+        const x = rng.between(50, width - 50);
+        const y = rng.between(50, height - 50);
+        this.add.image(x, y, 'rock').setDepth(y);
+      }
+    } else {
+      for (let i = 0; i < 20; i++) {
+        const x = rng.between(50, width - 50);
+        const y = rng.between(50, height - 50);
+        this.add.circle(x, y, rng.between(8, 18), 0x666666).setDepth(y);
+      }
     }
     
     this.addBuilding(200, 200, 120, 80, 0x5a4a3a, 'Gród Straży');
     this.addBuilding(700, 400, 100, 70, 0x6b4a2a, 'Wolne Chaty');
     
-    // Cmentarzysko
+    // Location labels
     this.add.text(800, 150, 'Cmentarzysko', { fontSize: '9px', color: '#666666' }).setOrigin(0.5).setDepth(1);
-    // Zapadlisko
     this.add.text(1200, 700, 'Zapadlisko', { fontSize: '9px', color: '#445533' }).setOrigin(0.5).setDepth(1);
-    // Szczelina
     this.add.text(1300, 200, 'Szczelina', { fontSize: '9px', color: '#442244' }).setOrigin(0.5).setDepth(1);
+    this.add.text(150, 480, 'Mokra Plaża', { fontSize: '9px', color: '#889966' }).setOrigin(0.5).setDepth(1);
     
+    // Path
     const pathGraphics = this.add.graphics();
     pathGraphics.lineStyle(4, 0x8b7355, 0.6);
     pathGraphics.beginPath();
@@ -196,6 +229,9 @@ export class GameScene extends Phaser.Scene {
     pathGraphics.lineTo(700, 400);
     pathGraphics.strokePath();
     pathGraphics.setDepth(0);
+    
+    // Activate night overlay if needed
+    this.add.rectangle(0, 0, width, height, 0x000022, 0).setOrigin(0, 0).setDepth(95).setName('nightOverlay');
   }
 
   addBuilding(x: number, y: number, w: number, h: number, color: number, label: string) {

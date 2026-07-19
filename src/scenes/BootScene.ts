@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { DataLoader, LoadedData } from '../systems/DataLoader';
 import { SaveSystem } from '../systems/SaveSystem';
 import { TimeSystem } from '../systems/TimeSystem';
+import { ProceduralAssets } from '../systems/ProceduralAssets';
 
 export class BootScene extends Phaser.Scene {
   private dataLoader!: DataLoader;
@@ -50,14 +51,13 @@ export class BootScene extends Phaser.Scene {
   }
 
   generateProceduralTextures() {
-    // Tekstura domyślna dla tileSprite
+    // Legacy default texture
     const canvas = this.textures.createCanvas('__DEFAULT', 32, 32);
     if (!canvas) return;
     const ctx = canvas.getContext();
     if (!ctx) return;
     ctx.fillStyle = '#3a5a2a';
     ctx.fillRect(0, 0, 32, 32);
-    // Ziarnistość
     for (let i = 0; i < 20; i++) {
       const x = Math.floor(Math.random() * 32);
       const y = Math.floor(Math.random() * 32);
@@ -66,6 +66,10 @@ export class BootScene extends Phaser.Scene {
       ctx.fillRect(x, y, 1, 1);
     }
     canvas.refresh();
+    
+    // Generate ALL game assets
+    const assets = new ProceduralAssets(this);
+    assets.generateAll();
   }
 
   async create() {

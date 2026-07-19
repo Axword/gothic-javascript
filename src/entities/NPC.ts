@@ -10,7 +10,7 @@ export class NPC extends Phaser.GameObjects.Container {
   public faction: Faction;
   public isHostile: boolean = false;
   
-  private bodySprite: Phaser.GameObjects.Rectangle;
+  private sprite!: Phaser.GameObjects.Image;
   private label: Phaser.GameObjects.Text;
   private dialogBubble: Phaser.GameObjects.Container | null = null;
   private moveTarget: { x: number; y: number } | null = null;
@@ -18,33 +18,46 @@ export class NPC extends Phaser.GameObjects.Container {
   private scheduleIndex: number = 0;
   private scheduleTimer: number = 0;
 
+  private getTextureKey(): string {
+    if (this.npcData.is_merchant) return 'char_merchant';
+    if (this.faction === 'old_order') {
+      if (this.npcData.role?.toLowerCase().includes('komendant') || this.npcData.role?.toLowerCase().includes('dowódca')) return 'char_old_commander';
+      if (this.npcData.gender === 'female') return 'char_old_guard_f';
+      return 'char_old_guard';
+    }
+    if (this.faction === 'new_order') {
+      if (this.npcData.title === 'Sęp' || this.npcData.role?.toLowerCase().includes('przywódca')) return 'char_new_leader';
+      if (this.npcData.gender === 'female') return 'char_new_fighter_f';
+      return 'char_new_fighter';
+    }
+    if (this.faction === 'bandit') return 'char_bandit';
+    if (this.npcData.gender === 'female') return 'char_female';
+    return 'char_neutral';
+  }
+
   constructor(scene: Phaser.Scene, x: number, y: number, data: NpcData) {
     super(scene, x, y);
     this.npcData = data;
     this.hp = data.stats?.hp || 30;
     this.faction = data.faction;
     
-    // Kolory frakcji
-    let bodyColor = 0x888888;
-    if (data.faction === 'old_order') bodyColor = 0x4444aa;
-    else if (data.faction === 'new_order') bodyColor = 0xaa4444;
-    else if (data.faction === 'bandit') bodyColor = 0x664422;
+    // Use sprite texture
+    const texKey = this.getTextureKey();
+    if (scene.textures.exists(texKey)) {
+      this.sprite = scene.add.image(0, 0, texKey, 0);
+      this.sprite.setOrigin(0.5, 0.5);
+    } else {
+      // Fallback colored rect
+      const colors: Record<string, number> = { old_order: 0x4444aa, new_order: 0xaa4444, neutral: 0x888888, bandit: 0x664422 };
+      const rect = scene.add.rectangle(0, 0, 18, 26, colors[data.faction] || 0x888888);
+      this.add(rect);
+      this.sprite = rect as any;
+    }
+    this.add(this.sprite);
     
-    // Ciało NPC
-    this.bodySprite = scene.add.rectangle(0, 0, 18, 26, bodyColor);
-    this.add(this.bodySprite);
-    
-    // Głowa
-    const headColor = data.gender === 'female' ? 0xd4a574 : 0xc4956a;
-    const head = scene.add.rectangle(0, -15, 12, 12, headColor);
-    this.add(head);
-    
-    // Etykieta
+    // Label
     this.label = scene.add.text(0, -28, data.name, {
-      fontSize: '9px',
-      color: '#ffffff',
-      stroke: '#000000',
-      strokeThickness: 2
+      fontSize: '9px', color: '#ffffff', stroke: '#000000', strokeThickness: 2
     }).setOrigin(0.5);
     this.add(this.label);
     
@@ -56,15 +69,10 @@ export class NPC extends Phaser.GameObjects.Container {
     body.setOffset(-9, -13);
     body.setCollideWorldBounds(true);
     
-    // Podświetlenie interakcji
     this.setSize(32, 32);
     this.setInteractive({ useHandCursor: true });
-    this.on('pointerover', () => {
-      this.bodySprite.setStrokeStyle(2, 0xffff00);
-    });
-    this.on('pointerout', () => {
-      this.bodySprite.setStrokeStyle(0);
-    });
+    this.on('pointerover', () => { this.sprite.setTint(0xffff88); });
+    this.on('pointerout', () => { this.sprite.clearTint(); });
   }
 
   update(delta: number, player: Player) {
@@ -140,7 +148,7 @@ export class NPC extends Phaser.GameObjects.Container {
 
   destroy() {
     this.label.destroy();
-    this.bodySprite.destroy();
+    this.sprite.destroy();
     super.destroy();
   }
 }
