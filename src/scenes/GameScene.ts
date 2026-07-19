@@ -5,6 +5,7 @@ import { Monster } from '../entities/Monster';
 import { DataLoader, LoadedData } from '../systems/DataLoader';
 import { TimeSystem } from '../systems/TimeSystem';
 import { SaveSystem } from '../systems/SaveSystem';
+import { QuestSystem } from '../systems/QuestSystem';
 
 export class GameScene extends Phaser.Scene {
   public player!: Player;
@@ -13,6 +14,7 @@ export class GameScene extends Phaser.Scene {
   public dataLoader!: DataLoader;
   public timeSystem!: TimeSystem;
   public saveSystem!: SaveSystem;
+  public questSystem!: QuestSystem;
   public gameData!: LoadedData;
   
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
@@ -22,6 +24,9 @@ export class GameScene extends Phaser.Scene {
   private groundLayer!: Phaser.GameObjects.TileSprite;
   private debugText!: Phaser.GameObjects.Text;
   private isPaused: boolean = false;
+  private attackCooldown: number = 0;
+  private attackRange: number = 40;
+  private xpPopup: Phaser.GameObjects.Text | null = null;
 
   constructor() {
     super({ key: 'GameScene' });
@@ -32,6 +37,7 @@ export class GameScene extends Phaser.Scene {
     this.timeSystem = data.timeSystem || new TimeSystem();
     this.saveSystem = data.saveSystem || new SaveSystem();
     this.gameData = data.gameData || await this.dataLoader.loadAll();
+    this.questSystem = new QuestSystem(this.gameData);
   }
 
   create() {
@@ -98,6 +104,13 @@ export class GameScene extends Phaser.Scene {
     // Przyciski szybkiego zapisu
     this.keys.F5.on('down', () => this.quickSave());
     this.keys.F9.on('down', () => this.quickLoad());
+    
+    // Atak lewym przyciskiem myszy
+    this.input.on('pointerdown', (pointer: Phaser.Input.Pointer) => {
+      if (pointer.leftButtonDown()) {
+        this.playerAttack();
+      }
+    });
   }
 
   generateProceduralMap() {
@@ -284,6 +297,9 @@ export class GameScene extends Phaser.Scene {
     
     // Time
     this.timeSystem.update(delta);
+    
+    // Atak cooldown
+    if (this.attackCooldown > 0) this.attackCooldown -= delta;
   }
 
   checkInteraction() {
@@ -327,16 +343,106 @@ export class GameScene extends Phaser.Scene {
   }
 
   lootMonster(monster: Monster) {
-    // Proste lootowanie
     const items = monster.getLoot();
+    let msg = '';
     for (const itemId of items) {
       this.player.addToInventory(itemId);
+      msg += `${itemId}, `;
     }
     const event = new CustomEvent('game:message', { 
-      detail: `Zdobyto łup: ${items.length} przedmiotów` 
+      detail: `Łup: ${msg}${this.player.gold > 0 ? `złoto: ${this.player.gold}` : ''}` 
     });
     window.dispatchEvent(event);
     monster.destroy();
+  }
+
+  /** Gracz atakuje najbliższego potwora lub NPC */
+  playerAttack() {
+    if (this.attackCooldown > 0) return;
+    
+    // Szukaj celu w zasięgu przed graczem
+    let target: Monster | null = null;
+    let targetDist = this.attackRange;
+    
+    for (const monster of this.monsters) {
+      if (!monster.isAlive) continue;
+      const dist = Phaser.Math.Distance.Between(this.player.x, this.player.y, monster.x, monster.y);
+      if (dist < targetDist) {
+        targetDist = dist;
+        target = monster;
+      }
+    }
+    
+    // Ustaw cooldown (szybkość broni)
+    this.attackCooldown = 500; // ms
+    
+    // Animacja ataku
+    this.tweens.add({
+      targets: this.player,
+      scaleX: 1.3,
+      scaleY: 0.8,
+      duration: 80,
+      yoyo: true,
+    });
+    
+    if (target) {
+      // Oblicz obrażenia
+      const baseDmg = 8; // bazowe obrażenia bez broni
+      const strBonus = Math.floor(this.player.strength * 1.5);
+      const totalDmg = Math.max(1, baseDmg + strBonus);
+      
+      const killed = target.takeDamage(totalDmg);
+      
+      // Komunikat o trafieniu
+      const event = new CustomEvent('game:playerHit', { 
+        detail: { damage: totalDmg, target: 'potwór' } 
+      });
+      window.dispatchEvent(event);
+      
+      // Odbicie potwora
+      const knockAngle = Phaser.Math.Angle.Between(target.x, target.y, this.player.x, this.player.y);
+      this.tweens.add({
+        targets: target,
+        x: target.x + Math.cos(knockAngle) * 15,
+        y: target.y + Math.sin(knockAngle) * 15,
+        duration: 100,
+        ease: 'Power2'
+      });
+      
+      if (killed) {
+        this.player.addXp(target.monsterData.stats.xp_reward);
+        this.player.gold += Phaser.Math.Between(1, 5);
+        
+        const event2 = new CustomEvent('game:message', { 
+          detail: `Pokonano ${target.monsterData.name}! +${target.monsterData.stats.xp_reward} XP` 
+        });
+        window.dispatchEvent(event2);
+        
+        // Popup XP
+        this.showXpPopup(target.x, target.y, `+${target.monsterData.stats.xp_reward} XP`);
+      }
+    } else {
+      // Atak w powietrze
+      const event = new CustomEvent('game:message', { detail: 'Ciach! (pusto)' });
+      window.dispatchEvent(event);
+    }
+  }
+  
+  private showXpPopup(x: number, y: number, text: string) {
+    const popup = this.add.text(x, y - 20, text, {
+      fontSize: '10px',
+      color: '#ffcc00',
+      stroke: '#000000',
+      strokeThickness: 2
+    }).setOrigin(0.5);
+    
+    this.tweens.add({
+      targets: popup,
+      y: y - 50,
+      alpha: 0,
+      duration: 1000,
+      onComplete: () => popup.destroy()
+    });
   }
 
   togglePause() {

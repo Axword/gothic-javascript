@@ -113,5 +113,118 @@
       "fight": "Staję na arenie. Czas pokazać, co potrafię.",
       "complete": "Próba zdana. Komendant uzna mnie za swojego."
     }
+  },
+  {
+    "id": "quest_old_04",
+    "title": "Oko Komendanta",
+    "description": "Szpieguj Wolne Chaty i przynieś informacje o ich planach.",
+    "type": "old_faction",
+    "faction": "old_order",
+    "prerequisites": [{ "type": "quest_state", "quest_id": "quest_old_02", "state": "completed" }],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Komendant podejrzewa, że Wolni szykują atak. Każe ci szpiegować.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_komendant", "description": "Porozmawiaj z Komendantem o szpiegowaniu" }],
+        "next_stage_on_complete": "recon",
+        "rewards": { "xp": 40, "gold": 20 }
+      },
+      "recon": {
+        "id": "recon",
+        "description": "Udaj się do Wolnych Chat i zbierz informacje.",
+        "objectives": [
+          { "type": "reach", "target_id": "loc_free_village", "description": "Idź do Wolnych Chat" },
+          { "type": "talk_to", "target_id": "npc_free_bartender", "description": "Wysłuchaj plotek u barmana" }
+        ],
+        "alternative_solutions": [
+          {
+            "description": "Przekup kogoś z Wolnych, by zdradził plany.",
+            "conditions": [{ "type": "has_item", "item_id": "misc_gold" }],
+            "result_stage": "bribe_info"
+          },
+          {
+            "description": "Zakradnij się do skrzyni Sępa i znajdź mapy.",
+            "conditions": [{ "type": "skill", "skill_id": "lockpicking", "min_skill_rank": 1 }],
+            "result_stage": "steal_maps"
+          }
+        ],
+        "next_stage_on_complete": "report_back",
+        "rewards": { "xp": 60, "gold": 30 }
+      },
+      "bribe_info": {
+        "id": "bribe_info",
+        "description": "Kupiłeś informacje. Wolni planują atak na magazyn.",
+        "objectives": [],
+        "next_stage_on_complete": "report_back",
+        "rewards": { "xp": 30, "gold": -30 }
+      },
+      "steal_maps": {
+        "id": "steal_maps",
+        "description": "Znalazłeś mapy. Wolni planują uderzyć w trakcie dostawy.",
+        "objectives": [],
+        "next_stage_on_complete": "report_back",
+        "rewards": { "xp": 70, "gold": 40 }
+      },
+      "report_back": {
+        "id": "report_back",
+        "description": "Wróć do Komendanta z informacjami.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_komendant", "description": "Zamelduj Komendantowi" }],
+        "rewards": { "xp": 60, "gold": 80, "reputation_changes": { "old_order": 20 } }
+      }
+    },
+    "journal_entries": {
+      "start": "Komendant każe mi szpiegować Wolnych. Niebezpieczna gra.",
+      "recon": "W Wolnych Chatach trzeba być ostrożnym. Ktoś może mnie wydać.",
+      "report_back": "Informacje zdobyte. Komendant będzie zadowolony."
+    }
+  },
+  {
+    "id": "quest_old_05",
+    "title": "Pieczęć na Szczelinę",
+    "description": "Zdobądź rzadki składnik do pieczęci zamykającej Szczelinę.",
+    "type": "old_faction",
+    "faction": "old_order",
+    "prerequisites": [{ "type": "quest_state", "quest_id": "quest_old_03", "state": "completed" }],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Komendant wierzy, że Szczelinę można zamknąć pieczęcią. Potrzebuje kamienia z serca góry.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_komendant", "description": "Dowiedz się o składniku" }],
+        "next_stage_on_complete": "fetch",
+        "rewards": { "xp": 50, "gold": 30 }
+      },
+      "fetch": {
+        "id": "fetch",
+        "description": "Znajdź Kamień Serca w Głuchodole.",
+        "objectives": [
+          { "type": "reach", "target_id": "loc_mountains", "description": "Dotrzyj do Głuchodołu" },
+          { "type": "collect", "target_id": "misc_quest_artifact", "target_count": 1, "description": "Znajdź Kamień Serca" }
+        ],
+        "next_stage_on_complete": "fight",
+        "rewards": { "xp": 60, "gold": 40 }
+      },
+      "fight": {
+        "id": "fight",
+        "description": "Kamienia strzeże Piaszczak. Musisz go pokonać.",
+        "objectives": [
+          { "type": "kill", "target_id": "monster_sand_wyrm", "target_count": 1, "description": "Pokonaj Piaszczaka" }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": { "xp": 120, "gold": 60 }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Kamień dostarczony. Komendant zaczyna przygotowania do pieczęci.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_komendant", "description": "Dostarcz kamień Komendantowi" }],
+        "rewards": { "xp": 80, "gold": 100, "skill_points": 2, "reputation_changes": { "old_order": 30 } }
+      }
+    },
+    "journal_entries": {
+      "start": "Do zamknięcia Szczeliny potrzebny jest Kamień Serca z Głuchodołu.",
+      "fetch": "W górach czai się niebezpieczeństwo. Kamień strzeżony przez bestię.",
+      "complete": "Kamień dostarczony. Szczelina wkrótce zostanie zamknięta."
+    }
   }
 ]

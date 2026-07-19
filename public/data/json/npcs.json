@@ -6,14 +6,46 @@
     "gender": "male",
     "faction": "neutral",
     "title": "Stary rozbitek",
-    "stats": { "hp": 30, "max_hp": 30, "mana": 0, "max_mana": 0, "strength": 4, "dexterity": 3, "armor": 1, "magic_resist": 0, "level": 1, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": { "weapon": "sword_rusted_dagger" },
-    "inventory": ["potion_healing_small", "misc_gold"],
+    "stats": {
+      "hp": 30,
+      "max_hp": 30,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 4,
+      "dexterity": 3,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 1,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_rusted_dagger"
+    },
+    "inventory": [
+      "potion_healing_small",
+      "misc_gold"
+    ],
     "default_dialog": "dialog_beach_survivor_greeting",
-    "dialogs": ["dialog_beach_survivor_greeting", "dialog_beach_survivor_quest"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_main_arrival"],
-    "spawn_position": { "x": 400, "y": 480, "location_id": "loc_beach" },
+    "dialogs": [
+      "dialog_beach_survivor_greeting",
+      "dialog_beach_survivor_quest"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_main_arrival"
+    ],
+    "spawn_position": {
+      "x": 400,
+      "y": 480,
+      "location_id": "loc_beach"
+    },
     "is_essential": true
   },
   {
@@ -23,14 +55,50 @@
     "gender": "male",
     "faction": "old_order",
     "title": "Komendant",
-    "stats": { "hp": 200, "max_hp": 200, "mana": 0, "max_mana": 0, "strength": 24, "dexterity": 12, "armor": 16, "magic_resist": 5, "level": 12, "xp": 0, "xp_to_next": 500, "skill_points": 0 },
-    "equipment": { "weapon": "sword_executioner", "armor": "armor_iron_plate" },
-    "inventory": ["potion_healing_large", "misc_gold"],
+    "stats": {
+      "hp": 200,
+      "max_hp": 200,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 24,
+      "dexterity": 12,
+      "armor": 16,
+      "magic_resist": 5,
+      "level": 12,
+      "xp": 0,
+      "xp_to_next": 500,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_executioner",
+      "armor": "armor_iron_plate"
+    },
+    "inventory": [
+      "potion_healing_large",
+      "misc_gold"
+    ],
     "default_dialog": "dialog_old_komendant_greeting",
-    "dialogs": ["dialog_old_komendant_greeting", "dialog_old_komendant_quest", "dialog_old_komendant_join"],
-    "crime_reaction": { "witness_threshold": 300, "alert_range": 500, "reaction": "attack", "reputation_change": -20 },
-    "quest_ids": ["quest_old_01", "quest_old_02", "quest_old_03"],
-    "spawn_position": { "x": 300, "y": 300, "location_id": "loc_old_fort" },
+    "dialogs": [
+      "dialog_old_komendant_greeting",
+      "dialog_old_komendant_quest",
+      "dialog_old_komendant_join"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 300,
+      "alert_range": 500,
+      "reaction": "attack",
+      "reputation_change": -20
+    },
+    "quest_ids": [
+      "quest_old_01",
+      "quest_old_02",
+      "quest_old_03"
+    ],
+    "spawn_position": {
+      "x": 300,
+      "y": 300,
+      "location_id": "loc_old_fort"
+    },
     "is_essential": true
   },
   {
@@ -40,430 +108,2892 @@
     "gender": "male",
     "faction": "old_order",
     "title": "Mistrz Grot",
-    "stats": { "hp": 150, "max_hp": 150, "mana": 0, "max_mana": 0, "strength": 18, "dexterity": 14, "armor": 12, "magic_resist": 3, "level": 10, "xp": 0, "xp_to_next": 400, "skill_points": 0 },
-    "equipment": { "weapon": "sword_iron_longsword", "armor": "armor_guard_chainmail" },
+    "stats": {
+      "hp": 150,
+      "max_hp": 150,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 18,
+      "dexterity": 14,
+      "armor": 12,
+      "magic_resist": 3,
+      "level": 10,
+      "xp": 0,
+      "xp_to_next": 400,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_iron_longsword",
+      "armor": "armor_guard_chainmail"
+    },
     "inventory": [],
     "default_dialog": "dialog_old_weaponmaster_greeting",
-    "dialogs": ["dialog_old_weaponmaster_greeting", "dialog_old_weaponmaster_train"],
-    "crime_reaction": { "witness_threshold": 250, "alert_range": 400, "reaction": "warn", "reputation_change": -10 },
-    "teaching": [
-      { "skill_id": "combat_sword", "skill_name": "Trening Bojowy (Miecz)", "max_rank": 3, "cost_per_rank": { "gold": 100, "skill_points": 2 }, "requirements": { "min_level": 1 }, "description": "Nauka władania mieczem." },
-      { "skill_id": "combat_bow", "skill_name": "Trening Bojowy (Łuk)", "max_rank": 2, "cost_per_rank": { "gold": 120, "skill_points": 2 }, "requirements": { "min_level": 2 }, "description": "Nauka strzelania z łuku." }
+    "dialogs": [
+      "dialog_old_weaponmaster_greeting",
+      "dialog_old_weaponmaster_train"
     ],
-    "quest_ids": ["quest_old_01"],
-    "spawn_position": { "x": 250, "y": 350, "location_id": "loc_old_fort" },
+    "crime_reaction": {
+      "witness_threshold": 250,
+      "alert_range": 400,
+      "reaction": "warn",
+      "reputation_change": -10
+    },
+    "teaching": [
+      {
+        "skill_id": "combat_sword",
+        "skill_name": "Trening Bojowy (Miecz)",
+        "max_rank": 3,
+        "cost_per_rank": {
+          "gold": 100,
+          "skill_points": 2
+        },
+        "requirements": {
+          "min_level": 1
+        },
+        "description": "Nauka władania mieczem."
+      },
+      {
+        "skill_id": "combat_bow",
+        "skill_name": "Trening Bojowy (Łuk)",
+        "max_rank": 2,
+        "cost_per_rank": {
+          "gold": 120,
+          "skill_points": 2
+        },
+        "requirements": {
+          "min_level": 2
+        },
+        "description": "Nauka strzelania z łuku."
+      }
+    ],
+    "quest_ids": [
+      "quest_old_01"
+    ],
+    "spawn_position": {
+      "x": 250,
+      "y": 350,
+      "location_id": "loc_old_fort"
+    },
     "is_essential": true,
     "is_trainer": true
   },
   {
-    "id": "npc_old_guard_1", "name": "Strażnik Bartłomiej", "role": "Strażnik bramy", "gender": "male", "faction": "old_order", "title": "Strażnik",
-    "stats": { "hp": 80, "max_hp": 80, "mana": 0, "max_mana": 0, "strength": 10, "dexterity": 6, "armor": 8, "magic_resist": 2, "level": 4, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "sword_old_shortsword", "armor": "armor_guard_chainmail" },
-    "inventory": [], "default_dialog": "dialog_guard_generic", "dialogs": ["dialog_guard_generic", "dialog_guard_quest_info"],
-    "crime_reaction": { "witness_threshold": 250, "alert_range": 400, "reaction": "attack", "reputation_change": -15 },
-    "quest_ids": ["quest_old_01"], "spawn_position": { "x": 320, "y": 280, "location_id": "loc_old_fort" }
+    "id": "npc_old_guard_1",
+    "name": "Strażnik Bartłomiej",
+    "role": "Strażnik bramy",
+    "gender": "male",
+    "faction": "old_order",
+    "title": "Strażnik",
+    "stats": {
+      "hp": 80,
+      "max_hp": 80,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 10,
+      "dexterity": 6,
+      "armor": 8,
+      "magic_resist": 2,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_old_shortsword",
+      "armor": "armor_guard_chainmail"
+    },
+    "inventory": [],
+    "default_dialog": "dialog_guard_generic",
+    "dialogs": [
+      "dialog_guard_generic",
+      "dialog_guard_quest_info"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 250,
+      "alert_range": 400,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [
+      "quest_old_01"
+    ],
+    "spawn_position": {
+      "x": 320,
+      "y": 280,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_old_guard_2", "name": "Strażniczka Marta", "role": "Strażniczka patrolowa", "gender": "female", "faction": "old_order", "title": "Strażniczka",
-    "stats": { "hp": 75, "max_hp": 75, "mana": 0, "max_mana": 0, "strength": 9, "dexterity": 8, "armor": 8, "magic_resist": 2, "level": 4, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "sword_old_shortsword", "armor": "armor_guard_chainmail" },
-    "inventory": [], "default_dialog": "dialog_guard_generic", "dialogs": ["dialog_guard_generic"],
-    "crime_reaction": { "witness_threshold": 250, "alert_range": 400, "reaction": "attack", "reputation_change": -15 },
-    "quest_ids": [], "spawn_position": { "x": 280, "y": 320, "location_id": "loc_old_fort" }
+    "id": "npc_old_guard_2",
+    "name": "Strażniczka Marta",
+    "role": "Strażniczka patrolowa",
+    "gender": "female",
+    "faction": "old_order",
+    "title": "Strażniczka",
+    "stats": {
+      "hp": 75,
+      "max_hp": 75,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 9,
+      "dexterity": 8,
+      "armor": 8,
+      "magic_resist": 2,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_old_shortsword",
+      "armor": "armor_guard_chainmail"
+    },
+    "inventory": [],
+    "default_dialog": "dialog_guard_generic",
+    "dialogs": [
+      "dialog_guard_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 250,
+      "alert_range": 400,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 280,
+      "y": 320,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_old_guard_3", "name": "Strażnik Zbigniew", "role": "Strażnik magazynu", "gender": "male", "faction": "old_order",
-    "stats": { "hp": 80, "max_hp": 80, "mana": 0, "max_mana": 0, "strength": 11, "dexterity": 5, "armor": 8, "magic_resist": 2, "level": 4, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "sword_old_shortsword", "armor": "armor_guard_chainmail" },
-    "inventory": [], "default_dialog": "dialog_guard_generic", "dialogs": ["dialog_guard_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 350, "reaction": "attack", "reputation_change": -15 },
-    "quest_ids": ["quest_new_03"], "spawn_position": { "x": 340, "y": 260, "location_id": "loc_old_fort" }
+    "id": "npc_old_guard_3",
+    "name": "Strażnik Zbigniew",
+    "role": "Strażnik magazynu",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 80,
+      "max_hp": 80,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 11,
+      "dexterity": 5,
+      "armor": 8,
+      "magic_resist": 2,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_old_shortsword",
+      "armor": "armor_guard_chainmail"
+    },
+    "inventory": [],
+    "default_dialog": "dialog_guard_generic",
+    "dialogs": [
+      "dialog_guard_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 350,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [
+      "quest_new_03"
+    ],
+    "spawn_position": {
+      "x": 340,
+      "y": 260,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_old_smith", "name": "Kowal Gerhard", "role": "Kowal", "gender": "male", "faction": "old_order", "title": "Kowal",
-    "stats": { "hp": 60, "max_hp": 60, "mana": 0, "max_mana": 0, "strength": 14, "dexterity": 5, "armor": 4, "magic_resist": 1, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": {}, "inventory": ["sword_iron_longsword", "sword_old_shortsword", "misc_gold"],
-    "default_dialog": "dialog_old_smith_greeting", "dialogs": ["dialog_old_smith_greeting", "dialog_old_smith_quest"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 300, "reaction": "demand_return", "reputation_change": -5 },
-    "quest_ids": ["quest_side_01"], "spawn_position": { "x": 220, "y": 380, "location_id": "loc_old_fort" },
-    "is_merchant": true, "merchant_group": "blacksmith"
+    "id": "npc_old_smith",
+    "name": "Kowal Gerhard",
+    "role": "Kowal",
+    "gender": "male",
+    "faction": "old_order",
+    "title": "Kowal",
+    "stats": {
+      "hp": 60,
+      "max_hp": 60,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 14,
+      "dexterity": 5,
+      "armor": 4,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "sword_iron_longsword",
+      "sword_old_shortsword",
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_old_smith_greeting",
+    "dialogs": [
+      "dialog_old_smith_greeting",
+      "dialog_old_smith_quest"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 300,
+      "reaction": "demand_return",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_01"
+    ],
+    "spawn_position": {
+      "x": 220,
+      "y": 380,
+      "location_id": "loc_old_fort"
+    },
+    "is_merchant": true,
+    "merchant_group": "blacksmith"
   },
   {
-    "id": "npc_old_merchant", "name": "Kupiec Alojzy", "role": "Handlarz", "gender": "male", "faction": "old_order",
-    "stats": { "hp": 40, "max_hp": 40, "mana": 0, "max_mana": 0, "strength": 3, "dexterity": 4, "armor": 1, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["potion_healing_small", "potion_healing_medium", "misc_arrow", "misc_lockpick_iron"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "call_guards", "reputation_change": -15 },
-    "quest_ids": ["quest_new_01"], "spawn_position": { "x": 200, "y": 400, "location_id": "loc_old_fort" },
-    "is_merchant": true, "merchant_group": "general"
+    "id": "npc_old_merchant",
+    "name": "Kupiec Alojzy",
+    "role": "Handlarz",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 40,
+      "max_hp": 40,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 3,
+      "dexterity": 4,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "potion_healing_small",
+      "potion_healing_medium",
+      "misc_arrow",
+      "misc_lockpick_iron"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "call_guards",
+      "reputation_change": -15
+    },
+    "quest_ids": [
+      "quest_new_01"
+    ],
+    "spawn_position": {
+      "x": 200,
+      "y": 400,
+      "location_id": "loc_old_fort"
+    },
+    "is_merchant": true,
+    "merchant_group": "general"
   },
   {
-    "id": "npc_old_innkeeper", "name": "Oberżysta Bertold", "role": "Karczmarz", "gender": "male", "faction": "old_order", "title": "Gospodarz",
-    "stats": { "hp": 35, "max_hp": 35, "mana": 0, "max_mana": 0, "strength": 3, "dexterity": 3, "armor": 1, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["potion_healing_small", "potion_stamina"],
-    "default_dialog": "dialog_innkeeper_generic", "dialogs": ["dialog_innkeeper_generic", "dialog_innkeeper_rumors"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 250, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_side_03"], "spawn_position": { "x": 350, "y": 350, "location_id": "loc_old_fort" },
-    "is_merchant": true, "merchant_group": "inn"
+    "id": "npc_old_innkeeper",
+    "name": "Oberżysta Bertold",
+    "role": "Karczmarz",
+    "gender": "male",
+    "faction": "old_order",
+    "title": "Gospodarz",
+    "stats": {
+      "hp": 35,
+      "max_hp": 35,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 3,
+      "dexterity": 3,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "potion_healing_small",
+      "potion_stamina"
+    ],
+    "default_dialog": "dialog_innkeeper_generic",
+    "dialogs": [
+      "dialog_innkeeper_generic",
+      "dialog_innkeeper_rumors"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 250,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_03"
+    ],
+    "spawn_position": {
+      "x": 350,
+      "y": 350,
+      "location_id": "loc_old_fort"
+    },
+    "is_merchant": true,
+    "merchant_group": "inn"
   },
   {
-    "id": "npc_old_messenger", "name": "Gończy Wojmir", "role": "Goniec", "gender": "male", "faction": "old_order",
-    "stats": { "hp": 50, "max_hp": 50, "mana": 0, "max_mana": 0, "strength": 6, "dexterity": 10, "armor": 3, "magic_resist": 1, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": { "weapon": "sword_hunters_blade" }, "inventory": ["misc_quest_letter"],
-    "default_dialog": "dialog_old_messenger_greeting", "dialogs": ["dialog_old_messenger_greeting", "dialog_old_messenger_quest"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -10 },
-    "quest_ids": ["quest_old_01"], "spawn_position": { "x": 260, "y": 300, "location_id": "loc_old_fort" }
+    "id": "npc_old_messenger",
+    "name": "Gończy Wojmir",
+    "role": "Goniec",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 50,
+      "max_hp": 50,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 6,
+      "dexterity": 10,
+      "armor": 3,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_hunters_blade"
+    },
+    "inventory": [
+      "misc_quest_letter"
+    ],
+    "default_dialog": "dialog_old_messenger_greeting",
+    "dialogs": [
+      "dialog_old_messenger_greeting",
+      "dialog_old_messenger_quest"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_old_01"
+    ],
+    "spawn_position": {
+      "x": 260,
+      "y": 300,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_old_prisoner", "name": "Więzień 13", "role": "Więzień", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 20, "max_hp": 20, "mana": 0, "max_mana": 0, "strength": 3, "dexterity": 2, "armor": 0, "magic_resist": 0, "level": 1, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": [], "default_dialog": "dialog_prisoner", "dialogs": ["dialog_prisoner"],
-    "crime_reaction": { "witness_threshold": 100, "alert_range": 200, "reaction": "warn", "reputation_change": 0 },
-    "quest_ids": ["quest_side_02"], "spawn_position": { "x": 350, "y": 250, "location_id": "loc_old_fort" }
+    "id": "npc_old_prisoner",
+    "name": "Więzień 13",
+    "role": "Więzień",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 20,
+      "max_hp": 20,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 3,
+      "dexterity": 2,
+      "armor": 0,
+      "magic_resist": 0,
+      "level": 1,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [],
+    "default_dialog": "dialog_prisoner",
+    "dialogs": [
+      "dialog_prisoner"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "warn",
+      "reputation_change": 0
+    },
+    "quest_ids": [
+      "quest_side_02"
+    ],
+    "spawn_position": {
+      "x": 350,
+      "y": 250,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_old_guard_captain", "name": "Kapitan Straży", "role": "Zastępca Komendanta", "gender": "male", "faction": "old_order",
-    "stats": { "hp": 130, "max_hp": 130, "mana": 0, "max_mana": 0, "strength": 16, "dexterity": 10, "armor": 12, "magic_resist": 3, "level": 8, "xp": 0, "xp_to_next": 300, "skill_points": 0 },
-    "equipment": { "weapon": "sword_steel_blad", "armor": "armor_guard_chainmail" },
-    "inventory": ["potion_healing_medium"], "default_dialog": "dialog_guard_generic", "dialogs": ["dialog_guard_generic"],
-    "crime_reaction": { "witness_threshold": 250, "alert_range": 500, "reaction": "attack", "reputation_change": -25 },
-    "quest_ids": ["quest_old_02"], "spawn_position": { "x": 290, "y": 280, "location_id": "loc_old_fort" }
+    "id": "npc_old_guard_captain",
+    "name": "Kapitan Straży",
+    "role": "Zastępca Komendanta",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 130,
+      "max_hp": 130,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 16,
+      "dexterity": 10,
+      "armor": 12,
+      "magic_resist": 3,
+      "level": 8,
+      "xp": 0,
+      "xp_to_next": 300,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_steel_blad",
+      "armor": "armor_guard_chainmail"
+    },
+    "inventory": [
+      "potion_healing_medium"
+    ],
+    "default_dialog": "dialog_guard_generic",
+    "dialogs": [
+      "dialog_guard_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 250,
+      "alert_range": 500,
+      "reaction": "attack",
+      "reputation_change": -25
+    },
+    "quest_ids": [
+      "quest_old_02"
+    ],
+    "spawn_position": {
+      "x": 290,
+      "y": 280,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_old_archivist", "name": "Archista Sylwan", "role": "Archiwista", "gender": "male", "faction": "old_order",
-    "stats": { "hp": 25, "max_hp": 25, "mana": 0, "max_mana": 0, "strength": 2, "dexterity": 4, "armor": 1, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["misc_quest_letter"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 100, "alert_range": 200, "reaction": "call_guards", "reputation_change": -10 },
-    "quest_ids": ["quest_side_01"], "spawn_position": { "x": 240, "y": 320, "location_id": "loc_old_fort" }
+    "id": "npc_old_archivist",
+    "name": "Archista Sylwan",
+    "role": "Archiwista",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 25,
+      "max_hp": 25,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 2,
+      "dexterity": 4,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "misc_quest_letter"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "call_guards",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_side_01"
+    ],
+    "spawn_position": {
+      "x": 240,
+      "y": 320,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_old_cook", "name": "Kucharka Milusia", "role": "Kucharka", "gender": "female", "faction": "old_order",
-    "stats": { "hp": 30, "max_hp": 30, "mana": 0, "max_mana": 0, "strength": 4, "dexterity": 3, "armor": 1, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["potion_healing_small", "potion_stamina"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 100, "alert_range": 200, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": [], "spawn_position": { "x": 210, "y": 420, "location_id": "loc_old_fort" }
+    "id": "npc_old_cook",
+    "name": "Kucharka Milusia",
+    "role": "Kucharka",
+    "gender": "female",
+    "faction": "old_order",
+    "stats": {
+      "hp": 30,
+      "max_hp": 30,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 4,
+      "dexterity": 3,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "potion_healing_small",
+      "potion_stamina"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 210,
+      "y": 420,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_old_recruit_1", "name": "Rekrut Cichy", "role": "Nowy rekrut", "gender": "male", "faction": "old_order",
-    "stats": { "hp": 45, "max_hp": 45, "mana": 0, "max_mana": 0, "strength": 7, "dexterity": 4, "armor": 4, "magic_resist": 1, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": { "weapon": "sword_rusted_machete", "armor": "armor_leather_vest" },
-    "inventory": [], "default_dialog": "dialog_guard_generic", "dialogs": ["dialog_guard_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "attack", "reputation_change": -10 },
-    "quest_ids": ["quest_old_03"], "spawn_position": { "x": 310, "y": 310, "location_id": "loc_old_fort" }
+    "id": "npc_old_recruit_1",
+    "name": "Rekrut Cichy",
+    "role": "Nowy rekrut",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 45,
+      "max_hp": 45,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 7,
+      "dexterity": 4,
+      "armor": 4,
+      "magic_resist": 1,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_rusted_machete",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [],
+    "default_dialog": "dialog_guard_generic",
+    "dialogs": [
+      "dialog_guard_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "attack",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_old_03"
+    ],
+    "spawn_position": {
+      "x": 310,
+      "y": 310,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_old_recruit_2", "name": "Rekrut Gniewny", "role": "Nowy rekrut", "gender": "male", "faction": "old_order",
-    "stats": { "hp": 50, "max_hp": 50, "mana": 0, "max_mana": 0, "strength": 9, "dexterity": 3, "armor": 4, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": { "weapon": "sword_rusted_machete", "armor": "armor_leather_vest" },
-    "inventory": [], "default_dialog": "dialog_guard_generic", "dialogs": ["dialog_guard_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "attack", "reputation_change": -10 },
-    "quest_ids": ["quest_old_03"], "spawn_position": { "x": 330, "y": 310, "location_id": "loc_old_fort" }
+    "id": "npc_old_recruit_2",
+    "name": "Rekrut Gniewny",
+    "role": "Nowy rekrut",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 50,
+      "max_hp": 50,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 9,
+      "dexterity": 3,
+      "armor": 4,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_rusted_machete",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [],
+    "default_dialog": "dialog_guard_generic",
+    "dialogs": [
+      "dialog_guard_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "attack",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_old_03"
+    ],
+    "spawn_position": {
+      "x": 330,
+      "y": 310,
+      "location_id": "loc_old_fort"
+    }
   },
   {
-    "id": "npc_free_sep", "name": "Sęp", "role": "Przywódca Wolnych Chat", "gender": "male", "faction": "new_order", "title": "Sęp",
-    "stats": { "hp": 180, "max_hp": 180, "mana": 0, "max_mana": 0, "strength": 20, "dexterity": 14, "armor": 14, "magic_resist": 4, "level": 11, "xp": 0, "xp_to_next": 450, "skill_points": 0 },
-    "equipment": { "weapon": "sword_obsidian_cleaver", "armor": "armor_free_hide" },
-    "inventory": ["potion_healing_large", "misc_gold"],
-    "default_dialog": "dialog_free_sep_greeting", "dialogs": ["dialog_free_sep_greeting", "dialog_free_sep_quest", "dialog_free_sep_join"],
-    "crime_reaction": { "witness_threshold": 300, "alert_range": 500, "reaction": "attack", "reputation_change": -20 },
-    "quest_ids": ["quest_new_01", "quest_new_02", "quest_new_03"],
-    "spawn_position": { "x": 500, "y": 300, "location_id": "loc_free_village" },
+    "id": "npc_free_sep",
+    "name": "Sęp",
+    "role": "Przywódca Wolnych Chat",
+    "gender": "male",
+    "faction": "new_order",
+    "title": "Sęp",
+    "stats": {
+      "hp": 180,
+      "max_hp": 180,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 20,
+      "dexterity": 14,
+      "armor": 14,
+      "magic_resist": 4,
+      "level": 11,
+      "xp": 0,
+      "xp_to_next": 450,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_obsidian_cleaver",
+      "armor": "armor_free_hide"
+    },
+    "inventory": [
+      "potion_healing_large",
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_free_sep_greeting",
+    "dialogs": [
+      "dialog_free_sep_greeting",
+      "dialog_free_sep_quest",
+      "dialog_free_sep_join"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 300,
+      "alert_range": 500,
+      "reaction": "attack",
+      "reputation_change": -20
+    },
+    "quest_ids": [
+      "quest_new_01",
+      "quest_new_02",
+      "quest_new_03"
+    ],
+    "spawn_position": {
+      "x": 500,
+      "y": 300,
+      "location_id": "loc_free_village"
+    },
     "is_essential": true
   },
   {
-    "id": "npc_free_thief_trainer", "name": "Szczur", "role": "Złodziej / Nauczyciel kradzieży", "gender": "male", "faction": "new_order", "title": "Szczur",
-    "stats": { "hp": 55, "max_hp": 55, "mana": 0, "max_mana": 0, "strength": 6, "dexterity": 16, "armor": 3, "magic_resist": 1, "level": 5, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "sword_serrated_gladius" },
-    "inventory": ["misc_lockpick_iron", "misc_lockpick_steel", "misc_lockpick_master"],
-    "default_dialog": "dialog_free_thief_greeting", "dialogs": ["dialog_free_thief_greeting", "dialog_free_thief_train"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "teaching": [
-      { "skill_id": "lockpicking", "skill_name": "Otwieranie Zamków", "max_rank": 3, "cost_per_rank": { "gold": 80, "skill_points": 1 }, "requirements": { "min_level": 1 }, "description": "Sztuka otwierania zamków." },
-      { "skill_id": "pickpocket", "skill_name": "Kradzież", "max_rank": 2, "cost_per_rank": { "gold": 150, "skill_points": 2 }, "requirements": { "min_level": 2, "reputation_min": -20 }, "description": "Ciche zabieranie cudzej własności." }
+    "id": "npc_free_thief_trainer",
+    "name": "Szczur",
+    "role": "Złodziej / Nauczyciel kradzieży",
+    "gender": "male",
+    "faction": "new_order",
+    "title": "Szczur",
+    "stats": {
+      "hp": 55,
+      "max_hp": 55,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 6,
+      "dexterity": 16,
+      "armor": 3,
+      "magic_resist": 1,
+      "level": 5,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_serrated_gladius"
+    },
+    "inventory": [
+      "misc_lockpick_iron",
+      "misc_lockpick_steel",
+      "misc_lockpick_master"
     ],
-    "quest_ids": ["quest_new_01"], "spawn_position": { "x": 520, "y": 350, "location_id": "loc_free_village" }, "is_trainer": true
-  },
-  {
-    "id": "npc_free_herbalist", "name": "Jarzębina", "role": "Zielarka", "gender": "female", "faction": "new_order", "title": "Jarzębina",
-    "stats": { "hp": 35, "max_hp": 35, "mana": 20, "max_mana": 20, "strength": 2, "dexterity": 5, "armor": 1, "magic_resist": 4, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": {}, "inventory": ["plant_bloodroot", "plant_dewleaf", "plant_moonweed", "potion_healing_small", "potion_antidote", "potion_mana_small"],
-    "default_dialog": "dialog_free_herbalist_greeting", "dialogs": ["dialog_free_herbalist_greeting", "dialog_free_herbalist_quest"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 250, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_new_02", "quest_side_05"], "spawn_position": { "x": 480, "y": 380, "location_id": "loc_free_village" },
-    "is_merchant": true, "merchant_group": "herbalist"
-  },
-  {
-    "id": "npc_hunter_trainer", "name": "Stary Łowczy", "role": "Łowca / Nauczyciel skórowania", "gender": "male", "faction": "neutral", "title": "Łowczy",
-    "stats": { "hp": 70, "max_hp": 70, "mana": 0, "max_mana": 0, "strength": 10, "dexterity": 12, "armor": 5, "magic_resist": 2, "level": 5, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "bow_hunting_bow", "armor": "armor_leather_vest" },
-    "inventory": ["misc_arrow", "misc_skins_wolf"],
-    "default_dialog": "dialog_hunter_greeting", "dialogs": ["dialog_hunter_greeting", "dialog_hunter_train"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "teaching": [{ "skill_id": "skinning", "skill_name": "Skórowanie", "max_rank": 2, "cost_per_rank": { "gold": 50, "skill_points": 1 }, "requirements": { "min_level": 1 }, "description": "Umiejętność zdejmowania skór z upolowanych bestii." }],
-    "quest_ids": ["quest_side_04"], "spawn_position": { "x": 600, "y": 400, "location_id": "loc_forest" }, "is_trainer": true
-  },
-  {
-    "id": "npc_mage_trainer", "name": "Pustelnik", "role": "Mag / Nauczyciel magii", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 45, "max_hp": 45, "mana": 100, "max_mana": 100, "strength": 4, "dexterity": 6, "armor": 2, "magic_resist": 12, "level": 8, "xp": 0, "xp_to_next": 350, "skill_points": 0 },
-    "equipment": {}, "inventory": ["potion_mana_small"],
-    "default_dialog": "dialog_mage_greeting", "dialogs": ["dialog_mage_greeting", "dialog_mage_train"],
-    "crime_reaction": { "witness_threshold": 300, "alert_range": 400, "reaction": "warn", "reputation_change": -10 },
-    "teaching": [
-      { "skill_id": "magic_fire", "skill_name": "Magia Ognia", "max_rank": 1, "cost_per_rank": { "gold": 300, "skill_points": 3 }, "requirements": { "min_level": 3, "quest_completed": ["quest_main_magic_path"] }, "description": "Nauka Ognistego Pocisku." },
-      { "skill_id": "magic_ice", "skill_name": "Magia Lodu", "max_rank": 1, "cost_per_rank": { "gold": 350, "skill_points": 3 }, "requirements": { "min_level": 5, "quest_completed": ["quest_main_magic_path"] }, "description": "Nauka Lodowego Odłamka." }
+    "default_dialog": "dialog_free_thief_greeting",
+    "dialogs": [
+      "dialog_free_thief_greeting",
+      "dialog_free_thief_train"
     ],
-    "quest_ids": ["quest_main_magic_path"], "spawn_position": { "x": 700, "y": 200, "location_id": "loc_special" },
-    "is_trainer": true, "is_essential": true
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "teaching": [
+      {
+        "skill_id": "lockpicking",
+        "skill_name": "Otwieranie Zamków",
+        "max_rank": 3,
+        "cost_per_rank": {
+          "gold": 80,
+          "skill_points": 1
+        },
+        "requirements": {
+          "min_level": 1
+        },
+        "description": "Sztuka otwierania zamków."
+      },
+      {
+        "skill_id": "pickpocket",
+        "skill_name": "Kradzież",
+        "max_rank": 2,
+        "cost_per_rank": {
+          "gold": 150,
+          "skill_points": 2
+        },
+        "requirements": {
+          "min_level": 2,
+          "reputation_min": -20
+        },
+        "description": "Ciche zabieranie cudzej własności."
+      }
+    ],
+    "quest_ids": [
+      "quest_new_01"
+    ],
+    "spawn_position": {
+      "x": 520,
+      "y": 350,
+      "location_id": "loc_free_village"
+    },
+    "is_trainer": true
   },
   {
-    "id": "npc_traveling_merchant", "name": "Wędrowny Handlarz", "role": "Handlarz", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 35, "max_hp": 35, "mana": 0, "max_mana": 0, "strength": 4, "dexterity": 4, "armor": 2, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": { "weapon": "sword_rusted_dagger" },
-    "inventory": ["potion_healing_small", "potion_stamina", "misc_arrow", "misc_lockpick_iron", "misc_gold"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic", "dialog_merchant_rumors"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "flee", "reputation_change": -10 },
-    "quest_ids": ["quest_side_03"], "spawn_position": { "x": 500, "y": 400, "location_id": "loc_road" },
-    "is_merchant": true, "merchant_group": "general"
+    "id": "npc_free_herbalist",
+    "name": "Jarzębina",
+    "role": "Zielarka",
+    "gender": "female",
+    "faction": "new_order",
+    "title": "Jarzębina",
+    "stats": {
+      "hp": 35,
+      "max_hp": 35,
+      "mana": 20,
+      "max_mana": 20,
+      "strength": 2,
+      "dexterity": 5,
+      "armor": 1,
+      "magic_resist": 4,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_bloodroot",
+      "plant_dewleaf",
+      "plant_moonweed",
+      "potion_healing_small",
+      "potion_antidote",
+      "potion_mana_small"
+    ],
+    "default_dialog": "dialog_free_herbalist_greeting",
+    "dialogs": [
+      "dialog_free_herbalist_greeting",
+      "dialog_free_herbalist_quest"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 250,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_new_02",
+      "quest_side_05"
+    ],
+    "spawn_position": {
+      "x": 480,
+      "y": 380,
+      "location_id": "loc_free_village"
+    },
+    "is_merchant": true,
+    "merchant_group": "herbalist"
   },
   {
-    "id": "npc_woodcutter", "name": "Drwal Jakub", "role": "Drwal", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 60, "max_hp": 60, "mana": 0, "max_mana": 0, "strength": 12, "dexterity": 4, "armor": 2, "magic_resist": 0, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": {}, "inventory": ["plant_bloodroot"],
-    "default_dialog": "dialog_woodcutter", "dialogs": ["dialog_woodcutter", "dialog_woodcutter_quest"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_side_02"], "spawn_position": { "x": 550, "y": 450, "location_id": "loc_forest" }
+    "id": "npc_hunter_trainer",
+    "name": "Stary Łowczy",
+    "role": "Łowca / Nauczyciel skórowania",
+    "gender": "male",
+    "faction": "neutral",
+    "title": "Łowczy",
+    "stats": {
+      "hp": 70,
+      "max_hp": 70,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 10,
+      "dexterity": 12,
+      "armor": 5,
+      "magic_resist": 2,
+      "level": 5,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "bow_hunting_bow",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [
+      "misc_arrow",
+      "misc_skins_wolf"
+    ],
+    "default_dialog": "dialog_hunter_greeting",
+    "dialogs": [
+      "dialog_hunter_greeting",
+      "dialog_hunter_train"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "teaching": [
+      {
+        "skill_id": "skinning",
+        "skill_name": "Skórowanie",
+        "max_rank": 2,
+        "cost_per_rank": {
+          "gold": 50,
+          "skill_points": 1
+        },
+        "requirements": {
+          "min_level": 1
+        },
+        "description": "Umiejętność zdejmowania skór z upolowanych bestii."
+      }
+    ],
+    "quest_ids": [
+      "quest_side_04"
+    ],
+    "spawn_position": {
+      "x": 600,
+      "y": 400,
+      "location_id": "loc_forest"
+    },
+    "is_trainer": true
   },
   {
-    "id": "npc_swamp_hermit", "name": "Błotny Pustelnik", "role": "Pustelnik", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 40, "max_hp": 40, "mana": 15, "max_mana": 15, "strength": 5, "dexterity": 5, "armor": 2, "magic_resist": 3, "level": 4, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": {}, "inventory": ["plant_swamp_moss", "plant_poison_cap", "potion_antidote"],
-    "default_dialog": "dialog_swamp_hermit", "dialogs": ["dialog_swamp_hermit"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_side_05"], "spawn_position": { "x": 300, "y": 300, "location_id": "loc_swamp" }
-  },
-  {
-    "id": "npc_old_veteran", "name": "Weteran Dobromir", "role": "Emerytowany żołnierz", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 65, "max_hp": 65, "mana": 0, "max_mana": 0, "strength": 10, "dexterity": 6, "armor": 4, "magic_resist": 1, "level": 4, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": {}, "inventory": [],
-    "default_dialog": "dialog_veteran", "dialogs": ["dialog_veteran", "dialog_veteran_quest"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_side_01"], "spawn_position": { "x": 350, "y": 400, "location_id": "loc_cemetery" }
-  },
-  {
-    "id": "npc_free_scout", "name": "Zwiadowca Włók", "role": "Zwiadowca Wolnych", "gender": "male", "faction": "new_order",
-    "stats": { "hp": 55, "max_hp": 55, "mana": 0, "max_mana": 0, "strength": 7, "dexterity": 10, "armor": 4, "magic_resist": 1, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": { "weapon": "bow_shortbow", "armor": "armor_leather_vest" },
-    "inventory": ["misc_arrow", "misc_gold"], "default_dialog": "dialog_free_scout", "dialogs": ["dialog_free_scout"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -10 },
-    "quest_ids": ["quest_new_01"], "spawn_position": { "x": 460, "y": 320, "location_id": "loc_free_village" }
-  },
-  {
-    "id": "npc_exile_leader", "name": "Wygnaniec Krzywy", "role": "Lider wygnańców w Głuchodole", "gender": "male", "faction": "bandit",
-    "stats": { "hp": 90, "max_hp": 90, "mana": 0, "max_mana": 0, "strength": 13, "dexterity": 8, "armor": 6, "magic_resist": 2, "level": 6, "xp": 0, "xp_to_next": 250, "skill_points": 0 },
-    "equipment": { "weapon": "sword_serrated_gladius", "armor": "armor_leather_vest" },
-    "inventory": ["potion_healing_small", "misc_gold"],
-    "default_dialog": "dialog_bandit_generic", "dialogs": ["dialog_bandit_generic"],
-    "crime_reaction": { "witness_threshold": 250, "alert_range": 400, "reaction": "attack", "reputation_change": -20 },
-    "quest_ids": ["quest_old_02", "quest_side_03"], "spawn_position": { "x": 400, "y": 200, "location_id": "loc_mountains" }
-  },
-  {
-    "id": "npc_exile_fighter", "name": "Łajba", "role": "Najemnik", "gender": "male", "faction": "bandit",
-    "stats": { "hp": 70, "max_hp": 70, "mana": 0, "max_mana": 0, "strength": 10, "dexterity": 6, "armor": 4, "magic_resist": 1, "level": 4, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "sword_iron_longsword", "armor": "armor_leather_vest" },
-    "inventory": ["misc_gold"], "default_dialog": "dialog_bandit_generic", "dialogs": ["dialog_bandit_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "attack", "reputation_change": -15 },
-    "quest_ids": [], "spawn_position": { "x": 420, "y": 220, "location_id": "loc_mountains" }
-  },
-  {
-    "id": "npc_exile_archer", "name": "Łukasz Wygnaniec", "role": "Łucznik", "gender": "male", "faction": "bandit",
-    "stats": { "hp": 50, "max_hp": 50, "mana": 0, "max_mana": 0, "strength": 5, "dexterity": 10, "armor": 2, "magic_resist": 1, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": { "weapon": "bow_shortbow", "armor": "armor_leather_vest" },
-    "inventory": ["misc_arrow", "misc_gold"], "default_dialog": "dialog_bandit_generic", "dialogs": ["dialog_bandit_generic"],
-    "crime_reaction": { "witness_threshold": 250, "alert_range": 400, "reaction": "attack", "reputation_change": -15 },
-    "quest_ids": [], "spawn_position": { "x": 440, "y": 200, "location_id": "loc_mountains" }
-  },
-  {
-    "id": "npc_exile_brute", "name": "Bruździ", "role": "Miecznik", "gender": "male", "faction": "bandit",
-    "stats": { "hp": 90, "max_hp": 90, "mana": 0, "max_mana": 0, "strength": 14, "dexterity": 4, "armor": 5, "magic_resist": 1, "level": 5, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "sword_iron_longsword", "armor": "armor_leather_vest" },
-    "inventory": ["misc_gold"], "default_dialog": "dialog_bandit_generic", "dialogs": ["dialog_bandit_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "attack", "reputation_change": -15 },
-    "quest_ids": ["quest_old_02"], "spawn_position": { "x": 410, "y": 240, "location_id": "loc_mountains" }
-  },
-  {
-    "id": "npc_free_fighter_1", "name": "Waligóra", "role": "Wojownik Wolnych", "gender": "male", "faction": "new_order",
-    "stats": { "hp": 90, "max_hp": 90, "mana": 0, "max_mana": 0, "strength": 15, "dexterity": 5, "armor": 7, "magic_resist": 2, "level": 5, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "sword_iron_longsword", "armor": "armor_free_hide" },
-    "inventory": [], "default_dialog": "dialog_free_fighter", "dialogs": ["dialog_free_fighter"],
-    "crime_reaction": { "witness_threshold": 250, "alert_range": 400, "reaction": "attack", "reputation_change": -15 },
-    "quest_ids": ["quest_new_03"], "spawn_position": { "x": 540, "y": 340, "location_id": "loc_free_village" }
-  },
-  {
-    "id": "npc_free_fighter_2", "name": "Czujna", "role": "Wojowniczka Wolnych", "gender": "female", "faction": "new_order",
-    "stats": { "hp": 75, "max_hp": 75, "mana": 0, "max_mana": 0, "strength": 10, "dexterity": 10, "armor": 5, "magic_resist": 2, "level": 4, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "sword_hunters_blade", "armor": "armor_free_hide" },
-    "inventory": [], "default_dialog": "dialog_free_fighter", "dialogs": ["dialog_free_fighter"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 350, "reaction": "attack", "reputation_change": -15 },
-    "quest_ids": ["quest_new_03"], "spawn_position": { "x": 550, "y": 330, "location_id": "loc_free_village" }
-  },
-  {
-    "id": "npc_free_merchant", "name": "Kupiec Robal", "role": "Handlarz", "gender": "male", "faction": "new_order",
-    "stats": { "hp": 35, "max_hp": 35, "mana": 0, "max_mana": 0, "strength": 3, "dexterity": 5, "armor": 1, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["potion_healing_small", "misc_arrow", "misc_lockpick_iron", "misc_gold"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "call_guards", "reputation_change": -15 },
-    "quest_ids": [], "spawn_position": { "x": 500, "y": 400, "location_id": "loc_free_village" },
-    "is_merchant": true, "merchant_group": "general"
-  },
-  {
-    "id": "npc_free_elder", "name": "Stara Wiedźma", "role": "Starsza Wolnych Chat", "gender": "female", "faction": "new_order",
-    "stats": { "hp": 30, "max_hp": 30, "mana": 40, "max_mana": 40, "strength": 2, "dexterity": 3, "armor": 1, "magic_resist": 6, "level": 5, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": {}, "inventory": [],
-    "default_dialog": "dialog_free_elder", "dialogs": ["dialog_free_elder", "dialog_free_elder_quest"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 250, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_new_03"], "spawn_position": { "x": 510, "y": 280, "location_id": "loc_free_village" },
+    "id": "npc_mage_trainer",
+    "name": "Pustelnik",
+    "role": "Mag / Nauczyciel magii",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 45,
+      "max_hp": 45,
+      "mana": 100,
+      "max_mana": 100,
+      "strength": 4,
+      "dexterity": 6,
+      "armor": 2,
+      "magic_resist": 12,
+      "level": 8,
+      "xp": 0,
+      "xp_to_next": 350,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "potion_mana_small"
+    ],
+    "default_dialog": "dialog_mage_greeting",
+    "dialogs": [
+      "dialog_mage_greeting",
+      "dialog_mage_train"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 300,
+      "alert_range": 400,
+      "reaction": "warn",
+      "reputation_change": -10
+    },
+    "teaching": [
+      {
+        "skill_id": "magic_fire",
+        "skill_name": "Magia Ognia",
+        "max_rank": 1,
+        "cost_per_rank": {
+          "gold": 300,
+          "skill_points": 3
+        },
+        "requirements": {
+          "min_level": 3,
+          "quest_completed": [
+            "quest_main_magic_path"
+          ]
+        },
+        "description": "Nauka Ognistego Pocisku."
+      },
+      {
+        "skill_id": "magic_ice",
+        "skill_name": "Magia Lodu",
+        "max_rank": 1,
+        "cost_per_rank": {
+          "gold": 350,
+          "skill_points": 3
+        },
+        "requirements": {
+          "min_level": 5,
+          "quest_completed": [
+            "quest_main_magic_path"
+          ]
+        },
+        "description": "Nauka Lodowego Odłamka."
+      }
+    ],
+    "quest_ids": [
+      "quest_main_magic_path"
+    ],
+    "spawn_position": {
+      "x": 700,
+      "y": 200,
+      "location_id": "loc_special"
+    },
+    "is_trainer": true,
     "is_essential": true
   },
   {
-    "id": "npc_free_hunter", "name": "Łowczyni Strzała", "role": "Myśliwy Wolnych", "gender": "female", "faction": "new_order",
-    "stats": { "hp": 50, "max_hp": 50, "mana": 0, "max_mana": 0, "strength": 6, "dexterity": 12, "armor": 3, "magic_resist": 1, "level": 4, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": { "weapon": "bow_hunting_bow", "armor": "armor_leather_vest" },
-    "inventory": ["misc_arrow", "misc_skins_wolf"], "default_dialog": "dialog_free_hunter", "dialogs": ["dialog_free_hunter"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -10 },
-    "quest_ids": ["quest_new_02"], "spawn_position": { "x": 530, "y": 360, "location_id": "loc_free_village" }
+    "id": "npc_traveling_merchant",
+    "name": "Wędrowny Handlarz",
+    "role": "Handlarz",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 35,
+      "max_hp": 35,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 4,
+      "dexterity": 4,
+      "armor": 2,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_rusted_dagger"
+    },
+    "inventory": [
+      "potion_healing_small",
+      "potion_stamina",
+      "misc_arrow",
+      "misc_lockpick_iron",
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic",
+      "dialog_merchant_rumors"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "flee",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_side_03"
+    ],
+    "spawn_position": {
+      "x": 500,
+      "y": 400,
+      "location_id": "loc_road"
+    },
+    "is_merchant": true,
+    "merchant_group": "general"
   },
   {
-    "id": "npc_free_smith", "name": "Kowal Iskra", "role": "Kowal Wolnych", "gender": "female", "faction": "new_order",
-    "stats": { "hp": 60, "max_hp": 60, "mana": 0, "max_mana": 0, "strength": 14, "dexterity": 6, "armor": 4, "magic_resist": 1, "level": 4, "xp": 0, "xp_to_next": 200, "skill_points": 0 },
-    "equipment": {}, "inventory": ["sword_obsidian_cleaver", "sword_hunters_blade", "sword_wolfs_fang"],
-    "default_dialog": "dialog_free_smith", "dialogs": ["dialog_free_smith"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": [], "spawn_position": { "x": 490, "y": 420, "location_id": "loc_free_village" },
-    "is_merchant": true, "merchant_group": "blacksmith"
+    "id": "npc_woodcutter",
+    "name": "Drwal Jakub",
+    "role": "Drwal",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 60,
+      "max_hp": 60,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 12,
+      "dexterity": 4,
+      "armor": 2,
+      "magic_resist": 0,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_bloodroot"
+    ],
+    "default_dialog": "dialog_woodcutter",
+    "dialogs": [
+      "dialog_woodcutter",
+      "dialog_woodcutter_quest"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_02"
+    ],
+    "spawn_position": {
+      "x": 550,
+      "y": 450,
+      "location_id": "loc_forest"
+    }
   },
   {
-    "id": "npc_free_alchemist", "name": "Mędrzec Proch", "role": "Alchemik", "gender": "male", "faction": "new_order",
-    "stats": { "hp": 30, "max_hp": 30, "mana": 30, "max_mana": 30, "strength": 2, "dexterity": 4, "armor": 1, "magic_resist": 3, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": {}, "inventory": ["plant_bloodroot", "plant_poison_cap", "potion_healing_small", "potion_antidote"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 200, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_side_05"], "spawn_position": { "x": 470, "y": 410, "location_id": "loc_free_village" },
-    "is_merchant": true, "merchant_group": "general"
+    "id": "npc_swamp_hermit",
+    "name": "Błotny Pustelnik",
+    "role": "Pustelnik",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 40,
+      "max_hp": 40,
+      "mana": 15,
+      "max_mana": 15,
+      "strength": 5,
+      "dexterity": 5,
+      "armor": 2,
+      "magic_resist": 3,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_swamp_moss",
+      "plant_poison_cap",
+      "potion_antidote"
+    ],
+    "default_dialog": "dialog_swamp_hermit",
+    "dialogs": [
+      "dialog_swamp_hermit"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_05"
+    ],
+    "spawn_position": {
+      "x": 300,
+      "y": 300,
+      "location_id": "loc_swamp"
+    }
   },
   {
-    "id": "npc_free_child_1", "name": "Mały Drapich", "role": "Dziecko", "gender": "male", "faction": "new_order",
-    "stats": { "hp": 15, "max_hp": 15, "mana": 0, "max_mana": 0, "strength": 2, "dexterity": 5, "armor": 0, "magic_resist": 0, "level": 1, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": [],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 50, "alert_range": 200, "reaction": "flee", "reputation_change": 0 },
-    "quest_ids": [], "spawn_position": { "x": 515, "y": 380, "location_id": "loc_free_village" }
+    "id": "npc_old_veteran",
+    "name": "Weteran Dobromir",
+    "role": "Emerytowany żołnierz",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 65,
+      "max_hp": 65,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 10,
+      "dexterity": 6,
+      "armor": 4,
+      "magic_resist": 1,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [],
+    "default_dialog": "dialog_veteran",
+    "dialogs": [
+      "dialog_veteran",
+      "dialog_veteran_quest"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_01"
+    ],
+    "spawn_position": {
+      "x": 350,
+      "y": 400,
+      "location_id": "loc_cemetery"
+    }
   },
   {
-    "id": "npc_free_child_2", "name": "Kostka", "role": "Dziecko", "gender": "female", "faction": "new_order",
-    "stats": { "hp": 15, "max_hp": 15, "mana": 0, "max_mana": 0, "strength": 1, "dexterity": 6, "armor": 0, "magic_resist": 0, "level": 1, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": [],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 50, "alert_range": 200, "reaction": "flee", "reputation_change": 0 },
-    "quest_ids": [], "spawn_position": { "x": 525, "y": 390, "location_id": "loc_free_village" }
+    "id": "npc_free_scout",
+    "name": "Zwiadowca Włók",
+    "role": "Zwiadowca Wolnych",
+    "gender": "male",
+    "faction": "new_order",
+    "stats": {
+      "hp": 55,
+      "max_hp": 55,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 7,
+      "dexterity": 10,
+      "armor": 4,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "bow_shortbow",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [
+      "misc_arrow",
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_free_scout",
+    "dialogs": [
+      "dialog_free_scout"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_new_01"
+    ],
+    "spawn_position": {
+      "x": 460,
+      "y": 320,
+      "location_id": "loc_free_village"
+    }
   },
   {
-    "id": "npc_free_bartender", "name": "Adam Gorzałka", "role": "Barman", "gender": "male", "faction": "new_order",
-    "stats": { "hp": 40, "max_hp": 40, "mana": 0, "max_mana": 0, "strength": 6, "dexterity": 4, "armor": 2, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["potion_stamina"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": [], "spawn_position": { "x": 505, "y": 360, "location_id": "loc_free_village" },
-    "is_merchant": true, "merchant_group": "inn"
+    "id": "npc_exile_leader",
+    "name": "Wygnaniec Krzywy",
+    "role": "Lider wygnańców w Głuchodole",
+    "gender": "male",
+    "faction": "bandit",
+    "stats": {
+      "hp": 90,
+      "max_hp": 90,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 13,
+      "dexterity": 8,
+      "armor": 6,
+      "magic_resist": 2,
+      "level": 6,
+      "xp": 0,
+      "xp_to_next": 250,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_serrated_gladius",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [
+      "potion_healing_small",
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_bandit_generic",
+    "dialogs": [
+      "dialog_bandit_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 250,
+      "alert_range": 400,
+      "reaction": "attack",
+      "reputation_change": -20
+    },
+    "quest_ids": [
+      "quest_old_02",
+      "quest_side_03"
+    ],
+    "spawn_position": {
+      "x": 400,
+      "y": 200,
+      "location_id": "loc_mountains"
+    }
   },
   {
-    "id": "npc_neutral_fisherman", "name": "Rybak Stach", "role": "Rybak", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 35, "max_hp": 35, "mana": 0, "max_mana": 0, "strength": 5, "dexterity": 4, "armor": 1, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["misc_gold"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 250, "reaction": "flee", "reputation_change": -5 },
-    "quest_ids": [], "spawn_position": { "x": 350, "y": 520, "location_id": "loc_beach" }
+    "id": "npc_exile_fighter",
+    "name": "Łajba",
+    "role": "Najemnik",
+    "gender": "male",
+    "faction": "bandit",
+    "stats": {
+      "hp": 70,
+      "max_hp": 70,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 10,
+      "dexterity": 6,
+      "armor": 4,
+      "magic_resist": 1,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_iron_longsword",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_bandit_generic",
+    "dialogs": [
+      "dialog_bandit_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 420,
+      "y": 220,
+      "location_id": "loc_mountains"
+    }
   },
   {
-    "id": "npc_neutral_pilgrim", "name": "Pielgrzym Wawrzyniec", "role": "Pielgrzym", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 25, "max_hp": 25, "mana": 0, "max_mana": 0, "strength": 3, "dexterity": 3, "armor": 1, "magic_resist": 1, "level": 1, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["plant_bloodroot"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 100, "alert_range": 200, "reaction": "flee", "reputation_change": -5 },
-    "quest_ids": ["quest_side_03"], "spawn_position": { "x": 450, "y": 450, "location_id": "loc_road" }
+    "id": "npc_exile_archer",
+    "name": "Łukasz Wygnaniec",
+    "role": "Łucznik",
+    "gender": "male",
+    "faction": "bandit",
+    "stats": {
+      "hp": 50,
+      "max_hp": 50,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 5,
+      "dexterity": 10,
+      "armor": 2,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "bow_shortbow",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [
+      "misc_arrow",
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_bandit_generic",
+    "dialogs": [
+      "dialog_bandit_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 250,
+      "alert_range": 400,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 440,
+      "y": 200,
+      "location_id": "loc_mountains"
+    }
   },
   {
-    "id": "npc_neutral_madman", "name": "Obłąkany Wieszcz", "role": "Prorok", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 20, "max_hp": 20, "mana": 40, "max_mana": 40, "strength": 2, "dexterity": 3, "armor": 0, "magic_resist": 2, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": {}, "inventory": [],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 100, "alert_range": 200, "reaction": "flee", "reputation_change": 0 },
-    "quest_ids": ["quest_main_arrival"], "spawn_position": { "x": 650, "y": 300, "location_id": "loc_forest" }
+    "id": "npc_exile_brute",
+    "name": "Bruździ",
+    "role": "Miecznik",
+    "gender": "male",
+    "faction": "bandit",
+    "stats": {
+      "hp": 90,
+      "max_hp": 90,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 14,
+      "dexterity": 4,
+      "armor": 5,
+      "magic_resist": 1,
+      "level": 5,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_iron_longsword",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_bandit_generic",
+    "dialogs": [
+      "dialog_bandit_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [
+      "quest_old_02"
+    ],
+    "spawn_position": {
+      "x": 410,
+      "y": 240,
+      "location_id": "loc_mountains"
+    }
   },
   {
-    "id": "npc_neutral_trapper", "name": "Traper Krzak", "role": "Traper", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 55, "max_hp": 55, "mana": 0, "max_mana": 0, "strength": 8, "dexterity": 8, "armor": 3, "magic_resist": 1, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": { "weapon": "bow_shortbow", "armor": "armor_leather_vest" },
-    "inventory": ["misc_skins_wolf", "misc_arrow", "misc_gold"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_side_04"], "spawn_position": { "x": 620, "y": 440, "location_id": "loc_forest" }
+    "id": "npc_free_fighter_1",
+    "name": "Waligóra",
+    "role": "Wojownik Wolnych",
+    "gender": "male",
+    "faction": "new_order",
+    "stats": {
+      "hp": 90,
+      "max_hp": 90,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 15,
+      "dexterity": 5,
+      "armor": 7,
+      "magic_resist": 2,
+      "level": 5,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_iron_longsword",
+      "armor": "armor_free_hide"
+    },
+    "inventory": [],
+    "default_dialog": "dialog_free_fighter",
+    "dialogs": [
+      "dialog_free_fighter"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 250,
+      "alert_range": 400,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [
+      "quest_new_03"
+    ],
+    "spawn_position": {
+      "x": 540,
+      "y": 340,
+      "location_id": "loc_free_village"
+    }
   },
   {
-    "id": "npc_neutral_forager", "name": "Zbieraczka Malwa", "role": "Zbieraczka", "gender": "female", "faction": "neutral",
-    "stats": { "hp": 30, "max_hp": 30, "mana": 0, "max_mana": 0, "strength": 3, "dexterity": 5, "armor": 1, "magic_resist": 1, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["plant_dewleaf", "plant_bloodroot", "plant_moonweed"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 200, "reaction": "flee", "reputation_change": -5 },
-    "quest_ids": ["quest_side_05"], "spawn_position": { "x": 580, "y": 420, "location_id": "loc_forest" }
+    "id": "npc_free_fighter_2",
+    "name": "Czujna",
+    "role": "Wojowniczka Wolnych",
+    "gender": "female",
+    "faction": "new_order",
+    "stats": {
+      "hp": 75,
+      "max_hp": 75,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 10,
+      "dexterity": 10,
+      "armor": 5,
+      "magic_resist": 2,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_hunters_blade",
+      "armor": "armor_free_hide"
+    },
+    "inventory": [],
+    "default_dialog": "dialog_free_fighter",
+    "dialogs": [
+      "dialog_free_fighter"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 350,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [
+      "quest_new_03"
+    ],
+    "spawn_position": {
+      "x": 550,
+      "y": 330,
+      "location_id": "loc_free_village"
+    }
   },
   {
-    "id": "npc_neutral_grave_digger", "name": "Grabarz Żal", "role": "Grabarz", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 40, "max_hp": 40, "mana": 0, "max_mana": 0, "strength": 8, "dexterity": 3, "armor": 2, "magic_resist": 1, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": {}, "inventory": ["plant_grave_moss"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 150, "alert_range": 250, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": ["quest_side_01"], "spawn_position": { "x": 330, "y": 380, "location_id": "loc_cemetery" }
+    "id": "npc_free_merchant",
+    "name": "Kupiec Robal",
+    "role": "Handlarz",
+    "gender": "male",
+    "faction": "new_order",
+    "stats": {
+      "hp": 35,
+      "max_hp": 35,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 3,
+      "dexterity": 5,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "potion_healing_small",
+      "misc_arrow",
+      "misc_lockpick_iron",
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "call_guards",
+      "reputation_change": -15
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 500,
+      "y": 400,
+      "location_id": "loc_free_village"
+    },
+    "is_merchant": true,
+    "merchant_group": "general"
   },
   {
-    "id": "npc_neutral_prospector", "name": "Poszukiwacz Brył", "role": "Poszukiwacz", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 45, "max_hp": 45, "mana": 0, "max_mana": 0, "strength": 7, "dexterity": 5, "armor": 3, "magic_resist": 1, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": { "weapon": "sword_rusted_machete" }, "inventory": ["misc_gold"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "warn", "reputation_change": -5 },
-    "quest_ids": [], "spawn_position": { "x": 380, "y": 250, "location_id": "loc_mountains" }
+    "id": "npc_free_elder",
+    "name": "Stara Wiedźma",
+    "role": "Starsza Wolnych Chat",
+    "gender": "female",
+    "faction": "new_order",
+    "stats": {
+      "hp": 30,
+      "max_hp": 30,
+      "mana": 40,
+      "max_mana": 40,
+      "strength": 2,
+      "dexterity": 3,
+      "armor": 1,
+      "magic_resist": 6,
+      "level": 5,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [],
+    "default_dialog": "dialog_free_elder",
+    "dialogs": [
+      "dialog_free_elder",
+      "dialog_free_elder_quest"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 250,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_new_03"
+    ],
+    "spawn_position": {
+      "x": 510,
+      "y": 280,
+      "location_id": "loc_free_village"
+    },
+    "is_essential": true
   },
   {
-    "id": "npc_neutral_hermit_cave", "name": "Jaskiniowy Pustelnik", "role": "Pustelnik", "gender": "male", "faction": "neutral",
-    "stats": { "hp": 35, "max_hp": 35, "mana": 10, "max_mana": 10, "strength": 4, "dexterity": 4, "armor": 1, "magic_resist": 2, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": {}, "inventory": ["plant_frost_grass", "potion_mana_small"],
-    "default_dialog": "dialog_merchant_generic", "dialogs": ["dialog_merchant_generic"],
-    "crime_reaction": { "witness_threshold": 100, "alert_range": 200, "reaction": "flee", "reputation_change": -5 },
-    "quest_ids": [], "spawn_position": { "x": 360, "y": 280, "location_id": "loc_mountains" }
+    "id": "npc_free_hunter",
+    "name": "Łowczyni Strzała",
+    "role": "Myśliwy Wolnych",
+    "gender": "female",
+    "faction": "new_order",
+    "stats": {
+      "hp": 50,
+      "max_hp": 50,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 6,
+      "dexterity": 12,
+      "armor": 3,
+      "magic_resist": 1,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "bow_hunting_bow",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [
+      "misc_arrow",
+      "misc_skins_wolf"
+    ],
+    "default_dialog": "dialog_free_hunter",
+    "dialogs": [
+      "dialog_free_hunter"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_new_02"
+    ],
+    "spawn_position": {
+      "x": 530,
+      "y": 360,
+      "location_id": "loc_free_village"
+    }
   },
   {
-    "id": "npc_bandit_road_1", "name": "Obdartus", "role": "Bandyta", "gender": "male", "faction": "bandit",
-    "stats": { "hp": 45, "max_hp": 45, "mana": 0, "max_mana": 0, "strength": 7, "dexterity": 5, "armor": 2, "magic_resist": 0, "level": 2, "xp": 0, "xp_to_next": 100, "skill_points": 0 },
-    "equipment": { "weapon": "sword_rusted_machete" }, "inventory": ["misc_gold"],
-    "default_dialog": "dialog_bandit_generic", "dialogs": ["dialog_bandit_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "attack", "reputation_change": -10 },
-    "quest_ids": ["quest_old_02"], "spawn_position": { "x": 450, "y": 420, "location_id": "loc_road" }
+    "id": "npc_free_smith",
+    "name": "Kowal Iskra",
+    "role": "Kowal Wolnych",
+    "gender": "female",
+    "faction": "new_order",
+    "stats": {
+      "hp": 60,
+      "max_hp": 60,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 14,
+      "dexterity": 6,
+      "armor": 4,
+      "magic_resist": 1,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "sword_obsidian_cleaver",
+      "sword_hunters_blade",
+      "sword_wolfs_fang"
+    ],
+    "default_dialog": "dialog_free_smith",
+    "dialogs": [
+      "dialog_free_smith"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 490,
+      "y": 420,
+      "location_id": "loc_free_village"
+    },
+    "is_merchant": true,
+    "merchant_group": "blacksmith"
   },
   {
-    "id": "npc_bandit_road_2", "name": "Szemrany", "role": "Bandyta", "gender": "male", "faction": "bandit",
-    "stats": { "hp": 50, "max_hp": 50, "mana": 0, "max_mana": 0, "strength": 8, "dexterity": 6, "armor": 2, "magic_resist": 0, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": { "weapon": "sword_old_shortsword" }, "inventory": ["misc_gold", "potion_healing_small"],
-    "default_dialog": "dialog_bandit_generic", "dialogs": ["dialog_bandit_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "attack", "reputation_change": -10 },
-    "quest_ids": ["quest_old_02"], "spawn_position": { "x": 480, "y": 440, "location_id": "loc_road" }
+    "id": "npc_free_alchemist",
+    "name": "Mędrzec Proch",
+    "role": "Alchemik",
+    "gender": "male",
+    "faction": "new_order",
+    "stats": {
+      "hp": 30,
+      "max_hp": 30,
+      "mana": 30,
+      "max_mana": 30,
+      "strength": 2,
+      "dexterity": 4,
+      "armor": 1,
+      "magic_resist": 3,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_bloodroot",
+      "plant_poison_cap",
+      "potion_healing_small",
+      "potion_antidote"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 200,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_05"
+    ],
+    "spawn_position": {
+      "x": 470,
+      "y": 410,
+      "location_id": "loc_free_village"
+    },
+    "is_merchant": true,
+    "merchant_group": "general"
   },
   {
-    "id": "npc_bandit_road_3", "name": "Kostropaty", "role": "Bandyta", "gender": "male", "faction": "bandit",
-    "stats": { "hp": 60, "max_hp": 60, "mana": 0, "max_mana": 0, "strength": 10, "dexterity": 4, "armor": 3, "magic_resist": 1, "level": 3, "xp": 0, "xp_to_next": 150, "skill_points": 0 },
-    "equipment": { "weapon": "sword_serrated_gladius" }, "inventory": ["misc_gold", "misc_lockpick_iron"],
-    "default_dialog": "dialog_bandit_generic", "dialogs": ["dialog_bandit_generic"],
-    "crime_reaction": { "witness_threshold": 200, "alert_range": 300, "reaction": "attack", "reputation_change": -10 },
-    "quest_ids": ["quest_old_02"], "spawn_position": { "x": 470, "y": 460, "location_id": "loc_road" }
+    "id": "npc_free_child_1",
+    "name": "Mały Drapich",
+    "role": "Dziecko",
+    "gender": "male",
+    "faction": "new_order",
+    "stats": {
+      "hp": 15,
+      "max_hp": 15,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 2,
+      "dexterity": 5,
+      "armor": 0,
+      "magic_resist": 0,
+      "level": 1,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 50,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": 0
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 515,
+      "y": 380,
+      "location_id": "loc_free_village"
+    }
+  },
+  {
+    "id": "npc_free_child_2",
+    "name": "Kostka",
+    "role": "Dziecko",
+    "gender": "female",
+    "faction": "new_order",
+    "stats": {
+      "hp": 15,
+      "max_hp": 15,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 1,
+      "dexterity": 6,
+      "armor": 0,
+      "magic_resist": 0,
+      "level": 1,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 50,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": 0
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 525,
+      "y": 390,
+      "location_id": "loc_free_village"
+    }
+  },
+  {
+    "id": "npc_free_bartender",
+    "name": "Adam Gorzałka",
+    "role": "Barman",
+    "gender": "male",
+    "faction": "new_order",
+    "stats": {
+      "hp": 40,
+      "max_hp": 40,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 6,
+      "dexterity": 4,
+      "armor": 2,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "potion_stamina"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 505,
+      "y": 360,
+      "location_id": "loc_free_village"
+    },
+    "is_merchant": true,
+    "merchant_group": "inn"
+  },
+  {
+    "id": "npc_neutral_fisherman",
+    "name": "Rybak Stach",
+    "role": "Rybak",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 35,
+      "max_hp": 35,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 5,
+      "dexterity": 4,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 250,
+      "reaction": "flee",
+      "reputation_change": -5
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 350,
+      "y": 520,
+      "location_id": "loc_beach"
+    }
+  },
+  {
+    "id": "npc_neutral_pilgrim",
+    "name": "Pielgrzym Wawrzyniec",
+    "role": "Pielgrzym",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 25,
+      "max_hp": 25,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 3,
+      "dexterity": 3,
+      "armor": 1,
+      "magic_resist": 1,
+      "level": 1,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_bloodroot"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_03"
+    ],
+    "spawn_position": {
+      "x": 450,
+      "y": 450,
+      "location_id": "loc_road"
+    }
+  },
+  {
+    "id": "npc_neutral_madman",
+    "name": "Obłąkany Wieszcz",
+    "role": "Prorok",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 20,
+      "max_hp": 20,
+      "mana": 40,
+      "max_mana": 40,
+      "strength": 2,
+      "dexterity": 3,
+      "armor": 0,
+      "magic_resist": 2,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": 0
+    },
+    "quest_ids": [
+      "quest_main_arrival"
+    ],
+    "spawn_position": {
+      "x": 650,
+      "y": 300,
+      "location_id": "loc_forest"
+    }
+  },
+  {
+    "id": "npc_neutral_trapper",
+    "name": "Traper Krzak",
+    "role": "Traper",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 55,
+      "max_hp": 55,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 8,
+      "dexterity": 8,
+      "armor": 3,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "bow_shortbow",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [
+      "misc_skins_wolf",
+      "misc_arrow",
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_04"
+    ],
+    "spawn_position": {
+      "x": 620,
+      "y": 440,
+      "location_id": "loc_forest"
+    }
+  },
+  {
+    "id": "npc_neutral_forager",
+    "name": "Zbieraczka Malwa",
+    "role": "Zbieraczka",
+    "gender": "female",
+    "faction": "neutral",
+    "stats": {
+      "hp": 30,
+      "max_hp": 30,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 3,
+      "dexterity": 5,
+      "armor": 1,
+      "magic_resist": 1,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_dewleaf",
+      "plant_bloodroot",
+      "plant_moonweed"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_05"
+    ],
+    "spawn_position": {
+      "x": 580,
+      "y": 420,
+      "location_id": "loc_forest"
+    }
+  },
+  {
+    "id": "npc_neutral_grave_digger",
+    "name": "Grabarz Żal",
+    "role": "Grabarz",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 40,
+      "max_hp": 40,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 8,
+      "dexterity": 3,
+      "armor": 2,
+      "magic_resist": 1,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_grave_moss"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 250,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_01"
+    ],
+    "spawn_position": {
+      "x": 330,
+      "y": 380,
+      "location_id": "loc_cemetery"
+    }
+  },
+  {
+    "id": "npc_neutral_prospector",
+    "name": "Poszukiwacz Brył",
+    "role": "Poszukiwacz",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 45,
+      "max_hp": 45,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 7,
+      "dexterity": 5,
+      "armor": 3,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_rusted_machete"
+    },
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 380,
+      "y": 250,
+      "location_id": "loc_mountains"
+    }
+  },
+  {
+    "id": "npc_neutral_hermit_cave",
+    "name": "Jaskiniowy Pustelnik",
+    "role": "Pustelnik",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 35,
+      "max_hp": 35,
+      "mana": 10,
+      "max_mana": 10,
+      "strength": 4,
+      "dexterity": 4,
+      "armor": 1,
+      "magic_resist": 2,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_frost_grass",
+      "potion_mana_small"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": -5
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 360,
+      "y": 280,
+      "location_id": "loc_mountains"
+    }
+  },
+  {
+    "id": "npc_bandit_road_1",
+    "name": "Obdartus",
+    "role": "Bandyta",
+    "gender": "male",
+    "faction": "bandit",
+    "stats": {
+      "hp": 45,
+      "max_hp": 45,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 7,
+      "dexterity": 5,
+      "armor": 2,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_rusted_machete"
+    },
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_bandit_generic",
+    "dialogs": [
+      "dialog_bandit_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "attack",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_old_02"
+    ],
+    "spawn_position": {
+      "x": 450,
+      "y": 420,
+      "location_id": "loc_road"
+    }
+  },
+  {
+    "id": "npc_bandit_road_2",
+    "name": "Szemrany",
+    "role": "Bandyta",
+    "gender": "male",
+    "faction": "bandit",
+    "stats": {
+      "hp": 50,
+      "max_hp": 50,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 8,
+      "dexterity": 6,
+      "armor": 2,
+      "magic_resist": 0,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_old_shortsword"
+    },
+    "inventory": [
+      "misc_gold",
+      "potion_healing_small"
+    ],
+    "default_dialog": "dialog_bandit_generic",
+    "dialogs": [
+      "dialog_bandit_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "attack",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_old_02"
+    ],
+    "spawn_position": {
+      "x": 480,
+      "y": 440,
+      "location_id": "loc_road"
+    }
+  },
+  {
+    "id": "npc_bandit_road_3",
+    "name": "Kostropaty",
+    "role": "Bandyta",
+    "gender": "male",
+    "faction": "bandit",
+    "stats": {
+      "hp": 60,
+      "max_hp": 60,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 10,
+      "dexterity": 4,
+      "armor": 3,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_serrated_gladius"
+    },
+    "inventory": [
+      "misc_gold",
+      "misc_lockpick_iron"
+    ],
+    "default_dialog": "dialog_bandit_generic",
+    "dialogs": [
+      "dialog_bandit_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "attack",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_old_02"
+    ],
+    "spawn_position": {
+      "x": 470,
+      "y": 460,
+      "location_id": "loc_road"
+    }
+  },
+  {
+    "id": "npc_old_healer",
+    "name": "Medyk Krosta",
+    "role": "Medyk",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 30,
+      "max_hp": 30,
+      "mana": 30,
+      "max_mana": 30,
+      "strength": 2,
+      "dexterity": 4,
+      "armor": 1,
+      "magic_resist": 3,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "potion_healing_small",
+      "potion_healing_medium",
+      "potion_antidote"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 250,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_09"
+    ],
+    "spawn_position": {
+      "x": 230,
+      "y": 360,
+      "location_id": "loc_old_fort"
+    },
+    "is_merchant": true,
+    "merchant_group": "general"
+  },
+  {
+    "id": "npc_old_engineer",
+    "name": "Inżynier Klepka",
+    "role": "Budowniczy",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 40,
+      "max_hp": 40,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 10,
+      "dexterity": 4,
+      "armor": 3,
+      "magic_resist": 0,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_old_05"
+    ],
+    "spawn_position": {
+      "x": 270,
+      "y": 370,
+      "location_id": "loc_old_fort"
+    }
+  },
+  {
+    "id": "npc_old_guard_ranged",
+    "name": "Kusznik Stach",
+    "role": "Strażnik kusznik",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 60,
+      "max_hp": 60,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 8,
+      "dexterity": 10,
+      "armor": 5,
+      "magic_resist": 1,
+      "level": 4,
+      "xp": 0,
+      "xp_to_next": 200,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "bow_crossbow",
+      "armor": "armor_guard_chainmail"
+    },
+    "inventory": [],
+    "default_dialog": "dialog_guard_generic",
+    "dialogs": [
+      "dialog_guard_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 250,
+      "alert_range": 400,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 300,
+      "y": 260,
+      "location_id": "loc_old_fort"
+    }
+  },
+  {
+    "id": "npc_free_doctor",
+    "name": "Drwalina",
+    "role": "Znachorka",
+    "gender": "female",
+    "faction": "new_order",
+    "stats": {
+      "hp": 28,
+      "max_hp": 28,
+      "mana": 25,
+      "max_mana": 25,
+      "strength": 2,
+      "dexterity": 5,
+      "armor": 1,
+      "magic_resist": 4,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_moonweed",
+      "plant_bloodroot",
+      "potion_healing_small"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_08"
+    ],
+    "spawn_position": {
+      "x": 540,
+      "y": 380,
+      "location_id": "loc_free_village"
+    }
+  },
+  {
+    "id": "npc_free_gambler",
+    "name": "Gracz Fela",
+    "role": "Hazardzista",
+    "gender": "male",
+    "faction": "new_order",
+    "stats": {
+      "hp": 35,
+      "max_hp": 35,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 4,
+      "dexterity": 8,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_rusted_dagger"
+    },
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 250,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_new_04"
+    ],
+    "spawn_position": {
+      "x": 560,
+      "y": 350,
+      "location_id": "loc_free_village"
+    }
+  },
+  {
+    "id": "npc_free_tanner",
+    "name": "Garbarz Kwas",
+    "role": "Garbarz",
+    "gender": "male",
+    "faction": "new_order",
+    "stats": {
+      "hp": 45,
+      "max_hp": 45,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 9,
+      "dexterity": 4,
+      "armor": 2,
+      "magic_resist": 0,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "misc_skins_wolf",
+      "misc_skins_boar"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 250,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_04"
+    ],
+    "spawn_position": {
+      "x": 480,
+      "y": 440,
+      "location_id": "loc_free_village"
+    },
+    "is_merchant": true,
+    "merchant_group": "general"
+  },
+  {
+    "id": "npc_neutral_hunter_2",
+    "name": "Łowca Wilk",
+    "role": "Łowca",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 55,
+      "max_hp": 55,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 8,
+      "dexterity": 10,
+      "armor": 3,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "bow_hunting_bow",
+      "armor": "armor_leather_vest"
+    },
+    "inventory": [
+      "misc_skins_wolf",
+      "misc_arrow"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [
+      "quest_side_04"
+    ],
+    "spawn_position": {
+      "x": 630,
+      "y": 380,
+      "location_id": "loc_forest"
+    }
+  },
+  {
+    "id": "npc_neutral_wanderer",
+    "name": "Włóczęga Licho",
+    "role": "Włóczęga",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 35,
+      "max_hp": 35,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 5,
+      "dexterity": 5,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": -3
+    },
+    "quest_ids": [
+      "quest_side_07"
+    ],
+    "spawn_position": {
+      "x": 480,
+      "y": 450,
+      "location_id": "loc_road"
+    }
+  },
+  {
+    "id": "npc_neutral_farmer",
+    "name": "Rolnik Kłos",
+    "role": "Rolnik",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 40,
+      "max_hp": 40,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 7,
+      "dexterity": 3,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 250,
+      "reaction": "flee",
+      "reputation_change": -5
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 600,
+      "y": 460,
+      "location_id": "loc_forest"
+    }
+  },
+  {
+    "id": "npc_neutral_beach_comber",
+    "name": "Zbieracz Muszel",
+    "role": "Zbieracz",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 25,
+      "max_hp": 25,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 3,
+      "dexterity": 4,
+      "armor": 0,
+      "magic_resist": 0,
+      "level": 1,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": -3
+    },
+    "quest_ids": [
+      "quest_side_06"
+    ],
+    "spawn_position": {
+      "x": 380,
+      "y": 520,
+      "location_id": "loc_beach"
+    }
+  },
+  {
+    "id": "npc_neutral_scribe",
+    "name": "Pisarz Atrament",
+    "role": "Pisarz",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 22,
+      "max_hp": 22,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 2,
+      "dexterity": 4,
+      "armor": 0,
+      "magic_resist": 1,
+      "level": 1,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "call_guards",
+      "reputation_change": -10
+    },
+    "quest_ids": [
+      "quest_side_10"
+    ],
+    "spawn_position": {
+      "x": 250,
+      "y": 340,
+      "location_id": "loc_old_fort"
+    }
+  },
+  {
+    "id": "npc_neutral_drifter",
+    "name": "Morski Włóczęga",
+    "role": "Żeglarz",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 45,
+      "max_hp": 45,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 6,
+      "dexterity": 6,
+      "armor": 2,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_rusted_dagger"
+    },
+    "inventory": [
+      "misc_gold",
+      "potion_stamina"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 300,
+      "reaction": "warn",
+      "reputation_change": -5
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 420,
+      "y": 500,
+      "location_id": "loc_beach"
+    }
+  },
+  {
+    "id": "npc_neutral_mushroom_picker",
+    "name": "Grzybiarka Podgrzyb",
+    "role": "Zbieraczka grzybów",
+    "gender": "female",
+    "faction": "neutral",
+    "stats": {
+      "hp": 28,
+      "max_hp": 28,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 3,
+      "dexterity": 5,
+      "armor": 1,
+      "magic_resist": 1,
+      "level": 2,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "plant_poison_cap",
+      "plant_bloodroot"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 100,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": -3
+    },
+    "quest_ids": [
+      "quest_new_02"
+    ],
+    "spawn_position": {
+      "x": 640,
+      "y": 460,
+      "location_id": "loc_forest"
+    }
   }
 ]
