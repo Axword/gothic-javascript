@@ -176,10 +176,13 @@ export class DialogScene extends Phaser.Scene {
   private executeAction(action: any) {
     switch (action.type) {
       case 'start_quest':
-        const event = new CustomEvent('game:message', { 
-          detail: `Nowe zadanie: ${action.target}` 
-        });
-        window.dispatchEvent(event);
+        if (this.gameScene?.questSystem) {
+          this.gameScene.questSystem.startQuest(action.target);
+          const event = new CustomEvent('game:message', { 
+            detail: `Nowe zadanie: ${action.target}` 
+          });
+          window.dispatchEvent(event);
+        }
         break;
       case 'give_item':
         if (this.gameScene?.player) {
@@ -192,7 +195,7 @@ export class DialogScene extends Phaser.Scene {
         }
         break;
       case 'set_flag':
-        break; // Do implementacji z systemem flag
+        break;
     }
   }
 

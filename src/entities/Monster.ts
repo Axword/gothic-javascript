@@ -214,7 +214,14 @@ export class Monster extends Phaser.GameObjects.Container {
   }
 
   getLoot(): string[] {
-    return ['misc_gold'];
+    const items: string[] = ['misc_gold'];
+    const table = this.monsterData.loot_table;
+    if (table === 'loot_wolf') items.push('misc_skins_wolf');
+    else if (table === 'loot_boar') items.push('misc_skins_boar');
+    else if (table === 'loot_mutant') items.push('misc_trophy_mutant_eye');
+    else if (table === 'loot_wyrm') items.push('misc_trophy_wyrm_scale');
+    else if (table === 'loot_shade') items.push('plant_grave_moss');
+    return items;
   }
 
   destroy() {

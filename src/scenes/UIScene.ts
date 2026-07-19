@@ -16,9 +16,12 @@ export class UIScene extends Phaser.Scene {
   private weaponText!: Phaser.GameObjects.Text;
   private timeText!: Phaser.GameObjects.Text;
   private messageText!: Phaser.GameObjects.Text;
+  private combatModeText!: Phaser.GameObjects.Text;
   private messageTimer: number = 0;
   private inventoryOpen: boolean = false;
   private inventoryContainer!: Phaser.GameObjects.Container;
+  private questLogOpen: boolean = false;
+  private questContainer!: Phaser.GameObjects.Container;
 
   constructor() {
     super({ key: 'UIScene' });
@@ -52,42 +55,52 @@ export class UIScene extends Phaser.Scene {
     // Level
     this.levelText = this.add.text(20, 718, 'LVL 1', { fontSize: '10px', color: '#ffcc00' });
     
-    // Złoto
+    // Combat mode indicator (center-left)
+    this.combatModeText = this.add.text(180, 718, '⚔️ Miecz', {
+      fontSize: '10px', color: '#ffaa44'
+    });
+    
+    // Gold
     this.goldText = this.add.text(W - 120, 730, 'Złoto: 20', { fontSize: '11px', color: '#ffcc00' });
     
-    // Broń
+    // Weapon
     this.weaponText = this.add.text(W - 120, 748, 'Broń: brak', { fontSize: '9px', color: '#aaaaaa' });
     
-    // Czas
+    // Time
     this.timeText = this.add.text(W / 2, 748, '08:00 - Dzień 1', { 
       fontSize: '10px', color: '#aaaaaa' 
     }).setOrigin(0.5);
     
-    // Komunikaty (przewijane)
+    // Messages
     this.messageText = this.add.text(W / 2, 690, '', {
-      fontSize: '12px',
-      color: '#ffffcc',
-      stroke: '#000000',
-      strokeThickness: 3
+      fontSize: '12px', color: '#ffffcc', stroke: '#000000', strokeThickness: 3
     }).setOrigin(0.5);
     
-    // Nasłuchiwanie eventów
+    // Events
     window.addEventListener('game:message', (e: any) => {
       this.showMessage(e.detail);
     });
-    
     window.addEventListener('game:playerHit', (e: any) => {
-      this.showMessage(`Obrażenia: ${e.detail.damage}`, '#ff4444');
+      this.showMessage(`-${e.detail.damage} HP`, '#ff4444');
     });
-    
     window.addEventListener('game:time', (e: any) => {
       this.timeText.setText(`${e.detail.time} - Dzień ${e.detail.day}`);
     });
-    
-    // Ekwipunek (przycisk I)
-    this.input.keyboard!.on('keydown-I', () => {
-      this.toggleInventory();
+    window.addEventListener('game:combatMode', (e: any) => {
+      const icons: Record<string, string> = { melee: '⚔️ Miecz', ranged: '🏹 Łuk', magic: '🔮 Magia' };
+      this.combatModeText.setText(icons[e.detail.mode] || '⚔️ Miecz');
     });
+    window.addEventListener('game:questStarted', (e: any) => {
+      this.showMessage(`Nowe zadanie: ${e.detail.title}`, '#44ff44');
+    });
+    window.addEventListener('game:questCompleted', (e: any) => {
+      this.showMessage(`Zadanie ukończone: ${e.detail.title}!`, '#ffcc00');
+    });
+    
+    // Keys
+    this.input.keyboard!.on('keydown-I', () => this.toggleInventory());
+    this.input.keyboard!.on('keydown-J', () => this.toggleQuestLog());
+    this.input.keyboard!.on('keydown-C', () => this.showStats());
   }
 
   update() {
@@ -95,35 +108,27 @@ export class UIScene extends Phaser.Scene {
     
     const player = this.gameScene.player;
     
-    // HP bar
     const hpRatio = Math.max(0, player.hp / player.maxHp);
     this.hpBar.setScale(hpRatio, 1);
     this.hpText.setText(`HP: ${Math.floor(player.hp)}/${player.maxHp}`);
     
-    // Mana bar
     const manaRatio = Math.max(0, player.mana / player.maxMana);
     this.manaBar.setScale(manaRatio, 1);
     this.manaText.setText(`MP: ${Math.floor(player.mana)}/${player.maxMana}`);
     
-    // XP bar
     const xpRatio = Math.max(0, player.xp / player.xpToNext);
     this.xpBar.setScale(xpRatio, 1);
     
-    // Level
     this.levelText.setText(`LVL ${player.level}`);
-    
-    // Złoto
     this.goldText.setText(`Złoto: ${player.gold}`);
-    
-    // Broń
     this.weaponText.setText(`Broń: ${player.equippedWeapon || 'brak'}`);
     
-    // Komunikaty
+    const icons: Record<string, string> = { melee: '⚔️ Miecz', ranged: '🏹 Łuk', magic: '🔮 Magia' };
+    this.combatModeText.setText(icons[player.currentCombatMode] || '⚔️ Miecz');
+    
     if (this.messageTimer > 0) {
       this.messageTimer -= 16;
-      if (this.messageTimer <= 0) {
-        this.messageText.setText('');
-      }
+      if (this.messageTimer <= 0) this.messageText.setText('');
     }
   }
 
@@ -135,64 +140,100 @@ export class UIScene extends Phaser.Scene {
 
   private toggleInventory() {
     this.inventoryOpen = !this.inventoryOpen;
-    
-    if (this.inventoryOpen) {
-      this.showInventory();
-    } else {
-      if (this.inventoryContainer) {
-        this.inventoryContainer.destroy();
-      }
-    }
+    if (this.inventoryOpen) this.showInventory();
+    else if (this.inventoryContainer) this.inventoryContainer.destroy();
   }
 
   private showInventory() {
     if (this.inventoryContainer) this.inventoryContainer.destroy();
     
-    this.inventoryContainer = this.add.container(512, 384);
+    const cont = this.add.container(512, 384);
+    this.inventoryContainer = cont;
     
-    // Tło
-    const bg = this.add.rectangle(0, 0, 500, 400, 0x1a1a1a, 0.95);
-    bg.setStrokeStyle(2, 0x444444);
-    this.inventoryContainer.add(bg);
+    const bg = this.add.rectangle(0, 0, 560, 420, 0x1a1a1a, 0.95).setStrokeStyle(2, 0x444444);
+    cont.add(bg);
+    cont.add(this.add.text(0, -185, 'EKWIPUNEK', { fontSize: '18px', color: '#ffcc00' }).setOrigin(0.5));
     
-    // Tytuł
-    const title = this.add.text(0, -180, 'EKWIPUNEK', {
-      fontSize: '18px', color: '#ffcc00'
-    }).setOrigin(0.5);
-    this.inventoryContainer.add(title);
+    // Stat block
+    const p = this.gameScene.player;
+    cont.add(this.add.text(-250, -160, `Siła:${p.strength} Zręcz:${p.dexterity} Pkt:${p.skillPoints}`, { fontSize: '10px', color: '#aaaaaa' }));
+    cont.add(this.add.text(-250, -148, `Umiejętności: ${Object.entries(p.skillRanks).map(([k,v]) => `${k}:${v}`).join(', ') || 'brak'}`, { fontSize: '9px', color: '#888888' }));
     
-    // Lista przedmiotów
-    const player = this.gameScene.player;
-    const items = player.inventory;
-    
+    // Items
+    const items = p.inventory;
     if (items.length === 0) {
-      const empty = this.add.text(0, 0, 'Pusto. Znajdź coś po drodze.', {
-        fontSize: '14px', color: '#666666'
-      }).setOrigin(0.5);
-      this.inventoryContainer.add(empty);
+      cont.add(this.add.text(0, 0, 'Pusto.', { fontSize: '14px', color: '#666666' }).setOrigin(0.5));
     } else {
-      items.forEach((itemId, i) => {
-        if (i > 15) return; // limit widocznych
-        const y = -140 + i * 22;
-        const count = player.getItemCount(itemId);
-        const itemText = this.add.text(-220, y, `${itemId}${count > 1 ? ` (${count})` : ''}`, {
-          fontSize: '11px', color: '#cccccc'
-        });
-        this.inventoryContainer.add(itemText);
+      items.slice(0, 20).forEach((itemId, i) => {
+        const y = -120 + i * 20;
+        const count = p.getItemCount(itemId);
+        cont.add(this.add.text(-250, y, `${itemId}${count > 1 ? ` (${count})` : ''}`, { fontSize: '10px', color: '#cccccc' }));
       });
     }
     
-    // Zamknij
-    const closeBtn = this.add.text(220, -180, '[X]', {
-      fontSize: '14px', color: '#ff4444'
-    }).setInteractive({ useHandCursor: true });
+    // Close
+    const closeBtn = this.add.text(250, -185, '[X]', { fontSize: '14px', color: '#ff4444' })
+      .setInteractive({ useHandCursor: true });
     closeBtn.on('pointerdown', () => this.toggleInventory());
-    this.inventoryContainer.add(closeBtn);
+    cont.add(closeBtn);
     
-    // Instrukcja
-    const help = this.add.text(0, 170, 'I - zamknij | C - statystyki | J - dziennik', {
-      fontSize: '10px', color: '#666666'
-    }).setOrigin(0.5);
-    this.inventoryContainer.add(help);
+    cont.add(this.add.text(0, 185, 'I-zamknij | C-stats | J-zadania | 1/2/3-tryb', { fontSize: '9px', color: '#666666' }).setOrigin(0.5));
+  }
+
+  private toggleQuestLog() {
+    this.questLogOpen = !this.questLogOpen;
+    if (this.questLogOpen) this.showQuestLog();
+    else if (this.questContainer) this.questContainer.destroy();
+  }
+
+  private showQuestLog() {
+    if (this.questContainer) this.questContainer.destroy();
+    
+    const cont = this.add.container(512, 384);
+    this.questContainer = cont;
+    
+    const bg = this.add.rectangle(0, 0, 500, 420, 0x0a0a0a, 0.95).setStrokeStyle(2, 0x444444);
+    cont.add(bg);
+    cont.add(this.add.text(0, -190, 'DZIENNIK ZADAŃ', { fontSize: '18px', color: '#ffcc00' }).setOrigin(0.5));
+    
+    const quests = this.gameScene.questSystem.getActiveQuests();
+    const completed = this.gameScene.questSystem.getCompletedQuests();
+    
+    let y = -160;
+    if (quests.length === 0 && completed.length === 0) {
+      cont.add(this.add.text(0, 0, 'Brak zadań.', { fontSize: '14px', color: '#666666' }).setOrigin(0.5));
+    } else {
+      cont.add(this.add.text(-220, y, '--- AKTYWNE ---', { fontSize: '11px', color: '#44ff44' }));
+      y += 18;
+      
+      for (const q of quests) {
+        cont.add(this.add.text(-220, y, `• ${q.quest_id}: etap ${q.current_stage}`, { fontSize: '10px', color: '#cccccc' }));
+        y += 16;
+      }
+      
+      y += 10;
+      cont.add(this.add.text(-220, y, '--- UKOŃCZONE ---', { fontSize: '11px', color: '#ffcc00' }));
+      y += 18;
+      
+      for (const q of completed) {
+        cont.add(this.add.text(-220, y, `✓ ${q.quest_id}`, { fontSize: '10px', color: '#888888' }));
+        y += 16;
+      }
+    }
+    
+    const closeBtn = this.add.text(220, -190, '[X]', { fontSize: '14px', color: '#ff4444' })
+      .setInteractive({ useHandCursor: true });
+    closeBtn.on('pointerdown', () => this.toggleQuestLog());
+    cont.add(closeBtn);
+    
+    cont.add(this.add.text(0, 190, 'J-zamknij', { fontSize: '9px', color: '#666666' }).setOrigin(0.5));
+  }
+
+  private showStats() {
+    const p = this.gameScene.player;
+    this.showMessage(
+      `LVL${p.level} | S:${p.strength} Z:${p.dexterity} | HP:${Math.floor(p.hp)}/${p.maxHp} MP:${Math.floor(p.mana)}/${p.maxMana} | ` +
+      `Rep: Straż ${p.reputation.old_order || 0} Wolni ${p.reputation.new_order || 0}`
+    );
   }
 }

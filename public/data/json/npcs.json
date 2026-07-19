@@ -2995,5 +2995,90 @@
       "y": 460,
       "location_id": "loc_forest"
     }
+  },
+  {
+    "id": "npc_old_guard_4",
+    "name": "Strażnik Łukasz",
+    "role": "Strażnik wieży",
+    "gender": "male",
+    "faction": "old_order",
+    "stats": {
+      "hp": 70,
+      "max_hp": 70,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 9,
+      "dexterity": 7,
+      "armor": 6,
+      "magic_resist": 1,
+      "level": 3,
+      "xp": 0,
+      "xp_to_next": 150,
+      "skill_points": 0
+    },
+    "equipment": {
+      "weapon": "sword_old_shortsword",
+      "armor": "armor_guard_chainmail"
+    },
+    "inventory": [],
+    "default_dialog": "dialog_guard_generic",
+    "dialogs": [
+      "dialog_guard_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 200,
+      "alert_range": 350,
+      "reaction": "attack",
+      "reputation_change": -15
+    },
+    "quest_ids": [
+      "quest_old_04"
+    ],
+    "spawn_position": {
+      "x": 340,
+      "y": 240,
+      "location_id": "loc_old_fort"
+    }
+  },
+  {
+    "id": "npc_neutral_shepherd",
+    "name": "Pasterz Owiec",
+    "role": "Pasterz",
+    "gender": "male",
+    "faction": "neutral",
+    "stats": {
+      "hp": 30,
+      "max_hp": 30,
+      "mana": 0,
+      "max_mana": 0,
+      "strength": 4,
+      "dexterity": 3,
+      "armor": 1,
+      "magic_resist": 0,
+      "level": 1,
+      "xp": 0,
+      "xp_to_next": 100,
+      "skill_points": 0
+    },
+    "equipment": {},
+    "inventory": [
+      "misc_gold"
+    ],
+    "default_dialog": "dialog_merchant_generic",
+    "dialogs": [
+      "dialog_merchant_generic"
+    ],
+    "crime_reaction": {
+      "witness_threshold": 150,
+      "alert_range": 200,
+      "reaction": "flee",
+      "reputation_change": -5
+    },
+    "quest_ids": [],
+    "spawn_position": {
+      "x": 580,
+      "y": 480,
+      "location_id": "loc_forest"
+    }
   }
 ]
