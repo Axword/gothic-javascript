@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Misc Items",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "description", "category", "value", "weight", "icon"],
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "category": { "type": "string", "enum": ["ammo", "lockpick", "currency", "key", "quest_item", "trophy", "misc"] },
+      "value": { "type": "integer", "minimum": 0 },
+      "weight": { "type": "number", "minimum": 0 },
+      "icon": { "type": "string" },
+      "asset_path": { "type": "string" },
+      "stackable": { "type": "boolean" },
+      "max_stack": { "type": "integer", "minimum": 1 },
+      "lockpick_level": { "type": "integer", "minimum": 1, "maximum": 3 }
+    }
+  }
+}

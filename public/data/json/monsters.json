@@ -1,0 +1,82 @@
+[
+  {
+    "id": "monster_grey_wolf",
+    "name": "Szary Wilczur",
+    "description": "Wielki, wychudzony wilk o ślepiach jak żużle. Głód czyni go odważnym.",
+    "stats": { "hp": 40, "strength": 5, "dexterity": 8, "armor": 1, "speed": 160, "xp_reward": 25 },
+    "attacks": [ { "id": "bite", "name": "Ugryzienie", "type": "physical", "damage": 8, "range": 24, "cooldown": 800, "windup": 300 } ],
+    "behavior": ["aggressive", "pack"],
+    "loot_table": "loot_wolf",
+    "biom": ["forest", "road"],
+    "asset_path": "sprites/monsters/grey_wolf.png",
+    "scale": 1.0
+  },
+  {
+    "id": "monster_forest_boar",
+    "name": "Leśny Dzik",
+    "description": "Stary odyniec z ryjem jak taran. Nie ustępuje nikomu.",
+    "stats": { "hp": 70, "strength": 9, "dexterity": 4, "armor": 4, "speed": 120, "xp_reward": 40 },
+    "attacks": [ { "id": "charge", "name": "Szarża", "type": "physical", "damage": 15, "range": 32, "cooldown": 2000, "windup": 600 } ],
+    "behavior": ["aggressive", "tank"],
+    "loot_table": "loot_boar",
+    "biom": ["forest"],
+    "asset_path": "sprites/monsters/forest_boar.png",
+    "scale": 1.2
+  },
+  {
+    "id": "monster_marsh_crawler",
+    "name": "Błotny Pełzak",
+    "description": "Coś, co kiedyś było człowiekiem. Teraz jest tylko głodem i błotem.",
+    "stats": { "hp": 55, "strength": 6, "dexterity": 3, "armor": 2, "speed": 80, "xp_reward": 35 },
+    "attacks": [ { "id": "tentacle", "name": "Macka", "type": "physical", "damage": 10, "range": 40, "cooldown": 1200, "windup": 400, "effect": "poison" } ],
+    "behavior": ["territorial", "tank"],
+    "loot_table": "loot_crawler",
+    "biom": ["swamp", "cemetery"],
+    "asset_path": "sprites/monsters/marsh_crawler.png",
+    "scale": 1.1
+  },
+  {
+    "id": "monster_mutant",
+    "name": "Wykrzywiony",
+    "description": "Zwierzę zniekształcone przez energię Szczeliny. Aggresywne i nieprzewidywalne.",
+    "stats": { "hp": 90, "strength": 12, "dexterity": 6, "armor": 3, "speed": 140, "xp_reward": 60 },
+    "attacks": [
+      { "id": "claw", "name": "Pazur", "type": "physical", "damage": 14, "range": 28, "cooldown": 700, "windup": 250 },
+      { "id": "spit", "name": "Plwocina", "type": "fire", "damage": 8, "range": 120, "cooldown": 3000, "windup": 800, "projectile_speed": 200 }
+    ],
+    "behavior": ["aggressive", "ranged"],
+    "loot_table": "loot_mutant",
+    "biom": ["special", "mountain"],
+    "asset_path": "sprites/monsters/mutant.png",
+    "scale": 1.3,
+    "night_active": true
+  },
+  {
+    "id": "monster_sand_wyrm",
+    "name": "Piaszczak",
+    "description": "Wielki gad żyjący w skałach i piasku. Powolny, ale miażdży kości.",
+    "stats": { "hp": 180, "strength": 18, "dexterity": 2, "armor": 8, "speed": 60, "xp_reward": 100 },
+    "attacks": [
+      { "id": "crush", "name": "Miażdżenie", "type": "physical", "damage": 25, "range": 36, "cooldown": 3000, "windup": 1000 },
+      { "id": "tail_sweep", "name": "Ogon", "type": "physical", "damage": 15, "range": 48, "cooldown": 4000, "windup": 1200, "area_effect": 32 }
+    ],
+    "behavior": ["territorial", "tank"],
+    "loot_table": "loot_wyrm",
+    "biom": ["mountain", "beach"],
+    "asset_path": "sprites/monsters/sand_wyrm.png",
+    "scale": 1.5
+  },
+  {
+    "id": "monster_shade",
+    "name": "Cień",
+    "description": "Półprzezroczysta zjawa utkana z ciemności. Nie reaguje na stal, chyba że zaczarowaną.",
+    "stats": { "hp": 35, "strength": 4, "dexterity": 10, "armor": 0, "speed": 180, "xp_reward": 50 },
+    "attacks": [ { "id": "touch", "name": "Dotyk", "type": "ice", "damage": 10, "range": 20, "cooldown": 1000, "windup": 200, "effect": "freeze" } ],
+    "behavior": ["nocturnal", "aggressive"],
+    "loot_table": "loot_shade",
+    "biom": ["cemetery", "special", "forest"],
+    "asset_path": "sprites/monsters/shade.png",
+    "scale": 1.0,
+    "night_active": true
+  }
+]

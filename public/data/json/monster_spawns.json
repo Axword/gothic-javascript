@@ -1,0 +1,12 @@
+[
+  { "id": "spawn_forest_wolves", "monster_id": "monster_grey_wolf", "location_id": "loc_forest", "count": 3, "respawn_time": 120, "spawn_radius": 100 },
+  { "id": "spawn_forest_boars", "monster_id": "monster_forest_boar", "location_id": "loc_forest", "count": 2, "respawn_time": 180, "spawn_radius": 80 },
+  { "id": "spawn_road_wolves", "monster_id": "monster_grey_wolf", "location_id": "loc_road", "count": 2, "respawn_time": 120, "spawn_radius": 60 },
+  { "id": "spawn_swamp_crawlers", "monster_id": "monster_marsh_crawler", "location_id": "loc_swamp", "count": 3, "respawn_time": 150, "spawn_radius": 80 },
+  { "id": "spawn_mountain_wyrm", "monster_id": "monster_sand_wyrm", "location_id": "loc_mountains", "count": 1, "respawn_time": 300, "spawn_radius": 50 },
+  { "id": "spawn_mountain_mutants", "monster_id": "monster_mutant", "location_id": "loc_mountains", "count": 2, "respawn_time": 200, "spawn_radius": 70 },
+  { "id": "spawn_special_mutants", "monster_id": "monster_mutant", "location_id": "loc_special", "count": 2, "respawn_time": 180, "spawn_radius": 60 },
+  { "id": "spawn_special_shades", "monster_id": "monster_shade", "location_id": "loc_special", "count": 2, "respawn_time": 60, "spawn_radius": 50, "night_only": true },
+  { "id": "spawn_cemetery_shades", "monster_id": "monster_shade", "location_id": "loc_cemetery", "count": 2, "respawn_time": 60, "spawn_radius": 50, "night_only": true },
+  { "id": "spawn_cemetery_crawlers", "monster_id": "monster_marsh_crawler", "location_id": "loc_cemetery", "count": 1, "respawn_time": 120, "spawn_radius": 50 }
+]

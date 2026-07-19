@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Armors",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "description", "category", "value", "weight", "icon", "armor", "magic_resist", "slot"],
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "category": { "type": "string", "pattern": "^armor$" },
+      "value": { "type": "integer", "minimum": 0 },
+      "weight": { "type": "number", "minimum": 0 },
+      "icon": { "type": "string" },
+      "asset_path": { "type": "string" },
+      "armor": { "type": "integer", "minimum": 0 },
+      "magic_resist": { "type": "integer", "minimum": 0 },
+      "faction": { "type": "string" },
+      "slot": { "type": "string", "enum": ["chest", "head", "legs"] },
+      "requirements": {
+        "type": "object",
+        "properties": {
+          "strength": { "type": "integer" }
+        }
+      }
+    }
+  }
+}

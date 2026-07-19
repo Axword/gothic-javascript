@@ -1,0 +1,117 @@
+[
+  {
+    "id": "quest_old_01",
+    "title": "Posłaniec",
+    "description": "Dostarcz wiadomość do posterunku w Borze Bezgłosu.",
+    "type": "old_faction",
+    "faction": "old_order",
+    "prerequisites": [{ "type": "quest_state", "quest_id": "quest_main_arrival", "state": "active" }],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Odbiór wiadomości od Gończego Wojmira.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_messenger", "description": "Porozmawiaj z Gończym Wojmirem" }],
+        "next_stage_on_complete": "deliver",
+        "rewards": { "xp": 30, "gold": 15 }
+      },
+      "deliver": {
+        "id": "deliver",
+        "description": "Dostarcz wiadomość do posterunku w lesie.",
+        "objectives": [
+          { "type": "reach", "target_id": "loc_forest", "description": "Idź do Boru Bezgłosu" },
+          { "type": "talk_to", "target_id": "npc_woodcutter", "description": "Przekaż wiadomość drwalowi Jakubowi" }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": { "xp": 40, "gold": 25 }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Wróć do Komendanta po nagrodę.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_komendant", "description": "Wróć do Komendanta" }],
+        "rewards": { "xp": 30, "gold": 30, "reputation_changes": { "old_order": 10 } }
+      }
+    },
+    "journal_entries": {
+      "start": "Gończy Wojmir ma dla mnie zadanie od Komendanta.",
+      "deliver": "Mam dostarczyć wiadomość do posterunku w Borze Bezgłosu. Podobno drwal Jakub przekaże ją dalej.",
+      "complete": "Zadanie wykonane. Wracam do Komendanta po zapłatę."
+    }
+  },
+  {
+    "id": "quest_old_02",
+    "title": "Wilcze Gniazdo",
+    "description": "Wybij bandytów na Trakcie Północnym.",
+    "type": "old_faction",
+    "faction": "old_order",
+    "prerequisites": [{ "type": "quest_state", "quest_id": "quest_old_01", "state": "completed" }],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Porozmawiaj z Komendantem o bandytach.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_komendant", "description": "Dowiedz się szczegółów od Komendanta" }],
+        "next_stage_on_complete": "fight",
+        "rewards": { "xp": 40, "gold": 20 }
+      },
+      "fight": {
+        "id": "fight",
+        "description": "Zlikwiduj bandytów na Trakcie Północnym.",
+        "objectives": [
+          { "type": "kill", "target_id": "npc_exile_fighter", "target_count": 3, "description": "Zabij 3 bandytów na trakcie" }
+        ],
+        "next_stage_on_complete": "report",
+        "rewards": { "xp": 80, "gold": 40 }
+      },
+      "report": {
+        "id": "report",
+        "description": "Zamelduj Komendantowi o wykonaniu zadania.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_komendant", "description": "Zamelduj Komendantowi" }],
+        "rewards": { "xp": 50, "gold": 60, "reputation_changes": { "old_order": 15 } }
+      }
+    },
+    "journal_entries": {
+      "start": "Komendant każe oczyścić trakt z bandytów.",
+      "fight": "Trzeba ich wy tropić i pozbyć się problemu.",
+      "report": "Bandytów już nie ma. Czas po nagrodę."
+    }
+  },
+  {
+    "id": "quest_old_03",
+    "title": "Próba Żelaza",
+    "description": "Udowodnij swoją siłę w walce z tresowanym potworem.",
+    "type": "old_faction",
+    "faction": "old_order",
+    "prerequisites": [{ "type": "quest_state", "quest_id": "quest_old_02", "state": "completed" }],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Podejmij próbę żelaza na arenie Grodu.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_weaponmaster", "description": "Porozmawiaj z Mistrzem Grotem o próbie" }],
+        "next_stage_on_complete": "fight",
+        "rewards": { "xp": 30, "gold": 10 }
+      },
+      "fight": {
+        "id": "fight",
+        "description": "Pokonaj potwora na arenie.",
+        "objectives": [
+          { "type": "kill", "target_id": "monster_grey_wolf", "target_count": 1, "description": "Pokonaj wilczura na arenie" }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": { "xp": 100, "gold": 50 }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Próba żelaza zdana. Jesteś godny dołączyć do Straży.",
+        "objectives": [{ "type": "talk_to", "target_id": "npc_old_komendant", "description": "Porozmawiaj z Komendantem" }],
+        "rewards": { "xp": 60, "gold": 80, "skill_points": 2, "reputation_changes": { "old_order": 25 } }
+      }
+    },
+    "journal_entries": {
+      "start": "Mistrz Grot sprawdzi moją wartość w walce.",
+      "fight": "Staję na arenie. Czas pokazać, co potrafię.",
+      "complete": "Próba zdana. Komendant uzna mnie za swojego."
+    }
+  }
+]

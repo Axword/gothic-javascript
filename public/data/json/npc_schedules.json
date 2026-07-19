@@ -1,0 +1,134 @@
+[
+  {
+    "npc_id": "npc_beach_survivor",
+    "schedule": [
+      { "time": { "start": 21600, "end": 43200 }, "location_id": "loc_beach", "position": { "x": 400, "y": 480 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 43200, "end": 64800 }, "location_id": "loc_beach", "position": { "x": 350, "y": 500 }, "activity": "walk", "animation": "walk" },
+      { "time": { "start": 64800, "end": 82800 }, "location_id": "loc_beach", "position": { "x": 400, "y": 480 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 82800, "end": 21600 }, "location_id": "loc_beach", "position": { "x": 420, "y": 510 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_old_komendant",
+    "schedule": [
+      { "time": { "start": 25200, "end": 43200 }, "location_id": "loc_old_fort", "position": { "x": 300, "y": 300 }, "activity": "work", "animation": "idle" },
+      { "time": { "start": 43200, "end": 46800 }, "location_id": "loc_old_fort", "position": { "x": 320, "y": 320 }, "activity": "eat", "animation": "idle" },
+      { "time": { "start": 46800, "end": 64800 }, "location_id": "loc_old_fort", "position": { "x": 300, "y": 300 }, "activity": "work", "animation": "idle" },
+      { "time": { "start": 64800, "end": 72000 }, "location_id": "loc_old_fort", "position": { "x": 350, "y": 350 }, "activity": "patrol", "animation": "walk" },
+      { "time": { "start": 72000, "end": 25200 }, "location_id": "loc_old_fort", "position": { "x": 280, "y": 280 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_old_weaponmaster",
+    "schedule": [
+      { "time": { "start": 21600, "end": 43200 }, "location_id": "loc_old_fort", "position": { "x": 250, "y": 350 }, "activity": "train", "animation": "work" },
+      { "time": { "start": 43200, "end": 46800 }, "location_id": "loc_old_fort", "position": { "x": 270, "y": 370 }, "activity": "eat", "animation": "idle" },
+      { "time": { "start": 46800, "end": 64800 }, "location_id": "loc_old_fort", "position": { "x": 250, "y": 350 }, "activity": "train", "animation": "work" },
+      { "time": { "start": 64800, "end": 75600 }, "location_id": "loc_old_fort", "position": { "x": 300, "y": 300 }, "activity": "talk", "animation": "idle", "target_id": "npc_old_guard_1" },
+      { "time": { "start": 75600, "end": 21600 }, "location_id": "loc_old_fort", "position": { "x": 230, "y": 330 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_old_guard_1",
+    "schedule": [
+      { "time": { "start": 21600, "end": 43200 }, "location_id": "loc_old_fort", "position": { "x": 320, "y": 280 }, "activity": "guard", "animation": "idle" },
+      { "time": { "start": 43200, "end": 46800 }, "location_id": "loc_old_fort", "position": { "x": 330, "y": 290 }, "activity": "eat", "animation": "idle" },
+      { "time": { "start": 46800, "end": 64800 }, "location_id": "loc_old_fort", "position": { "x": 320, "y": 280 }, "activity": "guard", "animation": "idle" },
+      { "time": { "start": 64800, "end": 75600 }, "location_id": "loc_old_fort", "position": { "x": 350, "y": 300 }, "activity": "patrol", "animation": "walk" },
+      { "time": { "start": 75600, "end": 21600 }, "location_id": "loc_old_fort", "position": { "x": 310, "y": 260 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_old_guard_2",
+    "schedule": [
+      { "time": { "start": 21600, "end": 43200 }, "location_id": "loc_old_fort", "position": { "x": 280, "y": 320 }, "activity": "patrol", "animation": "walk" },
+      { "time": { "start": 43200, "end": 64800 }, "location_id": "loc_old_fort", "position": { "x": 280, "y": 320 }, "activity": "guard", "animation": "idle" },
+      { "time": { "start": 64800, "end": 75600 }, "location_id": "loc_old_fort", "position": { "x": 300, "y": 340 }, "activity": "patrol", "animation": "walk" },
+      { "time": { "start": 75600, "end": 21600 }, "location_id": "loc_old_fort", "position": { "x": 260, "y": 300 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_old_smith",
+    "schedule": [
+      { "time": { "start": 21600, "end": 43200 }, "location_id": "loc_old_fort", "position": { "x": 220, "y": 380 }, "activity": "work", "animation": "work" },
+      { "time": { "start": 43200, "end": 46800 }, "location_id": "loc_old_fort", "position": { "x": 230, "y": 390 }, "activity": "eat", "animation": "idle" },
+      { "time": { "start": 46800, "end": 64800 }, "location_id": "loc_old_fort", "position": { "x": 220, "y": 380 }, "activity": "work", "animation": "work" },
+      { "time": { "start": 64800, "end": 75600 }, "location_id": "loc_old_fort", "position": { "x": 350, "y": 350 }, "activity": "talk", "animation": "idle", "target_id": "npc_old_innkeeper" },
+      { "time": { "start": 75600, "end": 21600 }, "location_id": "loc_old_fort", "position": { "x": 200, "y": 360 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_free_sep",
+    "schedule": [
+      { "time": { "start": 28800, "end": 43200 }, "location_id": "loc_free_village", "position": { "x": 500, "y": 300 }, "activity": "work", "animation": "idle" },
+      { "time": { "start": 43200, "end": 46800 }, "location_id": "loc_free_village", "position": { "x": 520, "y": 320 }, "activity": "eat", "animation": "idle" },
+      { "time": { "start": 46800, "end": 64800 }, "location_id": "loc_free_village", "position": { "x": 500, "y": 300 }, "activity": "work", "animation": "idle" },
+      { "time": { "start": 64800, "end": 75600 }, "location_id": "loc_free_village", "position": { "x": 550, "y": 280 }, "activity": "patrol", "animation": "walk" },
+      { "time": { "start": 75600, "end": 28800 }, "location_id": "loc_free_village", "position": { "x": 480, "y": 270 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_free_thief_trainer",
+    "schedule": [
+      { "time": { "start": 25200, "end": 46800 }, "location_id": "loc_free_village", "position": { "x": 520, "y": 350 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 46800, "end": 64800 }, "location_id": "loc_free_village", "position": { "x": 520, "y": 350 }, "activity": "work", "animation": "idle" },
+      { "time": { "start": 64800, "end": 75600 }, "location_id": "loc_free_village", "position": { "x": 500, "y": 380 }, "activity": "talk", "animation": "idle", "target_id": "npc_free_sep" },
+      { "time": { "start": 75600, "end": 25200 }, "location_id": "loc_free_village", "position": { "x": 530, "y": 370 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_hunter_trainer",
+    "schedule": [
+      { "time": { "start": 18000, "end": 36000 }, "location_id": "loc_forest", "position": { "x": 600, "y": 400 }, "activity": "hunt", "animation": "walk" },
+      { "time": { "start": 36000, "end": 43200 }, "location_id": "loc_forest", "position": { "x": 620, "y": 420 }, "activity": "work", "animation": "work" },
+      { "time": { "start": 43200, "end": 64800 }, "location_id": "loc_forest", "position": { "x": 600, "y": 400 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 64800, "end": 72000 }, "location_id": "loc_forest", "position": { "x": 580, "y": 380 }, "activity": "work", "animation": "work" },
+      { "time": { "start": 72000, "end": 18000 }, "location_id": "loc_forest", "position": { "x": 590, "y": 410 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_mage_trainer",
+    "schedule": [
+      { "time": { "start": 21600, "end": 43200 }, "location_id": "loc_special", "position": { "x": 700, "y": 200 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 43200, "end": 64800 }, "location_id": "loc_special", "position": { "x": 700, "y": 200 }, "activity": "work", "animation": "idle" },
+      { "time": { "start": 64800, "end": 75600 }, "location_id": "loc_special", "position": { "x": 680, "y": 220 }, "activity": "walk", "animation": "walk" },
+      { "time": { "start": 75600, "end": 21600 }, "location_id": "loc_special", "position": { "x": 720, "y": 180 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_traveling_merchant",
+    "schedule": [
+      { "time": { "start": 28800, "end": 46800 }, "location_id": "loc_road", "position": { "x": 500, "y": 400 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 46800, "end": 64800 }, "location_id": "loc_road", "position": { "x": 480, "y": 380 }, "activity": "walk", "animation": "walk" },
+      { "time": { "start": 64800, "end": 72000 }, "location_id": "loc_road", "position": { "x": 520, "y": 420 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 72000, "end": 28800 }, "location_id": "loc_road", "position": { "x": 490, "y": 390 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_woodcutter",
+    "schedule": [
+      { "time": { "start": 18000, "end": 43200 }, "location_id": "loc_forest", "position": { "x": 550, "y": 450 }, "activity": "work", "animation": "work" },
+      { "time": { "start": 43200, "end": 46800 }, "location_id": "loc_forest", "position": { "x": 560, "y": 460 }, "activity": "eat", "animation": "idle" },
+      { "time": { "start": 46800, "end": 64800 }, "location_id": "loc_forest", "position": { "x": 550, "y": 450 }, "activity": "work", "animation": "work" },
+      { "time": { "start": 64800, "end": 18000 }, "location_id": "loc_forest", "position": { "x": 540, "y": 440 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_swamp_hermit",
+    "schedule": [
+      { "time": { "start": 21600, "end": 43200 }, "location_id": "loc_swamp", "position": { "x": 300, "y": 300 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 43200, "end": 64800 }, "location_id": "loc_swamp", "position": { "x": 280, "y": 320 }, "activity": "walk", "animation": "walk" },
+      { "time": { "start": 64800, "end": 75600 }, "location_id": "loc_swamp", "position": { "x": 300, "y": 300 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 75600, "end": 21600 }, "location_id": "loc_swamp", "position": { "x": 320, "y": 280 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  },
+  {
+    "npc_id": "npc_old_veteran",
+    "schedule": [
+      { "time": { "start": 21600, "end": 43200 }, "location_id": "loc_cemetery", "position": { "x": 350, "y": 400 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 43200, "end": 64800 }, "location_id": "loc_cemetery", "position": { "x": 330, "y": 420 }, "activity": "walk", "animation": "walk" },
+      { "time": { "start": 64800, "end": 75600 }, "location_id": "loc_cemetery", "position": { "x": 350, "y": 400 }, "activity": "idle", "animation": "idle" },
+      { "time": { "start": 75600, "end": 21600 }, "location_id": "loc_cemetery", "position": { "x": 370, "y": 380 }, "activity": "sleep", "animation": "sleep" }
+    ]
+  }
+]

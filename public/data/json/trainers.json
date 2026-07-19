@@ -1,0 +1,90 @@
+[
+  {
+    "id": "trainer_old_weaponmaster",
+    "npc_id": "npc_old_weaponmaster",
+    "name": "Mistrz Broni Straży",
+    "faction": "old_order",
+    "skills": [
+      {
+        "skill_id": "combat_sword",
+        "skill_name": "Trening Bojowy (Miecz)",
+        "max_rank": 3,
+        "cost_per_rank": { "gold": 100, "skill_points": 2 },
+        "requirements": { "min_level": 1, "reputation_min": 0 },
+        "description": "Podstawowy trening miecza. Każda ranga zwiększa obrażenia o 15% i odblokowuje nowe combosy."
+      },
+      {
+        "skill_id": "combat_bow",
+        "skill_name": "Trening Bojowy (Łuk)",
+        "max_rank": 3,
+        "cost_per_rank": { "gold": 120, "skill_points": 2 },
+        "requirements": { "min_level": 2, "reputation_min": 0 },
+        "description": "Nauka celowania i szybkiego naciągu. Każda ranga zwiększa celność i obrażenia."
+      }
+    ]
+  },
+  {
+    "id": "trainer_free_thief",
+    "npc_id": "npc_free_thief_trainer",
+    "name": "Szczur Wolnych Chat",
+    "faction": "new_order",
+    "skills": [
+      {
+        "skill_id": "lockpicking",
+        "skill_name": "Otwieranie Zamków",
+        "max_rank": 3,
+        "cost_per_rank": { "gold": 80, "skill_points": 1 },
+        "requirements": { "min_level": 1, "reputation_min": -10 },
+        "description": "Sztuka otwierania zamków. Wyższe rangi pozwalają na trudniejsze zamki."
+      },
+      {
+        "skill_id": "pickpocket",
+        "skill_name": "Kradzież",
+        "max_rank": 2,
+        "cost_per_rank": { "gold": 150, "skill_points": 2 },
+        "requirements": { "min_level": 2, "reputation_min": -20 },
+        "description": "Ciche zabieranie cudzej własności. Ryzykowne, ale zyskowne."
+      }
+    ]
+  },
+  {
+    "id": "trainer_hunter",
+    "npc_id": "npc_hunter_trainer",
+    "name": "Stary Łowczy",
+    "faction": "neutral",
+    "skills": [
+      {
+        "skill_id": "skinning",
+        "skill_name": "Skórowanie",
+        "max_rank": 2,
+        "cost_per_rank": { "gold": 50, "skill_points": 1 },
+        "requirements": { "min_level": 1 },
+        "description": "Umiejętność zdejmowania skór i zbierania trofeów z upolowanych bestii."
+      }
+    ]
+  },
+  {
+    "id": "trainer_mage",
+    "npc_id": "npc_mage_trainer",
+    "name": "Pustelnik ze Szczeliny",
+    "faction": "neutral",
+    "skills": [
+      {
+        "skill_id": "magic_fire",
+        "skill_name": "Magia Ognia",
+        "max_rank": 1,
+        "cost_per_rank": { "gold": 300, "skill_points": 3 },
+        "requirements": { "min_level": 3, "quest_completed": ["quest_main_magic_path"] },
+        "description": "Nauka zaklęcia Ognistego Pocisku."
+      },
+      {
+        "skill_id": "magic_ice",
+        "skill_name": "Magia Lodu",
+        "max_rank": 1,
+        "cost_per_rank": { "gold": 350, "skill_points": 3 },
+        "requirements": { "min_level": 5, "quest_completed": ["quest_main_magic_path"] },
+        "description": "Nauka zaklęcia Lodowego Odłamka."
+      }
+    ]
+  }
+]

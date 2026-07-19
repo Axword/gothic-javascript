@@ -1,0 +1,60 @@
+{
+  "xp": {
+    "base_xp_per_level": 100,
+    "xp_multiplier_per_level": 1.5,
+    "quest_xp_multiplier": 2.0,
+    "kill_xp_base": 10
+  },
+  "hp": {
+    "base_hp": 50,
+    "hp_per_strength": 3,
+    "hp_per_level": 10,
+    "hp_regen_rate": 1,
+    "hp_regen_interval": 5000
+  },
+  "mana": {
+    "base_mana": 20,
+    "mana_per_level": 5,
+    "mana_regen_rate": 1,
+    "mana_regen_interval": 3000
+  },
+  "combat": {
+    "damage_multiplier": 1.0,
+    "critical_chance_base": 0.05,
+    "critical_damage_multiplier": 2.0,
+    "block_damage_reduction": 0.6,
+    "dodge_chance_base": 0.05,
+    "dodge_chance_per_dexterity": 0.002,
+    "armor_damage_reduction_formula": "linear",
+    "armor_damage_reduction_per_point": 0.01,
+    "max_armor_reduction": 0.8,
+    "strength_damage_bonus_per_point": 0.05,
+    "dexterity_damage_bonus_per_point": 0.03
+  },
+  "skills": {
+    "skill_points_per_level": 2,
+    "lockpicking_base_chance": 0.3,
+    "lockpicking_chance_per_rank": 0.2,
+    "pickpocket_base_chance": 0.2,
+    "pickpocket_chance_per_rank": 0.15,
+    "skinning_bonus_per_rank": 0.5
+  },
+  "leveling": {
+    "max_level": 30,
+    "monster_xp_scale": 1.0,
+    "quest_xp_scale": 1.0
+  },
+  "economy": {
+    "starting_gold": 20,
+    "merchant_buy_modifier": 0.5,
+    "merchant_sell_modifier": 0.3,
+    "faction_discount_reputation": 50,
+    "faction_discount_modifier": 0.8
+  },
+  "time": {
+    "day_duration_seconds": 1800,
+    "night_start_hour": 20,
+    "night_end_hour": 6,
+    "time_scale": 60
+  }
+}

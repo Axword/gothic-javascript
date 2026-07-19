@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bows",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "description", "category", "value", "weight", "icon", "damage", "damage_type", "draw_time", "range", "dexterity_scaling"],
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "category": { "type": "string", "pattern": "^weapon_bow$" },
+      "value": { "type": "integer", "minimum": 0 },
+      "weight": { "type": "number", "minimum": 0 },
+      "icon": { "type": "string" },
+      "asset_path": { "type": "string" },
+      "damage": { "type": "integer", "minimum": 1 },
+      "damage_type": { "type": "string", "enum": ["physical", "fire", "ice"] },
+      "draw_time": { "type": "integer", "minimum": 100 },
+      "range": { "type": "integer", "minimum": 64 },
+      "dexterity_scaling": { "type": "number", "minimum": 0, "maximum": 1 },
+      "arrow_type": { "type": "string" },
+      "requirements": {
+        "type": "object",
+        "properties": {
+          "dexterity": { "type": "integer", "minimum": 1 },
+          "strength": { "type": "integer", "minimum": 1 }
+        }
+      }
+    }
+  }
+}
