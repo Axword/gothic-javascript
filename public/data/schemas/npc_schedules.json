@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "NPC Schedules",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["npc_id", "schedule"],
+    "properties": {
+      "npc_id": { "type": "string" },
+      "schedule": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["time", "location_id", "position", "activity"],
+          "properties": {
+            "time": {
+              "type": "object",
+              "required": ["start", "end"],
+              "properties": {
+                "start": { "type": "integer", "minimum": 0, "maximum": 86400 },
+                "end": { "type": "integer", "minimum": 0, "maximum": 86400 }
+              }
+            },
+            "location_id": { "type": "string" },
+            "position": {
+              "type": "object",
+              "required": ["x", "y"],
+              "properties": {
+                "x": { "type": "number" },
+                "y": { "type": "number" }
+              }
+            },
+            "activity": { "type": "string" },
+            "animation": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

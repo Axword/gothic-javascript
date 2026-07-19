@@ -1,0 +1,36 @@
+[
+  {
+    "id": "spell_fire_bolt",
+    "name": "Ognisty Pocisk",
+    "description": "Strzela kulą ognia w kierunku celu. Podpala trafione obiekty.",
+    "type": "fire",
+    "mana_cost": 15,
+    "cast_time": 600,
+    "cooldown": 1500,
+    "damage": 20,
+    "damage_type": "fire",
+    "range": 200,
+    "projectile_speed": 300,
+    "status_effect": { "id": "burn", "name": "Płonie", "type": "burn", "duration": 5000, "value": 3, "tick_interval": 1000 },
+    "asset_path": "sprites/effects/fire_bolt.png",
+    "vfx_path": "sprites/effects/fire_bolt_vfx.png",
+    "requirements": { "min_level": 3 }
+  },
+  {
+    "id": "spell_ice_shard",
+    "name": "Lodowy Odłamek",
+    "description": "Wystrzeliwuje lodowy kryształ, który zamraża cel.",
+    "type": "ice",
+    "mana_cost": 18,
+    "cast_time": 800,
+    "cooldown": 2000,
+    "damage": 18,
+    "damage_type": "ice",
+    "range": 180,
+    "projectile_speed": 350,
+    "status_effect": { "id": "freeze", "name": "Zamrożenie", "type": "freeze", "duration": 2000, "value": 50, "tick_interval": 0 },
+    "asset_path": "sprites/effects/ice_shard.png",
+    "vfx_path": "sprites/effects/ice_shard_vfx.png",
+    "requirements": { "min_level": 5 }
+  }
+]

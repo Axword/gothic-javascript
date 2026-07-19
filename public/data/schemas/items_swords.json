@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Swords",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "description", "category", "value", "weight", "icon", "damage", "damage_type", "speed", "range", "strength_scaling"],
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "category": { "type": "string", "pattern": "^weapon_sword$" },
+      "value": { "type": "integer", "minimum": 0 },
+      "weight": { "type": "number", "minimum": 0 },
+      "icon": { "type": "string" },
+      "asset_path": { "type": "string" },
+      "damage": { "type": "integer", "minimum": 1 },
+      "damage_type": { "type": "string", "enum": ["physical", "fire", "ice", "magic"] },
+      "speed": { "type": "integer", "minimum": 100 },
+      "range": { "type": "integer", "minimum": 16 },
+      "strength_scaling": { "type": "number", "minimum": 0, "maximum": 1 },
+      "combo_length": { "type": "integer", "minimum": 1, "maximum": 5 },
+      "requirements": {
+        "type": "object",
+        "properties": {
+          "strength": { "type": "integer", "minimum": 1 },
+          "level": { "type": "integer", "minimum": 1 }
+        }
+      },
+      "unique": { "type": "boolean" }
+    }
+  }
+}

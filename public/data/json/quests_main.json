@@ -1,0 +1,65 @@
+[
+  {
+    "id": "quest_main_arrival",
+    "title": "Rozbitek",
+    "description": "Statek się rozbił. Trzeba znaleźć drogę do cywilizacji.",
+    "type": "main",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Dotrzeć do osady lub grodu.",
+        "objectives": [
+          { "type": "reach", "target_id": "loc_old_fort", "description": "Dotrzyj do Grodu Straży lub Wolnych Chat" }
+        ],
+        "next_stage_on_complete": "stage2",
+        "rewards": { "xp": 20, "gold": 0 }
+      },
+      "stage2": {
+        "id": "stage2",
+        "description": "Dowiedz się więcej o konflikcie między Strażą a Wolnymi.",
+        "objectives": [
+          { "type": "talk_to", "target_id": "npc_old_komendant", "description": "Porozmawiaj z Komendantem Straży" },
+          { "type": "talk_to", "target_id": "npc_free_sep", "description": "Lub porozmawiaj z Sępem w Wolnych Chatach" }
+        ],
+        "next_stage_on_complete": "stage3",
+        "rewards": { "xp": 40, "gold": 10 }
+      },
+      "stage3": {
+        "id": "stage3",
+        "description": "Wykonaj zadania kandydackie dla wybranej frakcji.",
+        "objectives": [
+          { "type": "custom", "description": "Zdobyć zaufanie Straży lub Wolnych" }
+        ],
+        "next_stage_on_complete": "stage_choice",
+        "rewards": { "xp": 50, "gold": 20 }
+      },
+      "stage_choice": {
+        "id": "stage_choice",
+        "description": "Wybierz frakcję i dołącz do niej.",
+        "objectives": [
+          { "type": "talk_to", "target_id": "npc_old_komendant", "description": "Dołącz do Straży" },
+          { "type": "talk_to", "target_id": "npc_free_sep", "description": "Dołącz do Wolnych" }
+        ],
+        "next_stage_on_complete": "finale",
+        "rewards": { "xp": 100, "gold": 50, "skill_points": 2 }
+      },
+      "finale": {
+        "id": "finale",
+        "description": "Ostateczna misja wybranej frakcji.",
+        "objectives": [
+          { "type": "custom", "description": "Wykonaj ostatnie zadanie frakcji" }
+        ],
+        "rewards": { "xp": 200, "gold": 100, "skill_points": 3 }
+      }
+    },
+    "journal_entries": {
+      "start": "Obudziłem się na mokrej plaży. Statek wrak. W oddali widać trakt. Trzeba iść na północ.",
+      "stage2": "Dotarłem do osady. Dwa obozy walczą o wpływy. Straż w Grodzie i Wolni w Chatach. Muszę wybrać stronę.",
+      "stage3": "Muszę udowodnić swoją wartość, wykonując zadania dla wybranej frakcji.",
+      "stage_choice": "Nadszedł czas wyboru. Do kogo dołączę?",
+      "finale": "Ostatnia misja. Czas przypieczętować swój los."
+    }
+  }
+]

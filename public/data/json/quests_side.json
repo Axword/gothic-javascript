@@ -1,0 +1,773 @@
+[
+  {
+    "id": "quest_side_01",
+    "title": "Lista Poległych",
+    "description": "Znajdź listę poległych żołnierzy dla starego weterana na cmentarzysku.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Porozmawiaj z Weteranem Dobromirem na Cmentarzysku.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_veteran",
+            "description": "Dowiedz się, czego potrzebuje"
+          }
+        ],
+        "next_stage_on_complete": "search",
+        "rewards": {
+          "xp": 20,
+          "gold": 5
+        }
+      },
+      "search": {
+        "id": "search",
+        "description": "Znajdź listę poległych w starych ruinach na cmentarzysku.",
+        "objectives": [
+          {
+            "type": "collect",
+            "target_id": "misc_quest_letter",
+            "target_count": 1,
+            "description": "Znajdź listę poległych"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 40,
+          "gold": 20
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Lista dostarczona. Weteran może wreszcie poznać los swoich towarzyszy.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_veteran",
+            "description": "Dostarcz listę weteranowi"
+          }
+        ],
+        "rewards": {
+          "xp": 50,
+          "gold": 40
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Weteran Dobromir szuka listy poległych z dawnej bitwy.",
+      "search": "Lista podobno leży gdzieś w starych ruinach na cmentarzysku.",
+      "complete": "Weteran dostał swoją listę. Spokój za grosze."
+    }
+  },
+  {
+    "id": "quest_side_02",
+    "title": "Uciekinierka",
+    "description": "Pomóż kobiecie uciec przed przemocą domową.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Usłyszałeś krzyk w lesie. Ktoś potrzebuje pomocy.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_woodcutter",
+            "description": "Sprawdź, co się dzieje"
+          }
+        ],
+        "next_stage_on_complete": "help",
+        "rewards": {
+          "xp": 20,
+          "gold": 0
+        }
+      },
+      "help": {
+        "id": "help",
+        "description": "Znajdź sposób, by pomóc kobiecie.",
+        "objectives": [
+          {
+            "type": "custom",
+            "description": "Zdecyduj, jak pomóc: przekupić, zastraszyć lub zabić oprawcę"
+          }
+        ],
+        "alternative_solutions": [
+          {
+            "description": "Zastrasz mężczyznę i każ mu odejść.",
+            "conditions": [
+              {
+                "type": "skill",
+                "skill_id": "combat_sword",
+                "min_skill_rank": 2
+              }
+            ],
+            "result_stage": "intimidate"
+          },
+          {
+            "description": "Zabij oprawcę.",
+            "conditions": [],
+            "result_stage": "kill"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 60,
+          "gold": 20
+        }
+      },
+      "intimidate": {
+        "id": "intimidate",
+        "description": "Mężczyzna uciekł. Kobieta może odejść.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 50,
+          "gold": 30
+        }
+      },
+      "kill": {
+        "id": "kill",
+        "description": "Oprawca nie żyje. Surowe, ale skuteczne.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 70,
+          "gold": 20,
+          "reputation_changes": {
+            "old_order": -10
+          }
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Kobieta jest bezpieczna. Wdzięczność to jedyna nagroda.",
+        "objectives": [],
+        "rewards": {
+          "xp": 40,
+          "gold": 15
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "W lesie ktoś krzyczy. Trzeba sprawdzić.",
+      "help": "Kobieta potrzebuje pomocy. Jej oprawca nie odpuści bez walki.",
+      "complete": "Sprawa załatwiona. Kobieta odeszła w bezpieczne miejsce."
+    }
+  },
+  {
+    "id": "quest_side_03",
+    "title": "Beczka Wina",
+    "description": "Znajdź ukradzioną beczkę wina dla karczmarza.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Karczmarz Bertold z Grodu Straży stracił beczkę wina.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_innkeeper",
+            "description": "Porozmawiaj z karczmarzem"
+          }
+        ],
+        "next_stage_on_complete": "find",
+        "rewards": {
+          "xp": 15,
+          "gold": 5
+        }
+      },
+      "find": {
+        "id": "find",
+        "description": "Znajdź beczkę wina - podobno widziano ją na Trakcie Północnym.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_road",
+            "description": "Przeszukaj Trakt Północny"
+          }
+        ],
+        "alternative_solutions": [
+          {
+            "description": "Kup wino od wędrownego handlarza.",
+            "conditions": [
+              {
+                "type": "has_item",
+                "item_id": "misc_gold"
+              }
+            ],
+            "result_stage": "bought"
+          },
+          {
+            "description": "Znajdź beczkę u bandytów w Głuchodole.",
+            "conditions": [],
+            "result_stage": "fight"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 30,
+          "gold": 15
+        }
+      },
+      "bought": {
+        "id": "bought",
+        "description": "Kupiłeś wino od handlarza. Drogie, ale skuteczne.",
+        "objectives": [],
+        "rewards": {
+          "xp": 20,
+          "gold": -50
+        }
+      },
+      "fight": {
+        "id": "fight",
+        "description": "Zabiłeś bandytów i odzyskałeś beczkę.",
+        "objectives": [
+          {
+            "type": "kill",
+            "target_id": "npc_exile_fighter",
+            "target_count": 2,
+            "description": "Zabij bandytów"
+          }
+        ],
+        "rewards": {
+          "xp": 60,
+          "gold": 30
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Beczka wróciła do karczmy. Karczmarz stawia ci piwo.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_innkeeper",
+            "description": "Dostarcz wino karczmarzowi"
+          }
+        ],
+        "rewards": {
+          "xp": 40,
+          "gold": 50
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Karczmarz Bertold stracił beczkę wina. Ktoś ją ukradł.",
+      "find": "Podobno wino widziano na Trakcie Północnym albo u bandytów.",
+      "complete": "Wino wróciło. Karczmarz szczęśliwy, a ja bogatszy o parę groszy."
+    }
+  },
+  {
+    "id": "quest_side_04",
+    "title": "Skóra za Skórę",
+    "description": "Przynieś trofea Staremu Łowczemu, by udowodnić swoje umiejętności łowieckie.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Porozmawiaj ze Starym Łowczym w Borze Bezgłosu.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_hunter_trainer",
+            "description": "Dowiedz się, czego potrzebuje"
+          }
+        ],
+        "next_stage_on_complete": "hunt",
+        "rewards": {
+          "xp": 10,
+          "gold": 0
+        }
+      },
+      "hunt": {
+        "id": "hunt",
+        "description": "Zabij wilki i przynieś ich skóry.",
+        "objectives": [
+          {
+            "type": "collect",
+            "target_id": "misc_skins_wolf",
+            "target_count": 3,
+            "description": "Zbierz 3 wilcze skóry"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 80,
+          "gold": 30
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Łowczy uznał twoje umiejętności.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_hunter_trainer",
+            "description": "Pokaż skóry Łowczemu"
+          }
+        ],
+        "rewards": {
+          "xp": 40,
+          "gold": 40,
+          "skill_points": 1
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Stary Łowczy wystawia mnie na próbę. Trzeba zdobyć wilcze skóry.",
+      "hunt": "Polowanie w Borze. Wilki są groźne, ale skóry są cenne.",
+      "complete": "Łowczy jest zadowolony. Może mnie czegoś nauczyć."
+    }
+  },
+  {
+    "id": "quest_side_05",
+    "title": "Mech ze Szczeliny",
+    "description": "Przynieś zielarce mech rosnący blisko Szczeliny.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Jarzębina potrzebuje specjalnego mchu rosnącego przy Szczelinie.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_herbalist",
+            "description": "Porozmawiaj z Jarzębiną"
+          }
+        ],
+        "next_stage_on_complete": "fetch",
+        "rewards": {
+          "xp": 20,
+          "gold": 5
+        }
+      },
+      "fetch": {
+        "id": "fetch",
+        "description": "Zbierz mech w pobliżu Szczeliny.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_special",
+            "description": "Dotrzyj do Szczeliny"
+          },
+          {
+            "type": "collect",
+            "target_id": "plant_ember_flower",
+            "target_count": 1,
+            "description": "Zbierz mech ze Szczeliny"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 60,
+          "gold": 30
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Mech dostarczony. Zielarka ma nowy składnik do mikstur.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_herbalist",
+            "description": "Dostarcz mech Jarzębinie"
+          }
+        ],
+        "rewards": {
+          "xp": 50,
+          "gold": 60
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Jarzębina potrzebuje mchu ze Szczeliny. Niebezpieczne miejsce.",
+      "fetch": "Szczelina jest blisko. Czuję dziwną energię w powietrzu.",
+      "complete": "Mech dostarczony. Jarzębina zapłaciła i ostrzegła, żeby nie wracać tam zbyt często."
+    }
+  },
+  {
+    "id": "quest_side_06",
+    "title": "Skażony Miecz",
+    "description": "Oczyść legendarny miecz w wodzie z Mokrej Plaży.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Stary weteran mówi o mieczu, który trzeba oczyścić w morskiej wodzie.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_veteran",
+            "description": "Porozmawiaj z weteranem o mieczu"
+          }
+        ],
+        "next_stage_on_complete": "fetch_sword",
+        "rewards": {
+          "xp": 20,
+          "gold": 5
+        }
+      },
+      "fetch_sword": {
+        "id": "fetch_sword",
+        "description": "Znajdź skażony miecz w Głuchodole.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_mountains",
+            "description": "Znajdź miecz w górach"
+          }
+        ],
+        "next_stage_on_complete": "cleanse",
+        "rewards": {
+          "xp": 30,
+          "gold": 15
+        }
+      },
+      "cleanse": {
+        "id": "cleanse",
+        "description": "Zanieś miecz na Mokrą Plażę i zanurz w wodzie.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_beach",
+            "description": "Zanieś miecz na plażę"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 40,
+          "gold": 25
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Miecz oczyszczony. Weteran nagradza cię.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_veteran",
+            "description": "Wróć do weterana"
+          }
+        ],
+        "rewards": {
+          "xp": 60,
+          "gold": 50
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Weteran Dobromir opowiada o skażonym mieczu.",
+      "fetch_sword": "Miecz leży w Głuchodole od czasów wielkiej bitwy.",
+      "cleanse": "Morska woda ma oczyścić miecz z klątwy.",
+      "complete": "Miecz czysty. Weteran zapłacił i podziękował."
+    }
+  },
+  {
+    "id": "quest_side_07",
+    "title": "Beczka wina",
+    "description": "Znajdź ukradzioną beczkę wina dla karczmarza w Grodzie.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Karczmarz Bertold potrzebuje pomocy.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_innkeeper",
+            "description": "Porozmawiaj z karczmarzem"
+          }
+        ],
+        "next_stage_on_complete": "search",
+        "rewards": {
+          "xp": 15,
+          "gold": 5
+        }
+      },
+      "search": {
+        "id": "search",
+        "description": "Znajdź beczkę wina na Trakcie lub u bandytów.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_road",
+            "description": "Przeszukaj Trakt Północny"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 40,
+          "gold": 20
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Beczka wróciła do karczmy.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_innkeeper",
+            "description": "Dostarcz wino"
+          }
+        ],
+        "rewards": {
+          "xp": 40,
+          "gold": 50
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Karczmarz stracił beczkę wina.",
+      "search": "Beczka widziana na Trakcie.",
+      "complete": "Wino wróciło do gospody."
+    }
+  },
+  {
+    "id": "quest_side_08",
+    "title": "Oko za Oko",
+    "description": "Zemsta za zamordowanego brata... lub wybaczenie.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Kobieta w Wolnych Chatach prosi o pomoc w zemście.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_hunter",
+            "description": "Porozmawiaj z Łowczynią Strzałą"
+          }
+        ],
+        "next_stage_on_complete": "decide",
+        "rewards": {
+          "xp": 20,
+          "gold": 5
+        }
+      },
+      "decide": {
+        "id": "decide",
+        "description": "Zemścić się na mordercy czy darować winy?",
+        "objectives": [
+          {
+            "type": "custom",
+            "description": "Zdecyduj o losie mordercy"
+          }
+        ],
+        "alternative_solutions": [
+          {
+            "description": "Zabij mordercę, by pomścić brata.",
+            "conditions": [],
+            "result_stage": "revenge"
+          },
+          {
+            "description": "Przekonaj kobietę do wybaczenia.",
+            "conditions": [
+              {
+                "type": "skill",
+                "skill_id": "combat_sword",
+                "min_skill_rank": 1
+              }
+            ],
+            "result_stage": "forgive"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 50,
+          "gold": 20
+        }
+      },
+      "revenge": {
+        "id": "revenge",
+        "description": "Morderca nie żyje. Sprawiedliwości stało się zadość.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 60,
+          "gold": 30,
+          "reputation_changes": {
+            "new_order": 10
+          }
+        }
+      },
+      "forgive": {
+        "id": "forgive",
+        "description": "Wybaczyłaś/eś. Może to lepsza droga.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 70,
+          "gold": 20,
+          "reputation_changes": {
+            "old_order": 10
+          }
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Sprawa zakończona.",
+        "objectives": [],
+        "rewards": {
+          "xp": 30,
+          "gold": 15
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Łowczyni Strzała szuka zemsty za brata.",
+      "decide": "Morderca jest w lesie. Zemsta czy wybaczenie?",
+      "complete": "Sprawa zakończona po mojemu."
+    }
+  },
+  {
+    "id": "quest_side_09",
+    "title": "Lekarstwo",
+    "description": "Zdobądź rzadki składnik na chorobę dziecka.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Jarzębina potrzebuje ognistego ciernia dla chorego dziecka.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_herbalist",
+            "description": "Porozmawiaj z Jarzębiną"
+          }
+        ],
+        "next_stage_on_complete": "fetch",
+        "rewards": {
+          "xp": 15,
+          "gold": 5
+        }
+      },
+      "fetch": {
+        "id": "fetch",
+        "description": "Znajdź Ognisty Cierń w górach.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_mountains",
+            "description": "Idź do Głuchodołu"
+          },
+          {
+            "type": "collect",
+            "target_id": "plant_firethorn",
+            "target_count": 1,
+            "description": "Zbierz Ognisty Cierń"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 50,
+          "gold": 25
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Dziecko uratowane. Zielarka wdzięczna.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_herbalist",
+            "description": "Dostarcz składnik"
+          }
+        ],
+        "rewards": {
+          "xp": 40,
+          "gold": 40
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Jarzębina potrzebuje ognistego ciernia dla chorego dziecka.",
+      "fetch": "Ognisty cierń rośnie w górach, w pobliżu Szczeliny.",
+      "complete": "Dziecko uratowane. Zielarka odwdzięczyła się."
+    }
+  },
+  {
+    "id": "quest_side_10",
+    "title": "Stara Umowa",
+    "description": "Znajdź spadek po zmarłym dla prawnika z Grodu.",
+    "type": "side",
+    "prerequisites": [],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Archista Sylwan szuka testamentu zmarłego kupca.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_archivist",
+            "description": "Porozmawiaj z archistą Sylwanem"
+          }
+        ],
+        "next_stage_on_complete": "search",
+        "rewards": {
+          "xp": 15,
+          "gold": 5
+        }
+      },
+      "search": {
+        "id": "search",
+        "description": "Znajdź dokumenty w starym obozie w lesie.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_forest",
+            "description": "Idź do Boru Bezgłosu"
+          },
+          {
+            "type": "collect",
+            "target_id": "misc_quest_letter",
+            "target_count": 1,
+            "description": "Znajdź testament"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 40,
+          "gold": 20
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Dokumenty dostarczone. Spadek trafi do prawowitych spadkobierców.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_archivist",
+            "description": "Dostarcz testament"
+          }
+        ],
+        "rewards": {
+          "xp": 50,
+          "gold": 60
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Archista Sylwan szuka testamentu zmarłego kupca.",
+      "search": "Dokumenty ponoć są w lesie, w starym obozie handlowym.",
+      "complete": "Testament dostarczony. Spadkobiercy dostaną swoje."
+    }
+  }
+]

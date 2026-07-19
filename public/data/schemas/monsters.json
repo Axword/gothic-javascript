@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Monsters",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "stats", "attacks", "behavior", "loot_table", "biom", "asset_path"],
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "stats": {
+        "type": "object",
+        "required": ["hp", "strength", "dexterity", "armor", "speed", "xp_reward"]
+      },
+      "attacks": { "type": "array" },
+      "behavior": { "type": "array", "items": { "type": "string" } },
+      "loot_table": { "type": "string" },
+      "biom": { "type": "array", "items": { "type": "string" } },
+      "asset_path": { "type": "string" },
+      "night_active": { "type": "boolean" },
+      "scale": { "type": "number" }
+    }
+  }
+}

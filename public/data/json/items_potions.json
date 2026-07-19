@@ -1,0 +1,8 @@
+[
+  { "id": "potion_healing_small", "name": "Mała Mikstura Leczenia", "description": "Przywraca 30 HP. Gorzka, ale działa.", "category": "potion", "value": 15, "weight": 0.3, "icon": "potion_healing_small", "effect": "heal", "effect_value": 30 },
+  { "id": "potion_healing_medium", "name": "Mikstura Leczenia", "description": "Przywraca 80 HP. Pachnie ziołami i krwią.", "category": "potion", "value": 40, "weight": 0.3, "icon": "potion_healing_medium", "effect": "heal", "effect_value": 80 },
+  { "id": "potion_healing_large", "name": "Silna Mikstura Leczenia", "description": "Przywraca 200 HP. Czerwona jak krew, droga jak złoto.", "category": "potion", "value": 100, "weight": 0.3, "icon": "potion_healing_large", "effect": "heal", "effect_value": 200 },
+  { "id": "potion_mana_small", "name": "Mikstura Many", "description": "Przywraca 30 many. Chłodzi palce przy piciu.", "category": "potion", "value": 25, "weight": 0.3, "icon": "potion_mana_small", "effect": "mana", "effect_value": 30 },
+  { "id": "potion_stamina", "name": "Mikstura Wytrzymałości", "description": "Chwilowo zwiększa kondycję. Biegniesz jak wicher.", "category": "potion", "value": 20, "weight": 0.3, "icon": "potion_stamina", "effect": "stamina", "effect_value": 50, "effect_duration": 30 },
+  { "id": "potion_antidote", "name": "Antidotum", "description": "Neutralizuje trucizny. Każdy tropiciel nosi jedną przy pasie.", "category": "potion", "value": 20, "weight": 0.3, "icon": "potion_antidote", "effect": "antidote", "effect_value": 1 }
+]

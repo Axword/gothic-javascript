@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Plants",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "required": ["id", "name", "description", "category", "value", "weight", "icon", "effect", "effect_value", "biom", "rarity"],
+    "properties": {
+      "id": { "type": "string" },
+      "name": { "type": "string" },
+      "description": { "type": "string" },
+      "category": { "type": "string", "pattern": "^plant$" },
+      "value": { "type": "integer", "minimum": 0 },
+      "weight": { "type": "number", "minimum": 0 },
+      "icon": { "type": "string" },
+      "asset_path": { "type": "string" },
+      "effect": { "type": "string" },
+      "effect_value": { "type": "integer", "minimum": 0 },
+      "effect_duration": { "type": "integer", "minimum": 0 },
+      "biom": { "type": "string" },
+      "rarity": { "type": "string", "enum": ["common", "uncommon", "rare"] }
+    }
+  }
+}

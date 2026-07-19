@@ -1,0 +1,586 @@
+[
+  {
+    "id": "quest_new_01",
+    "title": "Dług Sępa",
+    "description": "Odzyskaj dług od kupca w Grodzie Straży.",
+    "type": "new_faction",
+    "faction": "new_order",
+    "prerequisites": [
+      {
+        "type": "quest_state",
+        "quest_id": "quest_main_arrival",
+        "state": "active"
+      }
+    ],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Porozmawiaj z Sępem o długu.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_sep",
+            "description": "Dowiedz się szczegółów od Sępa"
+          }
+        ],
+        "next_stage_on_complete": "collect",
+        "rewards": {
+          "xp": 30,
+          "gold": 10
+        }
+      },
+      "collect": {
+        "id": "collect",
+        "description": "Znajdź kupca Alojzego w Grodzie Straży i odzyskaj dług.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_merchant",
+            "description": "Porozmawiaj z kupcem Alojzym"
+          }
+        ],
+        "alternative_solutions": [
+          {
+            "description": "Zastrasz kupca i weź dług siłą.",
+            "conditions": [
+              {
+                "type": "skill",
+                "skill_id": "combat_sword",
+                "min_skill_rank": 1
+              }
+            ],
+            "result_stage": "intimidate"
+          },
+          {
+            "description": "Wkradnij się i ukradnij równowartość długu.",
+            "conditions": [
+              {
+                "type": "skill",
+                "skill_id": "pickpocket",
+                "min_skill_rank": 1
+              }
+            ],
+            "result_stage": "steal"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 50,
+          "gold": 30
+        }
+      },
+      "intimidate": {
+        "id": "intimidate",
+        "description": "Zastraszyłeś kupca. Dług odzyskany siłą.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 40,
+          "gold": 60,
+          "reputation_changes": {
+            "old_order": -15,
+            "new_order": 15
+          }
+        }
+      },
+      "steal": {
+        "id": "steal",
+        "description": "Ukradłeś towary na równowartość długu.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 35,
+          "gold": 50,
+          "reputation_changes": {
+            "old_order": -10,
+            "new_order": 20
+          }
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Dług odzyskany. Sęp jest zadowolony.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_sep",
+            "description": "Wróć do Sępa z długiem"
+          }
+        ],
+        "rewards": {
+          "xp": 60,
+          "gold": 70,
+          "reputation_changes": {
+            "new_order": 20
+          }
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Sęp wysyła mnie po dług od kupca w Grodzie Straży.",
+      "collect": "Kupiec Alojzy zalega z zapłatą. Trzeba go przekonać do oddania długu.",
+      "complete": "Sęp dostał swoje. Jestem o krok bliżej dołączenia do Wolnych."
+    }
+  },
+  {
+    "id": "quest_new_02",
+    "title": "Zielone Płuca",
+    "description": "Zbierz rzadkie rośliny z Zapadliska dla zielarki.",
+    "type": "new_faction",
+    "faction": "new_order",
+    "prerequisites": [
+      {
+        "type": "quest_state",
+        "quest_id": "quest_new_01",
+        "state": "completed"
+      }
+    ],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Porozmawiaj z Jarzębiną, zielarką Wolnych Chat.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_herbalist",
+            "description": "Dowiedz się, czego potrzebuje"
+          }
+        ],
+        "next_stage_on_complete": "collect",
+        "rewards": {
+          "xp": 20,
+          "gold": 10
+        }
+      },
+      "collect": {
+        "id": "collect",
+        "description": "Zbierz rośliny w Zapadlisku.",
+        "objectives": [
+          {
+            "type": "collect",
+            "target_id": "plant_swamp_moss",
+            "target_count": 3,
+            "description": "Zbierz 3 porcje błotnego mchu"
+          },
+          {
+            "type": "collect",
+            "target_id": "plant_poison_cap",
+            "target_count": 2,
+            "description": "Zbierz 2 trujące kapelusze"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 60,
+          "gold": 30
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Rośliny dostarczone. Zielarka jest wdzięczna.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_herbalist",
+            "description": "Dostarcz rośliny Jarzębinie"
+          }
+        ],
+        "rewards": {
+          "xp": 50,
+          "gold": 50,
+          "reputation_changes": {
+            "new_order": 15
+          }
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Jarzębina potrzebuje rzadkich roślin z Zapadliska.",
+      "collect": "Błotny mech i trujące kapelusze. Bagno nie jest bezpieczne, ale trzeba ryzykować.",
+      "complete": "Zioła dostarczone. Zielarka wie, jak robić lepsze mikstury."
+    }
+  },
+  {
+    "id": "quest_new_03",
+    "title": "Głód",
+    "description": "Zdobyć zapasy jedzenia z magazynów Straży.",
+    "type": "new_faction",
+    "faction": "new_order",
+    "prerequisites": [
+      {
+        "type": "quest_state",
+        "quest_id": "quest_new_02",
+        "state": "completed"
+      }
+    ],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Stara Wiedźma prosi o pomoc. W Wolnych Chatach brakuje jedzenia.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_elder",
+            "description": "Porozmawiaj ze Starą Wiedźmą"
+          }
+        ],
+        "next_stage_on_complete": "heist",
+        "rewards": {
+          "xp": 30,
+          "gold": 10
+        }
+      },
+      "heist": {
+        "id": "heist",
+        "description": "Zdobądź jedzenie z magazynów Straży.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_old_fort",
+            "description": "Wkradnij się do magazynu w Grodzie Straży"
+          }
+        ],
+        "alternative_solutions": [
+          {
+            "description": "Przekup strażnika, by przymknął oko.",
+            "conditions": [
+              {
+                "type": "has_item",
+                "item_id": "misc_gold"
+              }
+            ],
+            "result_stage": "bribe"
+          },
+          {
+            "description": "Zakradnij się nocą i otwórz zamek.",
+            "conditions": [
+              {
+                "type": "skill",
+                "skill_id": "lockpicking",
+                "min_skill_rank": 1
+              }
+            ],
+            "result_stage": "stealth"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 50,
+          "gold": 20
+        }
+      },
+      "bribe": {
+        "id": "bribe",
+        "description": "Strażnik dał się przekupić. Jedzenie zdobyte.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 40,
+          "gold": -50,
+          "reputation_changes": {
+            "old_order": -5
+          }
+        }
+      },
+      "stealth": {
+        "id": "stealth",
+        "description": "Nikt cię nie widział. Jedzenie zdobyte po kryjomu.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 60,
+          "gold": 30,
+          "reputation_changes": {
+            "new_order": 20
+          }
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Jedzenie dostarczone do Wolnych Chat. Wdzięczność Starszyzny.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_elder",
+            "description": "Dostarcz jedzenie Starej Wiedźmie"
+          }
+        ],
+        "rewards": {
+          "xp": 60,
+          "gold": 40,
+          "skill_points": 1,
+          "reputation_changes": {
+            "new_order": 25
+          }
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "W Wolnych Chatach głód. Stara Wiedźma prosi o pomoc.",
+      "heist": "Trzeba zdobyć jedzenie. Straż ma pełne magazyny.",
+      "complete": "Głód zażegnany. Wolni są mi wdzięczni."
+    }
+  },
+  {
+    "id": "quest_new_04",
+    "title": "Dezerter",
+    "description": "Pomóż uciec byłemu żołnierzowi Straży, który chce dołączyć do Wolnych.",
+    "type": "new_faction",
+    "faction": "new_order",
+    "prerequisites": [
+      {
+        "type": "quest_state",
+        "quest_id": "quest_new_02",
+        "state": "completed"
+      }
+    ],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Zwiadowca Włók mówi, że strażnik chce przejść na stronę Wolnych.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_scout",
+            "description": "Porozmawiaj ze zwiadowcą Włókiem"
+          }
+        ],
+        "next_stage_on_complete": "meet",
+        "rewards": {
+          "xp": 30,
+          "gold": 10
+        }
+      },
+      "meet": {
+        "id": "meet",
+        "description": "Spotkaj się z dezerterem na Trakcie Północnym.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_road",
+            "description": "Idź na Trakt Północny"
+          },
+          {
+            "type": "talk_to",
+            "target_id": "npc_old_recruit_1",
+            "description": "Porozmawiaj z dezerterem"
+          }
+        ],
+        "next_stage_on_complete": "escape",
+        "rewards": {
+          "xp": 40,
+          "gold": 20
+        }
+      },
+      "escape": {
+        "id": "escape",
+        "description": "Odprowadź dezertera bezpiecznie do Wolnych Chat.",
+        "objectives": [
+          {
+            "type": "reach",
+            "target_id": "loc_free_village",
+            "description": "Odprowadź dezertera do Wolnych Chat"
+          }
+        ],
+        "alternative_solutions": [
+          {
+            "description": "Zabij pościg",
+            "conditions": [
+              {
+                "type": "skill",
+                "skill_id": "combat_sword",
+                "min_skill_rank": 1
+              }
+            ],
+            "result_stage": "fight_escort"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 60,
+          "gold": 30
+        }
+      },
+      "fight_escort": {
+        "id": "fight_escort",
+        "description": "Zabiłeś pościg. Dezerter bezpieczny.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 90,
+          "gold": 40,
+          "reputation_changes": {
+            "old_order": -20,
+            "new_order": 25
+          }
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Dezerter dotarł do Wolnych Chat. Sęp przyjmuje go.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_sep",
+            "description": "Zamelduj Sępowi"
+          }
+        ],
+        "rewards": {
+          "xp": 70,
+          "gold": 60,
+          "reputation_changes": {
+            "new_order": 20
+          }
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Strażnik chce uciec do Wolnych. Trzeba mu pomóc.",
+      "meet": "Spotkanie na Trakcie. Jeśli Straż go złapie, zginie.",
+      "escape": "Dezerter idzie ze mną. Muszę go doprowadzić do Wolnych Chat.",
+      "complete": "Dezerter bezpieczny. Sęp zadowolony."
+    }
+  },
+  {
+    "id": "quest_new_05",
+    "title": "Zdrajca",
+    "description": "Znajdź szpiega Straży wśród Wolnych i rozpraw się z nim.",
+    "type": "new_faction",
+    "faction": "new_order",
+    "prerequisites": [
+      {
+        "type": "quest_state",
+        "quest_id": "quest_new_03",
+        "state": "completed"
+      }
+    ],
+    "initial_stage": "start",
+    "stages": {
+      "start": {
+        "id": "start",
+        "description": "Sęp podejrzewa, że ktoś w Wolnych Chatach donosi Straży.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_sep",
+            "description": "Porozmawiaj z Sępem o szpiegu"
+          }
+        ],
+        "next_stage_on_complete": "investigate",
+        "rewards": {
+          "xp": 40,
+          "gold": 20
+        }
+      },
+      "investigate": {
+        "id": "investigate",
+        "description": "Przesłuchaj podejrzanych w Wolnych Chatach.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_bartender",
+            "description": "Porozmawiaj z barmanem Adamem"
+          },
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_merchant",
+            "description": "Porozmawiaj z kupcem Robalem"
+          }
+        ],
+        "next_stage_on_complete": "confront",
+        "rewards": {
+          "xp": 50,
+          "gold": 30
+        }
+      },
+      "confront": {
+        "id": "confront",
+        "description": "Wszystkie tropy prowadzą do kupca. Skonfrontuj go.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_merchant",
+            "description": "Skonfrontuj kupca Robala"
+          }
+        ],
+        "alternative_solutions": [
+          {
+            "description": "Zabij szpiega",
+            "conditions": [],
+            "result_stage": "kill_spy"
+          },
+          {
+            "description": "Przekup szpiega",
+            "conditions": [
+              {
+                "type": "has_item",
+                "item_id": "misc_gold"
+              }
+            ],
+            "result_stage": "double_agent"
+          }
+        ],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 60,
+          "gold": 40
+        }
+      },
+      "kill_spy": {
+        "id": "kill_spy",
+        "description": "Szpieg nie żyje.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 80,
+          "gold": 50,
+          "reputation_changes": {
+            "new_order": 25
+          }
+        }
+      },
+      "double_agent": {
+        "id": "double_agent",
+        "description": "Kupiec teraz pracuje dla Wolnych.",
+        "objectives": [],
+        "next_stage_on_complete": "complete",
+        "rewards": {
+          "xp": 70,
+          "gold": -100,
+          "reputation_changes": {
+            "new_order": 35
+          }
+        }
+      },
+      "complete": {
+        "id": "complete",
+        "description": "Problem rozwiązany.",
+        "objectives": [
+          {
+            "type": "talk_to",
+            "target_id": "npc_free_sep",
+            "description": "Zamelduj Sępowi"
+          }
+        ],
+        "rewards": {
+          "xp": 80,
+          "gold": 80,
+          "skill_points": 2,
+          "reputation_changes": {
+            "new_order": 30
+          }
+        }
+      }
+    },
+    "journal_entries": {
+      "start": "Sęp podejrzewa szpiega. Trzeba znaleźć zdrajcę.",
+      "investigate": "Ktoś w osadzie donosi Straży.",
+      "confront": "Znalazłem winnego.",
+      "complete": "Zdrajca ukarany."
+    }
+  }
+]

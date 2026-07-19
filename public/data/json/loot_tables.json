@@ -1,0 +1,98 @@
+[
+  {
+    "id": "loot_wolf",
+    "name": "Wilczy Łup",
+    "guaranteed": [ { "item_id": "misc_skins_wolf", "count": 1 } ],
+    "rolls": 2,
+    "entries": [
+      { "item_id": "misc_gold", "weight": 60, "count_min": 1, "count_max": 5 },
+      { "item_id": "misc_skins_wolf", "weight": 30, "count_min": 0, "count_max": 1 },
+      { "item_id": "plant_bloodroot", "weight": 10, "count_min": 0, "count_max": 1 }
+    ]
+  },
+  {
+    "id": "loot_boar",
+    "name": "Dziczy Łup",
+    "guaranteed": [ { "item_id": "misc_skins_boar", "count": 1 } ],
+    "rolls": 2,
+    "entries": [
+      { "item_id": "misc_gold", "weight": 50, "count_min": 2, "count_max": 8 },
+      { "item_id": "misc_skins_boar", "weight": 30, "count_min": 0, "count_max": 1 },
+      { "item_id": "plant_dewleaf", "weight": 20, "count_min": 0, "count_max": 2 }
+    ]
+  },
+  {
+    "id": "loot_crawler",
+    "name": "Błotny Łup",
+    "guaranteed": [],
+    "rolls": 2,
+    "entries": [
+      { "item_id": "misc_gold", "weight": 40, "count_min": 1, "count_max": 4 },
+      { "item_id": "plant_swamp_moss", "weight": 30, "count_min": 0, "count_max": 2 },
+      { "item_id": "plant_poison_cap", "weight": 20, "count_min": 0, "count_max": 1 },
+      { "item_id": "misc_trophy_mutant_eye", "weight": 10, "count_min": 0, "count_max": 1 }
+    ]
+  },
+  {
+    "id": "loot_mutant",
+    "name": "Mutant",
+    "guaranteed": [ { "item_id": "misc_trophy_mutant_eye", "count": 1 } ],
+    "rolls": 3,
+    "entries": [
+      { "item_id": "misc_gold", "weight": 50, "count_min": 5, "count_max": 15 },
+      { "item_id": "plant_ember_flower", "weight": 15, "count_min": 0, "count_max": 1 },
+      { "item_id": "plant_firethorn", "weight": 15, "count_min": 0, "count_max": 1 },
+      { "item_id": "misc_quest_artifact", "weight": 5, "count_min": 0, "count_max": 1 },
+      { "item_id": "potion_healing_small", "weight": 15, "count_min": 0, "count_max": 1 }
+    ]
+  },
+  {
+    "id": "loot_wyrm",
+    "name": "Piaszczak",
+    "guaranteed": [ { "item_id": "misc_trophy_wyrm_scale", "count": 2 } ],
+    "rolls": 4,
+    "entries": [
+      { "item_id": "misc_gold", "weight": 60, "count_min": 10, "count_max": 30 },
+      { "item_id": "misc_trophy_wyrm_scale", "weight": 20, "count_min": 0, "count_max": 2 },
+      { "item_id": "potion_healing_medium", "weight": 10, "count_min": 0, "count_max": 1 },
+      { "item_id": "sword_obsidian_cleaver", "weight": 5, "count_min": 0, "count_max": 1 },
+      { "item_id": "armor_iron_plate", "weight": 5, "count_min": 0, "count_max": 1 }
+    ]
+  },
+  {
+    "id": "loot_shade",
+    "name": "Cień",
+    "guaranteed": [],
+    "rolls": 1,
+    "entries": [
+      { "item_id": "misc_gold", "weight": 40, "count_min": 1, "count_max": 3 },
+      { "item_id": "plant_grave_moss", "weight": 30, "count_min": 0, "count_max": 1 },
+      { "item_id": "plant_moonweed", "weight": 20, "count_min": 0, "count_max": 1 },
+      { "item_id": "potion_mana_small", "weight": 10, "count_min": 0, "count_max": 1 }
+    ]
+  },
+  {
+    "id": "loot_chest_common",
+    "name": "Zwykła Skrzynia",
+    "rolls": 2,
+    "entries": [
+      { "item_id": "misc_gold", "weight": 60, "count_min": 5, "count_max": 20 },
+      { "item_id": "potion_healing_small", "weight": 15, "count_min": 0, "count_max": 1 },
+      { "item_id": "misc_arrow", "weight": 15, "count_min": 3, "count_max": 10 },
+      { "item_id": "misc_lockpick_iron", "weight": 10, "count_min": 0, "count_max": 3 }
+    ]
+  },
+  {
+    "id": "loot_chest_rare",
+    "name": "Cenna Skrzynia",
+    "rolls": 3,
+    "entries": [
+      { "item_id": "misc_gold", "weight": 50, "count_min": 20, "count_max": 80 },
+      { "item_id": "potion_healing_medium", "weight": 15, "count_min": 0, "count_max": 2 },
+      { "item_id": "misc_lockpick_steel", "weight": 10, "count_min": 0, "count_max": 2 },
+      { "item_id": "plant_ember_flower", "weight": 10, "count_min": 0, "count_max": 1 },
+      { "item_id": "sword_hunters_blade", "weight": 5, "count_min": 0, "count_max": 1 },
+      { "item_id": "bow_shortbow", "weight": 10, "count_min": 0, "count_max": 1 }
+    ]
+  }
+]
