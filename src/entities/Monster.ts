@@ -3,14 +3,13 @@ import { MonsterData, AIState } from '../types';
 import { Player } from './Player';
 import { NPC } from './NPC';
 
-export class Monster extends Phaser.GameObjects.Container {
+export class Monster extends Phaser.Physics.Arcade.Sprite {
   public monsterData: MonsterData;
   public hp: number;
   public isAlive: boolean = true;
   
-  private sprite!: Phaser.GameObjects.Image;
-  private healthBar: Phaser.GameObjects.Rectangle;
-  private healthBarBg: Phaser.GameObjects.Rectangle;
+  private healthBar!: Phaser.GameObjects.Rectangle;
+  private healthBarBg!: Phaser.GameObjects.Rectangle;
   private aiState: AIState = 'idle';
   private stateTimer: number = 0;
   private targetX: number = 0;
@@ -18,75 +17,52 @@ export class Monster extends Phaser.GameObjects.Container {
   private patrolCenter: { x: number; y: number };
   private patrolRadius: number = 120;
   private aggroRadius: number = 220;
+  private hbWidth: number = 28;
 
   constructor(scene: Phaser.Scene, x: number, y: number, data: MonsterData) {
-    super(scene, x, y);
+    const tex = scene.textures.exists(data.id) ? data.id : '__DEFAULT';
+    super(scene, x, y, tex);
+    scene.add.existing(this);
+    scene.physics.add.existing(this);
+
     this.monsterData = data;
     this.hp = data.stats.hp;
     this.patrolCenter = { x, y };
-
     const scale = data.scale || 1.0;
-    
-    // Rozmiary per potwór
-    const spriteSizeMap: Record<string, {w:number;h:number;hw:number;hh:number}> = {
-      'monster_grey_wolf': { w: 64, h: 48, hw: 20, hh: 14 },
-      'monster_forest_boar': { w: 72, h: 56, hw: 24, hh: 16 },
-      'monster_marsh_crawler': { w: 56, h: 56, hw: 18, hh: 14 },
-      'monster_mutant': { w: 72, h: 72, hw: 22, hh: 22 },
-      'monster_sand_wyrm': { w: 80, h: 56, hw: 28, hh: 16 },
-      'monster_shade': { w: 56, h: 72, hw: 18, hh: 22 },
-    };
-    const sz = spriteSizeMap[data.id] || { w: 48, h: 48, hw: 18, hh: 16 };
-    this.hw = sz.hw * scale;
-    this.hh = sz.hh * scale;
+    this.setScale(scale);
+    this.setOrigin(0.5, 0.9);
+    this.setDepth(y);
+    this.setCollideWorldBounds(true);
+    this.setDrag(600);
+    this.setMaxVelocity(200);
 
-    if (scene.textures.exists(data.id)) {
-      this.sprite = scene.make.image({ key: data.id, add: false }) as Phaser.GameObjects.Image;
-      this.sprite.setOrigin(0.5, 0.95);
-      this.sprite.setDisplaySize(sz.w * scale, sz.h * scale);
-    } else {
-      const fb = scene.add.rectangle(0, -sz.hh, 24*scale, 24*scale, 0x884422);
-      this.sprite = fb as any;
-    }
-    this.add(this.sprite);
-
-    // Cień
-    const shadow = scene.add.ellipse(0, 2, sz.w*0.35*scale, 6*scale, 0x000000, 0.4);
-    shadow.setOrigin(0.5, 1);
-    this.add(shadow);
-    
-    // Health bar
-    const hbWidth = 28 * scale;
-    this.healthBarBg = scene.add.rectangle(0, -sz.h*scale - 6, hbWidth, 5, 0x333333);
-    this.healthBarBg.setVisible(false);
-    this.add(this.healthBarBg);
-    this.healthBar = scene.add.rectangle(-hbWidth/2, -sz.h*scale - 6, hbWidth, 5, 0xff0000);
-    this.healthBar.setOrigin(0, 0.5);
-    this.healthBar.setVisible(false);
-    this.add(this.healthBar);
-    
-    scene.add.existing(this);
-    scene.physics.add.existing(this);
-    
-    this.setSize(this.hw*2, this.hh*2);
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setSize(this.hw*2, this.hh*2);
-    body.setOffset(-this.hw, -this.hh*2);
-    body.setCollideWorldBounds(true);
-    body.setDrag(600);
-    body.setMaxSpeed(240);
+    const dw = this.displayWidth * 0.35;
+    const dh = this.displayHeight * 0.35;
+    body.setSize(dw*2, dh*2);
+    body.setOffset((this.displayWidth - dw*2)/2, this.displayHeight - dh*2);
+
+    this.hbWidth = Math.max(20, 28*scale);
+    this.healthBarBg = scene.add.rectangle(x, y - this.displayHeight - 8, this.hbWidth, 5, 0x333333).setDepth(y+2);
+    this.healthBarBg.setVisible(false);
+    this.healthBar = scene.add.rectangle(x - this.hbWidth/2, y - this.displayHeight - 8, this.hbWidth, 5, 0xff0000).setOrigin(0,0.5).setDepth(y+3);
+    this.healthBar.setVisible(false);
   }
 
-  private hw: number;
-  private hh: number;
+  update(delta: number, player: Player, _npcs: NPC[]) {
+    // Paski życia podążają
+    this.healthBar.setPosition(this.x - this.hbWidth/2, this.y - this.displayHeight - 8);
+    this.healthBarBg.setPosition(this.x, this.y - this.displayHeight - 8);
+    this.setDepth(this.y);
+    this.healthBar.setDepth(this.depth+2);
+    this.healthBarBg.setDepth(this.depth+1);
 
-  update(delta: number, player: Player, npcs: NPC[]) {
     if (!this.isAlive) return;
-    const dist = Phaser.Math.Distance.Between(this.x, this.y, player.x, this.y);
+    const dist = Phaser.Math.Distance.Between(this.x, this.y, player.x, player.y);
     this.stateTimer += delta;
     const isAggressive = (this.monsterData.behavior||[]).includes('aggressive');
     const aggroR = isAggressive ? this.aggroRadius : 140;
-    
+
     switch (this.aiState) {
       case 'idle':
         if (this.stateTimer > 3000) {
@@ -94,16 +70,13 @@ export class Monster extends Phaser.GameObjects.Container {
           this.targetX = this.patrolCenter.x + Phaser.Math.Between(-this.patrolRadius, this.patrolRadius);
           this.targetY = this.patrolCenter.y + Phaser.Math.Between(-this.patrolRadius, this.patrolRadius);
         }
-        if (dist < aggroR) {
-          this.aiState = 'chase'; this.stateTimer = 0;
-          this.healthBarBg.setVisible(true); this.healthBar.setVisible(true);
-        }
+        if (dist < aggroR) { this.aiState = 'chase'; this.stateTimer = 0; this.healthBarBg.setVisible(true); this.healthBar.setVisible(true); }
         break;
       case 'patrol':
         this.moveToward(this.targetX, this.targetY, this.monsterData.stats.speed * 0.4);
         if (dist < aggroR) { this.aiState = 'chase'; this.stateTimer = 0; }
-        if (this.stateTimer > 6000 || Phaser.Math.Distance.Between(this.x, this.y,this.targetX,this.targetY) < 12) {
-          this.aiState = 'idle'; this.stateTimer = 0; this.stop();
+        if (this.stateTimer > 6000 || Phaser.Math.Distance.Between(this.x,this.y,this.targetX,this.targetY) < 12) {
+          this.aiState = 'idle'; this.stateTimer = 0; this.halt();
         }
         break;
       case 'chase':
@@ -112,7 +85,7 @@ export class Monster extends Phaser.GameObjects.Container {
         if (dist > 500) { this.aiState = 'return'; this.stateTimer = 0; }
         break;
       case 'attack':
-        this.stop();
+        this.halt();
         const cd = this.monsterData.attacks?.[0]?.cooldown ?? 900;
         if (this.stateTimer > cd) { this.stateTimer = 0; this.performAttack(player); }
         if (dist > 44) { this.aiState = 'chase'; this.stateTimer = 0; }
@@ -125,49 +98,37 @@ export class Monster extends Phaser.GameObjects.Container {
         }
         break;
     }
-    if (this.healthBar.visible) {
-      const ratio = Math.max(0, this.hp / this.monsterData.stats.hp);
-      this.healthBar.setScale(ratio, 1);
-    }
-    // Spójrz w stronę ruchu
-    const body = this.body as Phaser.Physics.Arcade.Body;
-    if (body) {
-      const vx = body.velocity.x;
-      if (Math.abs(vx) > 5) this.sprite.setFlipX(vx < 0);
-    }
+    if (this.healthBar.visible) this.healthBar.setScale(Math.max(0, this.hp / this.monsterData.stats.hp), 1);
+    const b = this.body as Phaser.Physics.Arcade.Body;
+    if (b && Math.abs(b.velocity.x) > 5) this.setFlipX(b.velocity.x < 0);
   }
 
   private moveToward(tx: number, ty: number, speed: number) {
     const angle = Phaser.Math.Angle.Between(this.x, this.y, tx, ty);
     const body = this.body as Phaser.Physics.Arcade.Body;
-    if (body) body.setVelocity(Math.cos(angle) * speed, Math.sin(angle) * speed);
+    if (body) body.setVelocity(Math.cos(angle)*speed, Math.sin(angle)*speed);
   }
 
-  private stop() { const b = this.body as Phaser.Physics.Arcade.Body; if (b) b.setVelocity(0, 0); }
+  private halt() { const b = this.body as Phaser.Physics.Arcade.Body; if (b) b.setVelocity(0,0); }
 
   private performAttack(player: Player) {
     const dmg = this.monsterData.attacks?.[0]?.damage ?? 5;
     const actualDmg = player.takeDamage(dmg);
-    (this.sprite as any).setTint?.(0xff4040);
-    this.scene.time.delayedCall(120, () => (this.sprite as any).clearTint?.());
+    this.setTint(0xff4040);
+    this.scene.time.delayedCall(120, () => this.clearTint());
     window.dispatchEvent(new CustomEvent('game:playerHit', { detail: { damage: actualDmg } }));
   }
 
   takeDamage(amount: number): boolean {
     this.hp -= amount;
-    (this.sprite as any).setTint?.(0xffffff);
-    this.scene.time.delayedCall(100, () => (this.sprite as any).clearTint?.());
+    this.setTint(0xffffff);
+    this.scene.time.delayedCall(100, () => this.clearTint());
     this.healthBarBg.setVisible(true); this.healthBar.setVisible(true);
-    if (this.aiState === 'idle' || this.aiState === 'patrol' || this.aiState === 'return') {
-      this.aiState = 'chase'; this.stateTimer = 0;
-    }
+    if (this.aiState === 'idle' || this.aiState === 'patrol' || this.aiState === 'return') { this.aiState = 'chase'; this.stateTimer = 0; }
     if (this.hp <= 0) {
-      this.hp = 0; this.isAlive = false;
-      this.sprite.setAlpha(0.6);
-      this.stop();
-      // Wyłącz kolizje żeby nie blokował gracza
-      const b = this.body as Phaser.Physics.Arcade.Body;
-      if (b) b.checkCollision.none = true;
+      this.hp = 0; this.isAlive = false; this.setAlpha(0.6); this.halt();
+      const b = this.body as Phaser.Physics.Arcade.Body; if (b) b.checkCollision.none = true;
+      this.healthBar.destroy(); this.healthBarBg.destroy();
       return true;
     }
     return false;
@@ -186,8 +147,8 @@ export class Monster extends Phaser.GameObjects.Container {
     return items;
   }
 
-  destroy() {
-    try { this.sprite.destroy(); this.healthBar.destroy(); this.healthBarBg.destroy(); } catch {}
-    super.destroy();
+  destroy(fromScene?: boolean) {
+    try { this.healthBar.destroy(); this.healthBarBg.destroy(); } catch {}
+    super.destroy(fromScene);
   }
 }

@@ -119,7 +119,7 @@ export class GameScene extends Phaser.Scene {
   private stepTimer: number = 0;
   private locationLabels: Array<{ x: number; y: number; text: string; color: string }> = [];
 
-  private obstacles: Phaser.Physics.Arcade.StaticGroup | null = null;
+  private obstacles: null = null; // wyłączone
 
   constructor() { super({ key: 'GameScene' }); }
 
@@ -162,9 +162,6 @@ export class GameScene extends Phaser.Scene {
     this.lockpickMinigame = new LockpickMinigame(this);
     this.crimeSystem = new CrimeSystem(this);
 
-    // Obstacles (drzewa, skały, palisady, mury)
-    this.obstacles = this.physics.add.staticGroup();
-
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.keys = {
       W: this.input.keyboard!.addKey('W'), A: this.input.keyboard!.addKey('A'),
@@ -182,12 +179,7 @@ export class GameScene extends Phaser.Scene {
 
     this.spawnAllEntities();
 
-    // Kolizja gracza z przeszkodami
-    if (this.obstacles) {
-      this.physics.add.collider(this.player, this.obstacles);
-      this.physics.add.collider(this.npcs, this.obstacles);
-      this.physics.add.collider(this.monsters, this.obstacles);
-    }
+    // Podstawowe kolizje między postaciami (miękkie)
     this.physics.add.collider(this.npcs, this.npcs);
     this.physics.add.collider(this.monsters, this.monsters);
 
@@ -426,16 +418,9 @@ export class GameScene extends Phaser.Scene {
     }
   }
 
-  private addObstacle(x: number, y: number, w: number, h: number, sprite?: Phaser.GameObjects.Image) {
-    if (!this.obstacles) return;
-    // Statyczna skrzynka kolizyjna
-    const box = this.obstacles.create(x, y, '__DEFAULT') as Phaser.Physics.Arcade.Sprite;
-    if (box && box.body) {
-      box.setVisible(false);
-      box.body.setSize(w, h);
-      box.body.setOffset(-w/2, -h/2);
-      box.refreshBody();
-    }
+  private addObstacle(_x: number, _y: number, _w: number, _h: number, _sprite?: Phaser.GameObjects.Image) {
+    // Obstacle collision disabled - simplifies and prevents blocking player
+    return;
   }
 
   private buildFort(cx: number, cy: number, label: string) {

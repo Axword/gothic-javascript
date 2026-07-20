@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { Faction } from '../types';
 import { audio } from '../systems/AudioSystem';
 
-export class Player extends Phaser.GameObjects.Container {
+export class Player extends Phaser.Physics.Arcade.Sprite {
   public speed: number = 120;
   public hp: number = 50;
   public maxHp: number = 50;
@@ -33,67 +33,41 @@ export class Player extends Phaser.GameObjects.Container {
   public currentCombatMode: 'idle' | 'melee' | 'ranged' | 'magic' = 'idle';
   private direction: 'down' | 'up' | 'left' | 'right' = 'down';
 
-  private sprite!: Phaser.GameObjects.Image;
-  private label: Phaser.GameObjects.Text;
-
   getDirectionFrame(): number {
     const frames: Record<string, number> = { 'down': 0, 'left': 1, 'right': 2, 'up': 3 };
     return frames[this.direction] || 0;
   }
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    super(scene, x, y);
-
-    // Stwórz sprite BEZ automatycznego dodawania do sceny
-    if (scene.textures.exists('char_player')) {
-      this.sprite = scene.make.image({ key: 'char_player', frame: 0, add: false }) as Phaser.GameObjects.Image;
-      this.sprite.setOrigin(0.5, 0.95); // pivot między stopami
-    } else {
-      this.sprite = scene.make.image({ key: '__DEFAULT', add: false }) as Phaser.GameObjects.Image;
-    }
-    this.add(this.sprite);
-
-    // Cień (na samym dole pod postacią)
-    const shadow = scene.add.ellipse(0, 0, 14, 5, 0x000000, 0.45);
-    shadow.setOrigin(0.5, 1);
-    this.add(shadow);
-
-    // Label (imię gracza) - nad głową (56px od stóp)
-    this.label = scene.add.text(0, -62, 'TY', {
-      fontSize: '10px',
-      color: '#ffff80',
-      stroke: '#000000',
-      strokeThickness: 3,
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
-    this.add(this.label);
-
+    // Użyj tekstury postaci lub fallbacku
+    const tex = scene.textures.exists('char_player') ? 'char_player' : '__DEFAULT';
+    super(scene, x, y, tex, 0);
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
-    // Rozmiar kontenera (do poprawnej fizyki)
-    this.setSize(20, 24);
+    this.setOrigin(0.5, 0.9);
+    this.setDepth(y);
+    this.setCollideWorldBounds(true);
+    this.setDrag(1000);
+    this.setMaxVelocity(240);
     const body = this.body as Phaser.Physics.Arcade.Body;
-    // Hitbox pod postacią: 16x22, gdzie (0,0) kontenera to pozycja stóp
-    body.setSize(16, 22);
-    body.setOffset(-8, -24); // lewy-góra hitboxu względem kontenera
-    body.setCollideWorldBounds(true);
-    body.setDrag(1000);
-    body.setMaxSpeed(240);
+    // Hitbox na dole postaci (stopy)
+    const dw = Math.min(18, this.displayWidth * 0.4);
+    const dh = Math.min(24, this.displayHeight * 0.4);
+    body.setSize(dw, dh);
+    body.setOffset((this.displayWidth - dw)/2, this.displayHeight - dh);
 
     this.initStartingInventory();
     this.setDirection('down');
   }
 
-  /** Initialize starting inventory based on balance */
   private initStartingInventory() {
-    this.maxHp = 50 + 10 + this.strength * 3; // 72 HP at start
+    this.maxHp = 50 + 10 + this.strength * 3;
     this.hp = this.maxHp;
     this.maxMana = 20;
     this.mana = this.maxMana;
     this.gold = 20;
     this.xpToNext = 100;
-    // Starting items
     this.clearInventory();
     this.addToInventory('misc_gold', 20);
     this.addToInventory('misc_arrow', 20);
@@ -110,37 +84,29 @@ export class Player extends Phaser.GameObjects.Container {
 
   setDirection(dir: 'down' | 'up' | 'left' | 'right') {
     this.direction = dir;
-    if (this.sprite && 'setFrame' in this.sprite) {
-      (this.sprite as Phaser.GameObjects.Image).setFrame(this.getDirectionFrame());
-    }
+    this.setFrame(this.getDirectionFrame());
+    if (dir === 'left') this.setFlipX(false);
+    else if (dir === 'right') this.setFlipX(true);
   }
 
   getDirection() { return this.direction; }
 
-  setLabel(text: string) {
-    this.label.setText(text);
-  }
-
   move(velX: number, velY: number) {
+    if (!this.body) return;
     const body = this.body as Phaser.Physics.Arcade.Body;
-    if (body) {
-      body.setVelocity(velX * this.speed, velY * this.speed);
-    }
+    body.setVelocity(velX * this.speed, velY * this.speed);
     if (velX < 0) this.setDirection('left');
     else if (velX > 0) this.setDirection('right');
     if (velY < 0) this.setDirection('up');
     else if (velY > 0) this.setDirection('down');
+    this.setDepth(this.y);
   }
 
   stopMoving() {
-    const body = this.body as Phaser.Physics.Arcade.Body;
-    if (body) body.setVelocity(0, 0);
+    const b = this.body as Phaser.Physics.Arcade.Body;
+    if (b) b.setVelocity(0, 0);
   }
 
-  /**
-   * Apply damage using balance formula (BUG-005):
-   * reduction_per_point=0.01, max_reduction=0.8, min_dmg=1
-   */
   takeDamage(amount: number): number {
     const reduction = Math.min(this.armor * 0.01 * amount, amount * 0.8);
     const finalDamage = Math.max(1, Math.floor(amount - reduction));
@@ -188,7 +154,6 @@ export class Player extends Phaser.GameObjects.Container {
 
   getItemCount(itemId: string): number { return this.inventoryCounts[itemId] || 0; }
 
-  /** Equip weapon or armor; returns previously equipped item id (or null) to inventory */
   equip(itemId: string, itemData?: any): string | null {
     if (!itemData) return null;
     const cat = itemData.category;
@@ -196,7 +161,6 @@ export class Player extends Phaser.GameObjects.Container {
     if (cat === 'weapon_sword' || cat === 'weapon_bow') {
       previous = this.equippedWeapon;
       this.equippedWeapon = itemId;
-      // Apply stat requirements check is done externally
     } else if (cat === 'armor') {
       previous = this.equippedArmor;
       this.equippedArmor = itemId;
@@ -215,7 +179,6 @@ export class Player extends Phaser.GameObjects.Container {
     }
   }
 
-  /** Check if player meets requirements */
   meetsRequirements(reqs: any): { ok: boolean; reason?: string } {
     if (!reqs) return { ok: true };
     if (reqs.strength && this.strength < reqs.strength) return { ok: false, reason: `Wymaga siły ${reqs.strength}` };
@@ -260,7 +223,6 @@ export class Player extends Phaser.GameObjects.Container {
     this.skillRanks = data.skillRanks || {};
     this.xpToNext = Math.floor(100 * Math.pow(1.5, Math.max(1, this.level) - 1));
     this.isAlive = this.hp > 0;
-    // Re-apply armor from equipped armor item if present
     this.armor = 0; this.magicResist = 0;
     this.setPosition(data.x ?? this.x, data.y ?? this.y);
   }
