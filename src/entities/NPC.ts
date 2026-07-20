@@ -47,21 +47,20 @@ export class NPC extends Phaser.GameObjects.Container {
 
     const texKey = this.getTextureKey();
     if (scene.textures.exists(texKey)) {
-      this.sprite = scene.add.image(0, -4, texKey, 0);
-      (this.sprite as Phaser.GameObjects.Image).setOrigin(0.5, 1.0);
-      (this.sprite as Phaser.GameObjects.Image).setDisplaySize(32, 56);
+      this.sprite = scene.make.image({ key: texKey, frame: 0, add: false }) as Phaser.GameObjects.Image;
+      (this.sprite as Phaser.GameObjects.Image).setOrigin(0.5, 0.95);
     } else {
-      // Fallback - prostokąt jeżeli brak tekstury
       const colors: Record<string, number> = {
         old_order: 0x4444aa, new_order: 0xaa4444, neutral: 0x888888, bandit: 0x664422, monster: 0x555555
       };
+      // Fallback - prostokąt jeżeli brak tekstury
       const fallback = scene.add.rectangle(0, -14, 20, 28, colors[data.faction] || 0x888888);
       this.sprite = fallback as any;
     }
     this.add(this.sprite);
 
     // Cień
-    const shadow = scene.add.ellipse(0, 2, 16, 5, 0x000000, 0.4);
+    const shadow = scene.add.ellipse(0, 0, 14, 5, 0x000000, 0.4);
     shadow.setOrigin(0.5, 1);
     this.add(shadow);
 
@@ -78,13 +77,14 @@ export class NPC extends Phaser.GameObjects.Container {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
+    this.setSize(20, 24);
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setSize(16, 20);
-    body.setOffset(-8, -22);
+    body.setSize(16, 22);
+    body.setOffset(-8, -24);
     body.setCollideWorldBounds(true);
-    body.setDrag(800);
+    body.setDrag(1000);
+    body.setMaxSpeed(120);
 
-    this.setSize(32, 56);
     this.setInteractive(new Phaser.Geom.Rectangle(-16, -56, 32, 56), Phaser.Geom.Rectangle.Contains);
     this.on('pointerover', () => { (this.sprite as any).setTint?.(0xffff88); });
     this.on('pointerout', () => { (this.sprite as any).clearTint?.(); });

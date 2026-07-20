@@ -195,7 +195,9 @@ export class ProceduralAssets {
   }
 
   // ============================================================
-  // CHARACTERS (32x56, 4 directions) - mroczniej, więcej detali
+  // CHARACTERS (32x56, 4 directions) - mroczniej, więcej detali.
+  // Dla każdej postaci tworzymy spritesheet 4-frame (128×56) z poprawnie
+  // zarejestrowanymi ramkami, zamiast gołego canvasa.
   // ============================================================
   private genCharacters() {
     this.genCharacter('char_player', '#4a3018', '#b89060', '#3a2818', '#8a7040');
@@ -222,120 +224,129 @@ export class ProceduralAssets {
    */
   private genCharacter(key: string, bodyColor: string, skinColor: string, cloakColor: string, accentColor: string, female: boolean = false, crowned: boolean = false) {
     const w = 32, h = 56;
-    const canvas = this.scene.textures.createCanvas(key, w*4, h);
+    // Tworzymy duży canvas 4*w x h i rysujemy wszystkie 4 kierunki
+    const canvas = this.scene.textures.createCanvas(key + '_canvas', w*4, h);
     if (!canvas) return;
     const ctx = canvas.getContext(); if (!ctx) return;
+    ctx.imageSmoothingEnabled = false;
 
     for (let dir = 0; dir < 4; dir++) {
       const ox = dir*w;
       const isFront = dir === 0;
       const isBack = dir === 3;
 
-      // Shadow
-      ctx.fillStyle = 'rgba(0,0,0,0.35)';
+      // Cień
+      ctx.fillStyle = 'rgba(0,0,0,0.4)';
       ctx.beginPath();
       ctx.ellipse(ox+16, 52, 10, 3, 0, 0, Math.PI*2);
       ctx.fill();
 
-      // Legs - spodnie, ciemniejsze
+      // Nogi
       ctx.fillStyle = '#1a1410';
-      ctx.fillRect(ox+11, 32, 4, 14);
-      ctx.fillRect(ox+17, 32, 4, 14);
-      // Boots
+      ctx.fillRect(ox+11, 36, 4, 12);
+      ctx.fillRect(ox+17, 36, 4, 12);
+      // Buty
       ctx.fillStyle = accentColor;
-      ctx.fillRect(ox+10, 44, 6, 4);
-      ctx.fillRect(ox+16, 44, 6, 4);
+      ctx.fillRect(ox+10, 46, 6, 4);
+      ctx.fillRect(ox+16, 46, 6, 4);
       ctx.fillStyle = '#0a0604';
-      ctx.fillRect(ox+10, 46, 6, 2);
-      ctx.fillRect(ox+16, 46, 6, 2);
+      ctx.fillRect(ox+10, 48, 6, 2);
+      ctx.fillRect(ox+16, 48, 6, 2);
 
-      // Torso - ciemne ubranie
+      // Torso
       ctx.fillStyle = bodyColor;
-      ctx.fillRect(ox+8, 20, 16, 16);
-      // Cloak / narzutka z tyłu/boków
+      ctx.fillRect(ox+8, 22, 16, 16);
+      // Płaszcz
       ctx.fillStyle = cloakColor;
       if (isBack) {
-        ctx.fillRect(ox+6, 18, 20, 18);
+        ctx.fillRect(ox+6, 20, 20, 18);
       } else {
-        // narzutka ramion
-        ctx.fillRect(ox+6, 20, 20, 8);
+        ctx.fillRect(ox+6, 22, 20, 8);
       }
-      // Belt
+      // Pas
       ctx.fillStyle = '#2a1808';
-      ctx.fillRect(ox+8, 32, 16, 3);
+      ctx.fillRect(ox+8, 35, 16, 3);
       ctx.fillStyle = accentColor;
-      this.dotCtx(ctx, ox+16, 33, 1.5, accentColor);
+      this.dotCtx(ctx, ox+16, 36, 1.5, accentColor);
 
-      // Arms
+      // Ręce
       ctx.fillStyle = bodyColor;
-      ctx.fillRect(ox+6, 22, 3, 12);
-      ctx.fillRect(ox+23, 22, 3, 12);
-      // Hands
+      ctx.fillRect(ox+6, 24, 3, 12);
+      ctx.fillRect(ox+23, 24, 3, 12);
+      // Dłonie
       ctx.fillStyle = skinColor;
-      ctx.fillRect(ox+6, 32, 3, 3);
-      ctx.fillRect(ox+23, 32, 3, 3);
+      ctx.fillRect(ox+6, 34, 3, 3);
+      ctx.fillRect(ox+23, 34, 3, 3);
 
-      // Head
+      // Głowa
       ctx.fillStyle = skinColor;
-      ctx.fillRect(ox+11, 6, 10, 12);
-      // Jaw shadow
-      ctx.fillStyle = 'rgba(0,0,0,0.15)';
-      ctx.fillRect(ox+11, 14, 10, 4);
-      // Hair - długie u kobiet
+      ctx.fillRect(ox+11, 8, 10, 12);
+      // Żuchwa cień
+      ctx.fillStyle = 'rgba(0,0,0,0.2)';
+      ctx.fillRect(ox+11, 17, 10, 3);
+      // Włosy
       ctx.fillStyle = female ? '#201008' : '#2a1a0a';
-      ctx.fillRect(ox+10, 5, 12, 5);
+      ctx.fillRect(ox+10, 6, 12, 5);
       if (female) {
-        ctx.fillRect(ox+8, 6, 3, 14);
-        ctx.fillRect(ox+21, 6, 3, 14);
+        ctx.fillRect(ox+8, 7, 3, 14);
+        ctx.fillRect(ox+21, 7, 3, 14);
       }
-      // Eyes (front)
+      // Oczy
       if (isFront) {
         ctx.fillStyle = '#000';
-        ctx.fillRect(ox+13, 11, 2, 2);
-        ctx.fillRect(ox+17, 11, 2, 2);
+        ctx.fillRect(ox+13, 13, 2, 2);
+        ctx.fillRect(ox+17, 13, 2, 2);
         ctx.fillStyle = '#fff';
-        ctx.fillRect(ox+13, 11, 1, 1);
-        ctx.fillRect(ox+17, 11, 1, 1);
-        // Brow - zmarszczka
+        ctx.fillRect(ox+13, 13, 1, 1);
+        ctx.fillRect(ox+17, 13, 1, 1);
+        // Brwi
         ctx.fillStyle = '#000';
-        ctx.fillRect(ox+13, 10, 2, 1);
-        ctx.fillRect(ox+17, 10, 2, 1);
-        // Beard stubble
-        ctx.fillStyle = 'rgba(0,0,0,0.3)';
-        ctx.fillRect(ox+12, 14, 8, 3);
+        ctx.fillRect(ox+13, 12, 2, 1);
+        ctx.fillRect(ox+17, 12, 2, 1);
+        // Zarost
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.fillRect(ox+12, 17, 8, 3);
+        // Usta
+        ctx.fillStyle = '#502018';
+        ctx.fillRect(ox+15, 16, 2, 1);
       } else if (isBack) {
-        // Hair covers head
+        // Włosy zasłaniają głowę
         ctx.fillStyle = '#1a0e04';
-        ctx.fillRect(ox+10, 6, 12, 12);
+        ctx.fillRect(ox+10, 8, 12, 12);
       } else {
-        // Side: one eye visible
+        // Bok
         ctx.fillStyle = '#000';
         const ex = dir === 1 ? ox+12 : ox+18;
-        ctx.fillRect(ex, 11, 2, 2);
+        ctx.fillRect(ex, 13, 2, 2);
         ctx.fillStyle = '#fff';
-        ctx.fillRect(ex, 11, 1, 1);
-        // Nose
+        ctx.fillRect(ex, 13, 1, 1);
+        // Nos
         ctx.fillStyle = skinColor;
-        ctx.fillRect(dir === 1 ? ox+21 : ox+10, 13, 1, 3);
+        ctx.fillRect(dir === 1 ? ox+21 : ox+10, 15, 1, 3);
       }
 
-      // Weapon at side
+      // Broń przy pasie
       ctx.fillStyle = '#404040';
-      ctx.fillRect(ox+24, 20, 2, 14);
+      ctx.fillRect(ox+24, 22, 2, 14);
       ctx.fillStyle = '#2a1808';
-      ctx.fillRect(ox+23, 32, 4, 2);
+      ctx.fillRect(ox+23, 34, 4, 2);
 
-      // Helmet/Crown for leaders
+      // Hełm/korona
       if (crowned) {
         ctx.fillStyle = '#202030';
-        ctx.fillRect(ox+10, 3, 12, 5);
+        ctx.fillRect(ox+10, 4, 12, 5);
         ctx.fillStyle = accentColor;
-        ctx.fillRect(ox+12, 1, 2, 4);
-        ctx.fillRect(ox+15, 0, 2, 5);
-        ctx.fillRect(ox+18, 1, 2, 4);
+        ctx.fillRect(ox+12, 2, 2, 4);
+        ctx.fillRect(ox+15, 1, 2, 5);
+        ctx.fillRect(ox+18, 2, 2, 4);
       }
     }
     canvas.refresh();
+
+    // Zarejestruj jako spritesheet z poprawnymi ramkami 32x56
+    const src = canvas.getSourceImage() as any;
+    if (this.scene.textures.exists(key)) this.scene.textures.remove(key);
+    this.scene.textures.addSpriteSheet(key, src, { frameWidth: w, frameHeight: h });
   }
 
   // ============================================================

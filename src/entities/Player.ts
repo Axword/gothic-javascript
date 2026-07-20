@@ -44,24 +44,22 @@ export class Player extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y);
 
-    // Player sprite - 32x56 z 4 klatkami kierunku
+    // Stwórz sprite BEZ automatycznego dodawania do sceny
     if (scene.textures.exists('char_player')) {
-      this.sprite = scene.add.image(0, -4, 'char_player', 0);
-      this.sprite.setOrigin(0.5, 1.0); // pivot na stopach
-      this.sprite.setDisplaySize(32, 56);
+      this.sprite = scene.make.image({ key: 'char_player', frame: 0, add: false }) as Phaser.GameObjects.Image;
+      this.sprite.setOrigin(0.5, 0.95); // pivot między stopami
     } else {
-      // Fallback
-      this.sprite = scene.add.image(0, -4, '__missing');
+      this.sprite = scene.make.image({ key: '__DEFAULT', add: false }) as Phaser.GameObjects.Image;
     }
     this.add(this.sprite);
 
-    // Cień
-    const shadow = scene.add.ellipse(0, 2, 16, 5, 0x000000, 0.4);
+    // Cień (na samym dole pod postacią)
+    const shadow = scene.add.ellipse(0, 0, 14, 5, 0x000000, 0.45);
     shadow.setOrigin(0.5, 1);
     this.add(shadow);
 
-    // Label (nazwa gracza)
-    this.label = scene.add.text(0, -60, 'TY', {
+    // Label (imię gracza) - nad głową (56px od stóp)
+    this.label = scene.add.text(0, -62, 'TY', {
       fontSize: '10px',
       color: '#ffff80',
       stroke: '#000000',
@@ -73,14 +71,16 @@ export class Player extends Phaser.GameObjects.Container {
     scene.add.existing(this);
     scene.physics.add.existing(this);
 
+    // Rozmiar kontenera (do poprawnej fizyki)
+    this.setSize(20, 24);
     const body = this.body as Phaser.Physics.Arcade.Body;
-    // Hitbox 16x20, center pod stopami (sprite 32x56, pivot u dołu = stopa na 0,0)
-    body.setSize(16, 20);
-    body.setOffset(-8, -22);
+    // Hitbox pod postacią: 16x22, gdzie (0,0) kontenera to pozycja stóp
+    body.setSize(16, 22);
+    body.setOffset(-8, -24); // lewy-góra hitboxu względem kontenera
     body.setCollideWorldBounds(true);
-    body.setDrag(800);
+    body.setDrag(1000);
+    body.setMaxSpeed(240);
 
-    // Initialize starting inventory
     this.initStartingInventory();
     this.setDirection('down');
   }

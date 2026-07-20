@@ -150,11 +150,11 @@ export class GameScene extends Phaser.Scene {
     this.player = new Player(this, START_POINT.x, START_POINT.y);
 
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
-    this.cameras.main.setZoom(1.5);
+    this.cameras.main.setZoom(1.3);
     this.cameras.main.setBackgroundColor('#0a0a0a');
-    this.cameras.main.setBounds(-50, -50, WORLD_W + 100, WORLD_H + 100);
+    this.cameras.main.setBounds(-50, -50, WORLD_W + 100, WORLD_H + 50);
     this.physics.world.setBounds(0, 0, WORLD_W, WORLD_H);
-    this.physics.world.setBoundsCollision(true, true, true, false); // brak kolizji z dolną krawędzią (woda sama w sobie ogranicza)
+    this.physics.world.setBoundsCollision(true, true, true, false);
 
     if (this.gameData.balance?.time) this.timeSystem.configureFromBalance(this.gameData.balance);
 
@@ -268,22 +268,19 @@ export class GameScene extends Phaser.Scene {
   // MINIMAPA
   // ============================================================
   private createMinimap() {
-    const mmSize = 180;
-    const mmX = this.cameras.main.width - mmSize - 12;
-    const mmY = this.cameras.main.height - mmSize - 12;
+    const mmSize = 140;
+    const mmX = 10; // prawy górny róg
+    const mmY = 10;
 
-    // Rysujemy statyczną minimapę raz na teksturze
     const tex = this.add.renderTexture(mmX, mmY, mmSize, mmSize).setOrigin(0,0).setScrollFactor(0).setDepth(999);
-    // Tło
     const mmScale = mmSize / Math.max(WORLD_W, WORLD_H);
     const mmW = WORLD_W * mmScale;
     const mmH = WORLD_H * mmScale;
     const offX = (mmSize - mmW) / 2;
     const offY = (mmSize - mmH) / 2;
-    tex.fill(0x0a0a0a, 1);
+    tex.fill(0x000000, 1);
 
-    // Rysuj biom jako kolory
-    const step = 16;
+    const step = 20;
     const biomColor: Record<BiomeType, number> = {
       forest: 0x1a3010, beach: 0x8a7040, swamp: 0x2e3a1e, mountain: 0x4a4a4a,
       road: 0x4a3a28, dark: 0x0a0810, water: 0x15283d, fort: 0x6a4020,
@@ -295,24 +292,29 @@ export class GameScene extends Phaser.Scene {
         tex.fill(biomColor[b] || 0x000000, 1, offX + x*mmScale, offY + y*mmScale, step*mmScale+1, step*mmScale+1);
       }
     }
-    // Ramka
+    // Tło pod mapą (ramka)
+    this.add.rectangle(mmX-2, mmY-2, mmSize+4, mmSize+4, 0x000000, 0.8).setOrigin(0,0).setScrollFactor(0).setDepth(998);
     const border = this.add.rectangle(mmX, mmY, mmSize, mmSize).setOrigin(0,0).setScrollFactor(0).setDepth(1000).setStrokeStyle(2,0x8a6020);
     border.setFillStyle(0,0);
     this.minimapTexture = tex;
     (this as any)._mmOffX = offX; (this as any)._mmOffY = offY; (this as any)._mmScale = mmScale;
-    (this as any)._mmSize = mmSize; (this as any)._mmX = mmX; (this as any)._mmY = mmY;
+    (this as any)._mmX = mmX; (this as any)._mmY = mmY;
 
-    // Znaczniki lokacji
     const dots: Array<{x:number;y:number;color:number;r:number}> = [
-      { x: OLD_FORT.x, y: OLD_FORT.y, color: 0xffcc00, r: 4 },
-      { x: NEW_CAMP.x, y: NEW_CAMP.y, color: 0xff4020, r: 4 },
-      { x: START_POINT.x, y: START_POINT.y, color: 0x80ff80, r: 3 },
+      { x: OLD_FORT.x, y: OLD_FORT.y, color: 0xffcc00, r: 3 },
+      { x: NEW_CAMP.x, y: NEW_CAMP.y, color: 0xff4020, r: 3 },
+      { x: START_POINT.x, y: START_POINT.y, color: 0x80ff80, r: 2 },
     ];
     for (const d of dots) {
       tex.fill(d.color, 1, offX + d.x*mmScale - d.r, offY + d.y*mmScale - d.r, d.r*2, d.r*2);
     }
 
     this.minimap = this.add.ellipse(mmX + offX + START_POINT.x*mmScale, mmY + offY + START_POINT.y*mmScale, 5, 5, 0xffffff).setScrollFactor(0).setDepth(1001);
+
+    // Etykieta "MAPA [M]"
+    this.add.text(mmX, mmY + mmSize + 4, 'MAPA [M]', {
+      fontSize: '9px', color: '#aa8855', stroke: '#000', strokeThickness: 2
+    }).setOrigin(0,0).setScrollFactor(0).setDepth(1001);
   }
 
   private toggleMinimap() {

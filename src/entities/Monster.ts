@@ -27,7 +27,7 @@ export class Monster extends Phaser.GameObjects.Container {
 
     const scale = data.scale || 1.0;
     
-    // Rozmiar sprite'a z tekstury zależy od stwora
+    // Rozmiary per potwór
     const spriteSizeMap: Record<string, {w:number;h:number;hw:number;hh:number}> = {
       'monster_grey_wolf': { w: 64, h: 48, hw: 20, hh: 14 },
       'monster_forest_boar': { w: 72, h: 56, hw: 24, hh: 16 },
@@ -41,27 +41,26 @@ export class Monster extends Phaser.GameObjects.Container {
     this.hh = sz.hh * scale;
 
     if (scene.textures.exists(data.id)) {
-      this.sprite = scene.add.image(0, -sz.h*0.2, data.id);
-      this.sprite.setOrigin(0.5, 1.0);
+      this.sprite = scene.make.image({ key: data.id, add: false }) as Phaser.GameObjects.Image;
+      this.sprite.setOrigin(0.5, 0.95);
       this.sprite.setDisplaySize(sz.w * scale, sz.h * scale);
     } else {
-      // Fallback - mały czerwony kwadrat
-      const fb = scene.add.rectangle(0, -10, 24*scale, 24*scale, 0x884422);
+      const fb = scene.add.rectangle(0, -sz.hh, 24*scale, 24*scale, 0x884422);
       this.sprite = fb as any;
     }
     this.add(this.sprite);
 
     // Cień
-    const shadow = scene.add.ellipse(0, 2, sz.w*0.3*scale, 6*scale, 0x000000, 0.4);
+    const shadow = scene.add.ellipse(0, 2, sz.w*0.35*scale, 6*scale, 0x000000, 0.4);
     shadow.setOrigin(0.5, 1);
     this.add(shadow);
     
-    // Health bar (nad głową)
+    // Health bar
     const hbWidth = 28 * scale;
-    this.healthBarBg = scene.add.rectangle(0, -sz.h*scale - 8, hbWidth, 5, 0x333333);
+    this.healthBarBg = scene.add.rectangle(0, -sz.h*scale - 6, hbWidth, 5, 0x333333);
     this.healthBarBg.setVisible(false);
     this.add(this.healthBarBg);
-    this.healthBar = scene.add.rectangle(-hbWidth/2, -sz.h*scale - 8, hbWidth, 5, 0xff0000);
+    this.healthBar = scene.add.rectangle(-hbWidth/2, -sz.h*scale - 6, hbWidth, 5, 0xff0000);
     this.healthBar.setOrigin(0, 0.5);
     this.healthBar.setVisible(false);
     this.add(this.healthBar);
@@ -69,11 +68,13 @@ export class Monster extends Phaser.GameObjects.Container {
     scene.add.existing(this);
     scene.physics.add.existing(this);
     
+    this.setSize(this.hw*2, this.hh*2);
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setSize(this.hw*2, this.hh*2);
     body.setOffset(-this.hw, -this.hh*2);
     body.setCollideWorldBounds(true);
     body.setDrag(600);
+    body.setMaxSpeed(240);
   }
 
   private hw: number;
