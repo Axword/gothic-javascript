@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { Faction } from '../types';
+import { audio } from '../systems/AudioSystem';
 
 export class Player extends Phaser.GameObjects.Container {
   public speed: number = 120;
@@ -9,7 +10,7 @@ export class Player extends Phaser.GameObjects.Container {
   public maxMana: number = 20;
   public strength: number = 4;
   public dexterity: number = 4;
-  public armor: number = 1;
+  public armor: number = 0;
   public magicResist: number = 0;
   public level: number = 1;
   public xp: number = 0;
@@ -18,7 +19,7 @@ export class Player extends Phaser.GameObjects.Container {
   public gold: number = 20;
   public faction: Faction | null = null;
   public reputation: Record<string, number> = { old_order: 0, new_order: 0 };
-  
+
   public equippedWeapon: string | null = null;
   public equippedArmor: string | null = null;
   public knownSpells: string[] = [];
@@ -26,13 +27,13 @@ export class Player extends Phaser.GameObjects.Container {
 
   public inventory: string[] = [];
   public inventoryCounts: Record<string, number> = {};
-  
+
   public isAlive: boolean = true;
   public isInCombat: boolean = false;
   public currentCombatMode: 'idle' | 'melee' | 'ranged' | 'magic' = 'idle';
   private direction: 'down' | 'up' | 'left' | 'right' = 'down';
-  
-  private sprite!: Phaser.GameObjects.Image;
+
+  private sprite!: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle;
   private label: Phaser.GameObjects.Text;
 
   getDirectionFrame(): number {
@@ -42,19 +43,19 @@ export class Player extends Phaser.GameObjects.Container {
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y);
-    
+
     // Use sprite texture from ProceduralAssets
     if (scene.textures.exists('char_player')) {
       this.sprite = scene.add.image(0, 0, 'char_player', 0);
-      this.sprite.setOrigin(0.5, 0.5);
+      (this.sprite as Phaser.GameObjects.Image).setOrigin(0.5, 0.5);
     } else {
       // Fallback rectangle
       const rect = scene.add.rectangle(0, 0, 20, 28, 0x6b4423);
       this.add(rect);
-      this.sprite = rect as any;
+      this.sprite = rect;
     }
     this.add(this.sprite);
-    
+
     // Label
     this.label = scene.add.text(0, -30, '', {
       fontSize: '10px',
@@ -63,14 +64,40 @@ export class Player extends Phaser.GameObjects.Container {
       strokeThickness: 2
     }).setOrigin(0.5);
     this.add(this.label);
-    
+
     scene.add.existing(this);
     scene.physics.add.existing(this);
-    
+
     const body = this.body as Phaser.Physics.Arcade.Body;
     body.setSize(20, 28);
     body.setOffset(-10, -14);
     body.setCollideWorldBounds(true);
+
+    // Initialize starting inventory (BUG-004, BUG-023)
+    this.initStartingInventory();
+  }
+
+  /** Initialize starting inventory based on balance */
+  private initStartingInventory() {
+    this.maxHp = 50 + 10 + this.strength * 3; // 72 HP at start
+    this.hp = this.maxHp;
+    this.maxMana = 20;
+    this.mana = this.maxMana;
+    this.gold = 20;
+    this.xpToNext = 100;
+    // Starting items
+    this.clearInventory();
+    this.addToInventory('misc_gold', 20);
+    this.addToInventory('misc_arrow', 20);
+    this.addToInventory('misc_lockpick_iron', 3);
+    this.addToInventory('potion_healing_small', 2);
+    this.addToInventory('sword_old_shortsword', 1);
+    this.equippedWeapon = 'sword_old_shortsword';
+  }
+
+  clearInventory() {
+    this.inventory = [];
+    this.inventoryCounts = {};
   }
 
   setDirection(dir: 'down' | 'up' | 'left' | 'right') {
@@ -102,8 +129,12 @@ export class Player extends Phaser.GameObjects.Container {
     if (body) body.setVelocity(0, 0);
   }
 
+  /**
+   * Apply damage using balance formula (BUG-005):
+   * reduction_per_point=0.01, max_reduction=0.8, min_dmg=1
+   */
   takeDamage(amount: number): number {
-    const reduction = Math.min(this.armor * 0.5, amount * 0.5);
+    const reduction = Math.min(this.armor * 0.01 * amount, amount * 0.8);
     const finalDamage = Math.max(1, Math.floor(amount - reduction));
     this.hp -= finalDamage;
     if (this.hp <= 0) { this.hp = 0; this.isAlive = false; }
@@ -115,16 +146,21 @@ export class Player extends Phaser.GameObjects.Container {
 
   addXp(amount: number): boolean {
     this.xp += amount;
-    if (this.xp >= this.xpToNext) { this.levelUp(); return true; }
-    return false;
+    let leveledUp = false;
+    while (this.xp >= this.xpToNext) {
+      this.xp -= this.xpToNext;
+      this.levelUp();
+      leveledUp = true;
+    }
+    return leveledUp;
   }
 
   private levelUp() {
-    this.xp -= this.xpToNext;
     this.level++;
     this.xpToNext = Math.floor(100 * Math.pow(1.5, this.level - 1));
     this.maxHp += 10; this.hp = this.maxHp;
     this.maxMana += 5; this.skillPoints += 2; this.mana = this.maxMana;
+    try { audio.sfxLevelUp(); } catch {}
   }
 
   addToInventory(itemId: string, count: number = 1) {
@@ -144,6 +180,43 @@ export class Player extends Phaser.GameObjects.Container {
 
   getItemCount(itemId: string): number { return this.inventoryCounts[itemId] || 0; }
 
+  /** Equip weapon or armor; returns previously equipped item id (or null) to inventory */
+  equip(itemId: string, itemData?: any): string | null {
+    if (!itemData) return null;
+    const cat = itemData.category;
+    let previous: string | null = null;
+    if (cat === 'weapon_sword' || cat === 'weapon_bow') {
+      previous = this.equippedWeapon;
+      this.equippedWeapon = itemId;
+      // Apply stat requirements check is done externally
+    } else if (cat === 'armor') {
+      previous = this.equippedArmor;
+      this.equippedArmor = itemId;
+      this.armor = itemData.armor || 0;
+      this.magicResist = itemData.magic_resist || 0;
+    }
+    return previous;
+  }
+
+  unequip(slot: 'weapon' | 'armor') {
+    if (slot === 'weapon') this.equippedWeapon = null;
+    else {
+      this.equippedArmor = null;
+      this.armor = 0;
+      this.magicResist = 0;
+    }
+  }
+
+  /** Check if player meets requirements */
+  meetsRequirements(reqs: any): { ok: boolean; reason?: string } {
+    if (!reqs) return { ok: true };
+    if (reqs.strength && this.strength < reqs.strength) return { ok: false, reason: `Wymaga siły ${reqs.strength}` };
+    if (reqs.dexterity && this.dexterity < reqs.dexterity) return { ok: false, reason: `Wymaga zręczności ${reqs.dexterity}` };
+    if (reqs.level && this.level < reqs.level) return { ok: false, reason: `Wymaga poziomu ${reqs.level}` };
+    if (reqs.faction && this.faction !== reqs.faction) return { ok: false, reason: `Wymaga frakcji ${reqs.faction}` };
+    return { ok: true };
+  }
+
   getSaveData() {
     return {
       x: this.x, y: this.y, hp: this.hp, maxHp: this.maxHp,
@@ -159,14 +232,28 @@ export class Player extends Phaser.GameObjects.Container {
   }
 
   loadSaveData(data: any) {
-    this.hp = data.hp; this.maxHp = data.maxHp; this.mana = data.mana; this.maxMana = data.maxMana;
-    this.strength = data.strength; this.dexterity = data.dexterity;
-    this.level = data.level; this.xp = data.xp; this.skillPoints = data.skillPoints; this.gold = data.gold;
-    this.equippedWeapon = data.equippedWeapon; this.equippedArmor = data.equippedArmor;
-    this.knownSpells = data.knownSpells || []; this.faction = data.faction;
-    this.reputation = data.reputation || {}; this.inventory = data.inventory || [];
-    this.inventoryCounts = data.inventoryCounts || {}; this.skillRanks = data.skillRanks || {};
-    this.xpToNext = Math.floor(100 * Math.pow(1.5, this.level - 1));
-    this.setPosition(data.x, data.y);
+    this.hp = data.hp ?? this.hp;
+    this.maxHp = data.maxHp ?? this.maxHp;
+    this.mana = data.mana ?? this.mana;
+    this.maxMana = data.maxMana ?? this.maxMana;
+    this.strength = data.strength ?? this.strength;
+    this.dexterity = data.dexterity ?? this.dexterity;
+    this.level = data.level ?? this.level;
+    this.xp = data.xp ?? this.xp;
+    this.skillPoints = data.skillPoints ?? this.skillPoints;
+    this.gold = data.gold ?? this.gold;
+    this.equippedWeapon = data.equippedWeapon ?? null;
+    this.equippedArmor = data.equippedArmor ?? null;
+    this.knownSpells = data.knownSpells || [];
+    this.faction = data.faction ?? null;
+    this.reputation = data.reputation || { old_order: 0, new_order: 0 };
+    this.inventory = data.inventory || [];
+    this.inventoryCounts = data.inventoryCounts || {};
+    this.skillRanks = data.skillRanks || {};
+    this.xpToNext = Math.floor(100 * Math.pow(1.5, Math.max(1, this.level) - 1));
+    this.isAlive = this.hp > 0;
+    // Re-apply armor from equipped armor item if present
+    this.armor = 0; this.magicResist = 0;
+    this.setPosition(data.x ?? this.x, data.y ?? this.y);
   }
 }

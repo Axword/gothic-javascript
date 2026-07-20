@@ -3,6 +3,7 @@ import { DataLoader, LoadedData } from '../systems/DataLoader';
 import { SaveSystem } from '../systems/SaveSystem';
 import { TimeSystem } from '../systems/TimeSystem';
 import { ProceduralAssets } from '../systems/ProceduralAssets';
+import { audio } from '../systems/AudioSystem';
 
 export class BootScene extends Phaser.Scene {
   private dataLoader!: DataLoader;
@@ -76,29 +77,31 @@ export class BootScene extends Phaser.Scene {
     this.dataLoader = new DataLoader();
     this.saveSystem = new SaveSystem();
     this.timeSystem = new TimeSystem();
-    
+
     try {
       this.loadedData = await this.dataLoader.loadAll();
-      
+
       if (this.dataLoader.hasErrors()) {
         console.warn('[Boot] Błędy danych:', this.dataLoader.getErrors());
       }
-      
+
       await this.saveSystem.init();
-      
+      // Inicjalizuj audio (czeka na user gesture w przeglądarkach)
+      audio.init().catch(() => {});
+
       this.scene.start('MenuScene', {
         dataLoader: this.dataLoader,
         saveSystem: this.saveSystem,
         timeSystem: this.timeSystem,
         gameData: this.loadedData
       });
-      
+
     } catch (e) {
       console.error('[Boot] Krytyczny błąd:', e);
-      // Wyświetl błąd na ekranie
-      this.add.text(320, 300, 'Błąd ładowania gry:\n' + (e as Error).message, {
+      this.add.text(512, 384, 'Błąd ładowania gry:\n' + (e as Error).message, {
         fontSize: '14px',
-        color: '#ff0000'
+        color: '#ff0000',
+        align: 'center'
       }).setOrigin(0.5);
     }
   }

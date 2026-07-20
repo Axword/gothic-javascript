@@ -4,6 +4,7 @@ import { GameScene } from './scenes/GameScene';
 import { UIScene } from './scenes/UIScene';
 import { MenuScene } from './scenes/MenuScene';
 import { DialogScene } from './scenes/DialogScene';
+import { EpilogueScene } from './scenes/EpilogueScene';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -24,7 +25,7 @@ const config: Phaser.Types.Core.GameConfig = {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
   },
-  scene: [BootScene, MenuScene, GameScene, UIScene, DialogScene],
+  scene: [BootScene, MenuScene, GameScene, UIScene, DialogScene, EpilogueScene],
 };
 
 const game = new Phaser.Game(config);
