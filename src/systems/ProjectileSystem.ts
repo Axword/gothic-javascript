@@ -27,20 +27,21 @@ export class ProjectileSystem {
 
   fire(
     x: number, y: number, tx: number, ty: number,
-    speed: number, damage: number, damageType: 'physical' | 'fire' | 'ice',
+    speed: number, damage: number, damageType: string,
     owner: 'player' | 'enemy', pierce: boolean = false
   ): Projectile {
+    const type = damageType as 'physical' | 'fire' | 'ice';
     const angle = Phaser.Math.Angle.Between(x, y, tx, ty);
-    const color = damageType === 'fire' ? 0xff4400 : damageType === 'ice' ? 0x44aaff : 0xcccc88;
-    const size = damageType === 'physical' ? 3 : 5;
+    const color = type === 'fire' ? 0xff4400 : type === 'ice' ? 0x44aaff : 0xcccc88;
+    const size = type === 'physical' ? 3 : 5;
     
     const graphic = this.scene.add.circle(x, y, size, color);
     graphic.setDepth(50);
     
     // Strzała ma kształt linii
-    if (damageType === 'physical') {
+    if (type === 'physical') {
       graphic.setStrokeStyle(1, 0x886644);
-    } else if (damageType === 'fire') {
+    } else if (type === 'fire') {
       this.scene.tweens.add({
         targets: graphic,
         scaleX: 1.5, scaleY: 1.5,
@@ -62,7 +63,7 @@ export class ProjectileSystem {
     const p: Projectile = {
       id: `proj_${this.nextId++}`,
       x, y, targetX: tx, targetY: ty,
-      speed, damage, damageType,
+      speed, damage, damageType: type,
       graphic, lifetime: 3000,
       pierce, owner
     };

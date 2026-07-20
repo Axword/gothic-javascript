@@ -8,21 +8,22 @@
       {
         "id": "start",
         "npc_id": "npc_beach_survivor",
-        "npc_line": "Hej! Żyjesz? No, chyba tak, skoro stoisz. Kolejny pechowiec wyrzucony przez morze.",
+        "npc_line": "Hej! Żyjesz? No, chyba tak, skoro stoisz. Kolejny pechowiec wyrzucony przez morze. W tym tygodniu już trzeci. Poprzedni odszedł w stronę lasu. Nie wrócił.",
         "npc_emotion": "neutral",
         "responses": [
           { "id": "r1", "text": "Gdzie jestem? Co to za miejsce?", "next_node": "explain" },
           { "id": "r2", "text": "Masz coś do jedzenia? Umieram z głodu.", "next_node": "food", "conditions": [] },
-          { "id": "r3", "text": "Nie mam czasu na gadanie. Idę.", "next_node": null, "is_leave": true }
+          { "id": "r3", "text": "Słyszałem o tej Szczelinie. Co to jest?", "next_node": "rift" },
+          { "id": "r4", "text": "Nie mam czasu na gadanie. Idę.", "next_node": null, "is_leave": true }
         ]
       },
       {
         "id": "explain",
         "npc_id": "npc_beach_survivor",
-        "npc_line": "Kresy Północne. Najgorsze miejsce do życia na całym kontynencie. Na północ traktem trafisz do Grodu Straży - tam rządzą wojskowi. Na wschód, przez las, są Wolne Chaty - wolność za cenę braku bezpieczeństwa.",
+        "npc_line": "Kresy Północne. Najgorsze miejsce do życia na całym kontynencie. Na północ traktem trafisz do Grodu Straży — tam rządzą wojskowi pod Komendantem. Żelazna dyscyplina, suchy chleb, ale bandyci nie podchodzą pod mury. Na wschód, przez las, są Wolne Chaty — Sęp rządzi, każdy sobie, wolność za cenę bezpieczeństwa.",
         "npc_emotion": "neutral",
         "responses": [
-          { "id": "r1", "text": "Straż? Wolni? O co chodzi?", "next_node": "explain_factions" },
+          { "id": "r1", "text": "Straż? Wolni? O co chodzi w tym konflikcie?", "next_node": "explain_factions" },
           { "id": "r2", "text": "Dzięki. Idę do Grodu.", "next_node": "quest_hint", "actions": [{ "type": "set_flag", "target": "heard_about_fort", "value": true }] },
           { "id": "r3", "text": "Dzięki. Idę do Wolnych Chat.", "next_node": "quest_hint", "actions": [{ "type": "set_flag", "target": "heard_about_village", "value": true }] },
           { "id": "r4", "text": "Muszę znaleźć jakieś wyposażenie.", "next_node": "equipment_hint" },
@@ -30,30 +31,59 @@
         ]
       },
       {
+        "id": "rift",
+        "npc_id": "npc_beach_survivor",
+        "npc_line": "Słyszałeś, to uważaj. W górach na wschodzie coś się rozdarło. Świeci na fioletowo, słychać jęki nocami. Z tamtego kierunku przychodzą mutanty - ludzie, co weszli i wrócili zmienieni. Nawet Straż tam nie chodzi, nawet Sęp nie wysyła swoich. Mówią, że stamtąd wieje koniec świata. Nie zbliżaj się, dopóki nie będziesz gotów.",
+        "npc_emotion": "sad",
+        "responses": [
+          { "id": "r1", "text": "Co można tam znaleźć?", "next_node": "rift_items" },
+          { "id": "r2", "text": "Rozumiem. Dzięki za ostrzeżenie.", "next_node": "explain" }
+        ]
+      },
+      {
+        "id": "rift_items",
+        "npc_id": "npc_beach_survivor",
+        "npc_line": "Kości. Zwęglone drzewa. Czasem coś co wygląda na broń, ale jest zimne jak lód i gorące jak ogień jednocześnie. Ci co wracają... nie wracają tacy sami. Ich oczy świecą. Słyszałem, że Pustelnik ze Szczeliny coś wie. Jeśli odważysz się tam wejść, szukaj go. I broń się czymś więcej niż pogrzebacz.",
+        "npc_emotion": "sad",
+        "responses": [
+          { "id": "r1", "text": "Dzięki. Zapamiętam.", "next_node": "explain" }
+        ]
+      },
+      {
         "id": "explain_factions",
         "npc_id": "npc_beach_survivor",
-        "npc_line": "Stary Porządek - Straż w Grodzie. Komendant trzyma wszystkich krótko, ale bandyci nie podchodzą pod mury. Nowy Porządek - Wolne Chaty. Sęp i jego ludzie, biją, kradną, ale każdy może robić co chce. Wybieraj mądrze, bo drugi raz nie będziesz miał szansy.",
+        "npc_line": "Stary Porządek - Straż w Grodzie. Komendant trzyma wszystkich krótko, ale jak już zapłacisz daninę, nikt cię nie ruszy. Nowy Porządek - Wolne Chaty pod Sępem. Biją, piją, kradną, ale każdy może się wybić. Wybieraj mądrze, bo gdy już zdecydujesz, drugiej szansy nie będzie. Znam takich, co myśleli że da się być pośrodku. Są w ziemi.",
         "npc_emotion": "sarcastic",
         "responses": [
           { "id": "r1", "text": "Rozumiem. Dzięki za radę.", "actions": [{ "type": "set_flag", "target": "heard_about_factions", "value": true }], "next_node": "quest_hint" },
-          { "id": "r2", "text": "Do zobaczenia.", "next_node": null, "is_leave": true }
+          { "id": "r2", "text": "A ty po czyjej stronie?", "next_node": "my_side" },
+          { "id": "r3", "text": "Do zobaczenia.", "next_node": null, "is_leave": true }
+        ]
+      },
+      {
+        "id": "my_side",
+        "npc_id": "npc_beach_survivor",
+        "npc_line": "Ja? Ja jestem po stronie tej samej co zawsze. Po mojej. Statek mnie przywiózł, morze mnie zostawi, morze mnie zabierze. Jak będziesz mądry, zrobisz to samo — nie przywiązuj się zbyt mocno do żadnej flagi, dopóki nie musisz.",
+        "npc_emotion": "sarcastic",
+        "responses": [
+          { "id": "r1", "text": "Mądra rada.", "next_node": "quest_hint" }
         ]
       },
       {
         "id": "food",
         "npc_id": "npc_beach_survivor",
-        "npc_line": "Mam tylko suchy chleb, ale za darmo nic nie daję. Masz może parę groszy? Albo zrób coś dla mnie - znajdź mój nóż, zgubiłem go gdzieś na plaży.",
+        "npc_line": "Mam tylko suchy chleb, ale za darmo nic nie daję. Masz może parę groszy? Albo zrób coś dla mnie - znajdź mój nóż, zgubiłem go gdzieś na plaży. Biała rękojeść, od razu poznasz.",
         "npc_emotion": "neutral",
         "responses": [
           { "id": "r1", "text": "Mam parę groszy (zapłać 5)", "next_node": "pay_food", "conditions": [{ "type": "has_item", "item_id": "misc_gold" }], "actions": [{ "type": "remove_item", "target": "misc_gold", "value": 5 }, { "type": "give_item", "target": "potion_healing_small" }] },
-          { "id": "r2", "text": "Pomogę znaleźć nóż.", "actions": [{ "type": "set_flag", "target": "quest_found_knife", "value": true }], "next_node": "knife_quest" },
+          { "id": "r2", "text": "Pomogę znaleźć nóż.", "actions": [{ "type": "set_flag", "target": "knife_quest_active", "value": true }], "next_node": "knife_quest" },
           { "id": "r3", "text": "Nie, dzięki.", "next_node": "start" }
         ]
       },
       {
         "id": "pay_food",
         "npc_id": "npc_beach_survivor",
-        "npc_line": "Dobra, trzymaj. Niewiele, ale zawsze coś. A jakbyś znalazł mój nóż, daj znać.",
+        "npc_line": "Dobra, trzymaj. Niewiele, ale zawsze coś. A jakbyś znalazł mój nóż, daj znać. Zapłacę więcej.",
         "npc_emotion": "neutral",
         "responses": [
           { "id": "r1", "text": "Dzięki.", "next_node": null, "is_leave": true }
@@ -62,9 +92,8 @@
       {
         "id": "knife_quest",
         "npc_id": "npc_beach_survivor",
-        "npc_line": "Noża szukaj w okolicy wraku na południu. Biała rękojeść, łatwo poznać. Jak znajdziesz, przynieś, a może wyciągnę cię z biedy.",
+        "npc_line": "Noża szukaj w okolicy wraku na południu. Biała rękojeść, łatwo poznać. Jak znajdziesz, przynieś, a podzielę się tym co mam. I nie daj się zjeść wilkom.",
         "npc_emotion": "neutral",
-        "actions": [{ "type": "set_flag", "target": "knife_quest_active", "value": true }],
         "responses": [
           { "id": "r1", "text": "Znajdę go.", "next_node": null, "is_leave": true },
           { "id": "r2", "text": "A coś więcej o tym miejscu?", "next_node": "explain" }
@@ -73,7 +102,7 @@
       {
         "id": "equipment_hint",
         "npc_id": "npc_beach_survivor",
-        "npc_line": "Rozejrzyj się po plaży. Morze wyrzuciło różne rzeczy. Widziałem coś błyszczącego w piasku na północy. No i ten nóż... gdybyś go znalazł, mógłbyś go zatrzymać, jakbyś mnie poratował groszem.",
+        "npc_line": "Rozejrzyj się po plaży. Morze wyrzuciło różne rzeczy. Widziałem coś błyszczącego w piasku na północy. W lesie znajdziesz zioła. Uważaj na wilki. I jeszcze jedno — unikaj Cmentarzysta, tam w nocy chodzą cienie.",
         "npc_emotion": "neutral",
         "responses": [
           { "id": "r1", "text": "Poszukam.", "next_node": null, "is_leave": true },
@@ -83,7 +112,7 @@
       {
         "id": "quest_hint",
         "npc_id": "npc_beach_survivor",
-        "npc_line": "Idź traktem na północ. W Grodzie Straży pytaj o Komendanta. W Wolnych Chatach - o Sępa. I uważaj na wilki w lesie. Powodzenia, chłopie. Będzie ci potrzebne.",
+        "npc_line": "Idź traktem na północ. W Grodzie pytaj o Komendanta. W Wolnych Chatach - o Sępa. I uważaj na wilki w lesie. Nie szwendaj się po nocy bez broni. I jeszcze coś: jeżeli zobaczysz kogoś w czarnym płaszczu z kapturem, odwróć się i udawaj martwego. Albo uciekaj. Szybko. Powodzenia, chłopie. Będzie ci potrzebne.",
         "npc_emotion": "neutral",
         "actions": [{ "type": "start_quest", "target": "quest_main_arrival" }],
         "responses": [

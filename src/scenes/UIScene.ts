@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { GameScene } from './GameScene';
+import { audio } from '../systems/AudioSystem';
 
 export class UIScene extends Phaser.Scene {
   private gameScene!: GameScene;
@@ -159,15 +160,30 @@ export class UIScene extends Phaser.Scene {
     cont.add(this.add.text(-250, -160, `Siła:${p.strength} Zręcz:${p.dexterity} Pkt:${p.skillPoints}`, { fontSize: '10px', color: '#aaaaaa' }));
     cont.add(this.add.text(-250, -148, `Umiejętności: ${Object.entries(p.skillRanks).map(([k,v]) => `${k}:${v}`).join(', ') || 'brak'}`, { fontSize: '9px', color: '#888888' }));
     
-    // Items
+    // Items (click to equip/use)
     const items = p.inventory;
     if (items.length === 0) {
       cont.add(this.add.text(0, 0, 'Pusto.', { fontSize: '14px', color: '#666666' }).setOrigin(0.5));
     } else {
-      items.slice(0, 20).forEach((itemId, i) => {
-        const y = -120 + i * 20;
+      items.slice(0, 24).forEach((itemId, i) => {
+        const col = i < 12 ? 0 : 1;
+        const row = i < 12 ? i : i - 12;
+        const x = -240 + col * 260;
+        const y = -120 + row * 18;
         const count = p.getItemCount(itemId);
-        cont.add(this.add.text(-250, y, `${itemId}${count > 1 ? ` (${count})` : ''}`, { fontSize: '10px', color: '#cccccc' }));
+        const isEquipped = p.equippedWeapon === itemId || p.equippedArmor === itemId;
+        const itemData = this.gameScene.dataLoader.findById('items_weapons_swords', itemId)
+          || this.gameScene.dataLoader.findById('items_weapons_bows', itemId)
+          || this.gameScene.dataLoader.findById('items_armors', itemId)
+          || this.gameScene.dataLoader.findById('items_potions', itemId)
+          || this.gameScene.dataLoader.findById('items_plants', itemId)
+          || this.gameScene.dataLoader.findById('items_misc', itemId);
+        const name = itemData?.name || itemId;
+        const label = this.add.text(x, y, `${isEquipped ? '★ ' : ''}${name}${count > 1 ? ` (${count})` : ''}`, {
+          fontSize: '10px', color: isEquipped ? '#ffcc00' : '#cccccc'
+        }).setInteractive({ useHandCursor: true });
+        label.on('pointerdown', () => this.useItem(itemId));
+        cont.add(label);
       });
     }
     
@@ -227,6 +243,49 @@ export class UIScene extends Phaser.Scene {
     cont.add(closeBtn);
     
     cont.add(this.add.text(0, 190, 'J-zamknij', { fontSize: '9px', color: '#666666' }).setOrigin(0.5));
+  }
+
+  private useItem(itemId: string) {
+    const p = this.gameScene.player;
+    const dl = this.gameScene.dataLoader;
+    const item = dl.findById('items_potions', itemId) || dl.findById('items_plants', itemId)
+      || dl.findById('items_weapons_swords', itemId) || dl.findById('items_weapons_bows', itemId)
+      || dl.findById('items_armors', itemId);
+    if (!item) {
+      this.showMessage('Tego przedmiotu nie da się użyć.');
+      return;
+    }
+    // Consumables
+    if (item.category === 'potion' || item.category === 'plant') {
+      if (item.effect === 'heal') {
+        p.heal(item.effect_value || 20);
+        p.removeFromInventory(itemId);
+        audio.sfxPotion();
+        this.showMessage(`+${item.effect_value || 20} HP`);
+      } else if (item.effect === 'mana') {
+        p.restoreMana(item.effect_value || 20);
+        p.removeFromInventory(itemId);
+        audio.sfxMana();
+        this.showMessage(`+${item.effect_value || 20} MP`);
+      } else if (item.effect === 'buff_strength') {
+        p.strength += (item.effect_value || 1);
+        p.removeFromInventory(itemId);
+        audio.sfxPotion();
+        this.showMessage(`+${item.effect_value || 1} siły (tymczasowo)`);
+      } else {
+        this.showMessage(`Efekt: ${item.effect}`);
+      }
+      this.showInventory(); // refresh
+      return;
+    }
+    // Equipment
+    if (item.category === 'weapon_sword' || item.category === 'weapon_bow' || item.category === 'armor') {
+      const ok = this.gameScene.equipFromInventory(itemId);
+      if (ok) { audio.sfxPickup(); this.showMessage(`Wyposażono: ${item.name || itemId}`, '#44ff44'); this.showInventory(); }
+      else audio.sfxError();
+      return;
+    }
+    this.showMessage('Tego przedmiotu nie da się użyć.');
   }
 
   private showStats() {
