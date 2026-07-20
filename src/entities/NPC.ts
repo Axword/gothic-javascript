@@ -47,21 +47,31 @@ export class NPC extends Phaser.GameObjects.Container {
 
     const texKey = this.getTextureKey();
     if (scene.textures.exists(texKey)) {
-      this.sprite = scene.add.image(0, 0, texKey, 0);
-      (this.sprite as Phaser.GameObjects.Image).setOrigin(0.5, 0.5);
+      this.sprite = scene.add.image(0, -4, texKey, 0);
+      (this.sprite as Phaser.GameObjects.Image).setOrigin(0.5, 1.0);
+      (this.sprite as Phaser.GameObjects.Image).setDisplaySize(32, 56);
     } else {
+      // Fallback - prostokąt jeżeli brak tekstury
       const colors: Record<string, number> = {
         old_order: 0x4444aa, new_order: 0xaa4444, neutral: 0x888888, bandit: 0x664422, monster: 0x555555
       };
-      const rect = scene.add.rectangle(0, 0, 18, 26, colors[data.faction] || 0x888888);
-      this.add(rect);
-      this.sprite = rect;
+      const fallback = scene.add.rectangle(0, -14, 20, 28, colors[data.faction] || 0x888888);
+      this.sprite = fallback as any;
     }
     this.add(this.sprite);
-    this.setScale(1.3);
 
-    this.label = scene.add.text(0, -34, data.name, {
-      fontSize: '10px', color: '#ffffff', stroke: '#000000', strokeThickness: 3
+    // Cień
+    const shadow = scene.add.ellipse(0, 2, 16, 5, 0x000000, 0.4);
+    shadow.setOrigin(0.5, 1);
+    this.add(shadow);
+
+    // Label (imię)
+    const labelColor = this.faction === 'old_order' ? '#ffdd66'
+      : this.faction === 'new_order' ? '#ff8844'
+      : this.faction === 'bandit' ? '#aa4040'
+      : '#cccccc';
+    this.label = scene.add.text(0, -62, data.name, {
+      fontSize: '10px', color: labelColor, stroke: '#000000', strokeThickness: 3, fontStyle: 'bold'
     }).setOrigin(0.5);
     this.add(this.label);
 
@@ -69,12 +79,13 @@ export class NPC extends Phaser.GameObjects.Container {
     scene.physics.add.existing(this);
 
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setSize(18, 22);
-    body.setOffset(-9, -14);
+    body.setSize(16, 20);
+    body.setOffset(-8, -22);
     body.setCollideWorldBounds(true);
+    body.setDrag(800);
 
-    this.setSize(32, 32);
-    this.setInteractive({ useHandCursor: true });
+    this.setSize(32, 56);
+    this.setInteractive(new Phaser.Geom.Rectangle(-16, -56, 32, 56), Phaser.Geom.Rectangle.Contains);
     this.on('pointerover', () => { (this.sprite as any).setTint?.(0xffff88); });
     this.on('pointerout', () => { (this.sprite as any).clearTint?.(); });
 

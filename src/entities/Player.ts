@@ -33,7 +33,7 @@ export class Player extends Phaser.GameObjects.Container {
   public currentCombatMode: 'idle' | 'melee' | 'ranged' | 'magic' = 'idle';
   private direction: 'down' | 'up' | 'left' | 'right' = 'down';
 
-  private sprite!: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle;
+  private sprite!: Phaser.GameObjects.Image;
   private label: Phaser.GameObjects.Text;
 
   getDirectionFrame(): number {
@@ -44,24 +44,29 @@ export class Player extends Phaser.GameObjects.Container {
   constructor(scene: Phaser.Scene, x: number, y: number) {
     super(scene, x, y);
 
-    // Use sprite texture from ProceduralAssets
+    // Player sprite - 32x56 z 4 klatkami kierunku
     if (scene.textures.exists('char_player')) {
-      this.sprite = scene.add.image(0, 0, 'char_player', 0);
-      (this.sprite as Phaser.GameObjects.Image).setOrigin(0.5, 0.5);
+      this.sprite = scene.add.image(0, -4, 'char_player', 0);
+      this.sprite.setOrigin(0.5, 1.0); // pivot na stopach
+      this.sprite.setDisplaySize(32, 56);
     } else {
-      // Fallback rectangle
-      const rect = scene.add.rectangle(0, 0, 20, 28, 0x6b4423);
-      this.add(rect);
-      this.sprite = rect;
+      // Fallback
+      this.sprite = scene.add.image(0, -4, '__missing');
     }
     this.add(this.sprite);
 
-    // Label
-    this.label = scene.add.text(0, -30, '', {
+    // Cień
+    const shadow = scene.add.ellipse(0, 2, 16, 5, 0x000000, 0.4);
+    shadow.setOrigin(0.5, 1);
+    this.add(shadow);
+
+    // Label (nazwa gracza)
+    this.label = scene.add.text(0, -60, 'TY', {
       fontSize: '10px',
-      color: '#ffffff',
+      color: '#ffff80',
       stroke: '#000000',
-      strokeThickness: 2
+      strokeThickness: 3,
+      fontStyle: 'bold'
     }).setOrigin(0.5);
     this.add(this.label);
 
@@ -69,12 +74,15 @@ export class Player extends Phaser.GameObjects.Container {
     scene.physics.add.existing(this);
 
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setSize(18, 26);
-    body.setOffset(-9, -18);
+    // Hitbox 16x20, center pod stopami (sprite 32x56, pivot u dołu = stopa na 0,0)
+    body.setSize(16, 20);
+    body.setOffset(-8, -22);
     body.setCollideWorldBounds(true);
+    body.setDrag(800);
 
-    // Initialize starting inventory (BUG-004, BUG-023)
+    // Initialize starting inventory
     this.initStartingInventory();
+    this.setDirection('down');
   }
 
   /** Initialize starting inventory based on balance */

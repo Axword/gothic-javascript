@@ -31,35 +31,53 @@ interface Chest {
   container?: Phaser.GameObjects.Container;
 }
 
-type BiomeType = 'beach' | 'forest' | 'swamp' | 'mountain' | 'road' | 'dark' | 'fort' | 'camp' | 'water';
+type BiomeType = 'beach' | 'forest' | 'swamp' | 'mountain' | 'road' | 'dark' | 'fort' | 'camp' | 'water' | 'grass';
 
-// World layout (duży świat)
+// Świat 3200x2400
 const WORLD_W = 3200;
 const WORLD_H = 2400;
 
-// Biome regions (rectangles)
-interface Region { x: number; y: number; w: number; h: number; biome: BiomeType; label?: string; }
-const REGIONS: Region[] = [
-  // Plaża na dole
-  { x: 0, y: 1900, w: WORLD_W, h: 500, biome: 'beach' },
-  { x: 0, y: 2200, w: WORLD_W, h: 200, biome: 'water' },
-  // Las w centrum-prawa
-  { x: 1200, y: 800, w: 1000, h: 1000, biome: 'forest', label: 'Bór Bezgłosu' },
-  // Bagna na prawo-dół
-  { x: 2000, y: 1500, w: 1200, h: 600, biome: 'swamp', label: 'Czerwone Bagna' },
-  // Góry na górze
-  { x: 600, y: 0, w: 1200, h: 500, biome: 'mountain', label: 'Szare Grzbiety' },
-  // Szczelina w górach (ciemny biom)
-  { x: 1300, y: 100, w: 400, h: 300, biome: 'dark', label: 'Szczelina' },
-  // Cmentarzysko w lesie
-  { x: 2300, y: 600, w: 400, h: 400, biome: 'dark', label: 'Stary Cmentarz' },
-  // Trakt - droga z południa na północ
-  { x: 700, y: 0, w: 100, h: WORLD_H, biome: 'road', label: 'Trakt Północny' },
+// Lokacje (osady)
+const OLD_FORT = { x: 500, y: 700, r: 180, label: 'Gród Straży' };
+const NEW_CAMP = { x: 2450, y: 1100, r: 180, label: 'Wolne Chaty' };
+const START_POINT = { x: 700, y: 2050 }; // bezpieczny start na plaży
+const BEACH_SURVIVOR = { x: 780, y: 2020 }; // Gniewosz - obok gracza, nie na nim
+
+// Safe zones (brak spawnu potworów): start, obie osady, droga przy startcie
+const SAFE_ZONES = [
+  { x: START_POINT.x, y: START_POINT.y, r: 350 },  // plaża startowa
+  { x: OLD_FORT.x, y: OLD_FORT.y, r: OLD_FORT.r + 80 },
+  { x: NEW_CAMP.x, y: NEW_CAMP.y, r: NEW_CAMP.r + 80 },
 ];
 
-// Camps/settlements - clusters of buildings
-const OLD_FORT = { x: 500, y: 600, label: 'Gród Straży' };
-const NEW_CAMP = { x: 1600, y: 1300, label: 'Wolne Chaty' };
+/**
+ * Sprawdzanie biomu - używa prostokątnych regionów.
+ * Kolejność: najbardziej szczegółowe pierwsze.
+ */
+function biomeAt(x: number, y: number): BiomeType {
+  // Woda - na samym dole (morze)
+  if (y >= 2280) return 'water';
+  // Plaża - pas wzdłuż wody
+  if (y >= 1950) return 'beach';
+  // Szczelina (ciemność) - środek gór
+  if (x >= 1400 && x < 1800 && y >= 80 && y < 380) return 'dark';
+  // Stary Cmentarz - we wschodnich górach
+  if (x >= 2500 && x < 2900 && y >= 500 && y < 900) return 'dark';
+  // Góry - pas na północy
+  if (y < 500) return 'mountain';
+  // Bagna - wschód, między plażą a lasem
+  if (x >= 2200 && y >= 1500) return 'swamp';
+  // Trakt Północny - droga od plaży (x~750) do gór
+  if (x >= 720 && x <= 800 && y < 1950) return 'road';
+  // Gród Straży
+  const dxo = x - OLD_FORT.x, dyo = y - OLD_FORT.y;
+  if (dxo*dxo + dyo*dyo < OLD_FORT.r*OLD_FORT.r) return 'fort';
+  // Wolne Chaty
+  const dxn = x - NEW_CAMP.x, dyn = y - NEW_CAMP.y;
+  if (dxn*dxn + dyn*dyn < NEW_CAMP.r*NEW_CAMP.r) return 'camp';
+  // Reszta - las (domyślny)
+  return 'forest';
+}
 
 export class GameScene extends Phaser.Scene {
   public player!: Player;
@@ -81,6 +99,9 @@ export class GameScene extends Phaser.Scene {
   private keys!: Record<string, Phaser.Input.Keyboard.Key>;
   private currentInteractable: any = null;
   private debugText!: Phaser.GameObjects.Text;
+  private minimapTexture!: Phaser.GameObjects.RenderTexture;
+  private minimap!: Phaser.GameObjects.Ellipse;
+  private biomeLabel!: Phaser.GameObjects.Text;
   private isPaused: boolean = false;
   private attackCooldown: number = 0;
   private attackRange: number = 50;
@@ -90,11 +111,15 @@ export class GameScene extends Phaser.Scene {
   private aimVisible: boolean = false;
   private currentSpellIndex: number = 0;
   private nightOverlay!: Phaser.GameObjects.Rectangle;
+  private waterOverlay!: Phaser.GameObjects.Rectangle;
   private uiSceneLaunched: boolean = false;
   private dialogFlags: Record<string, any> = {};
   private openedChestIds: Set<string> = new Set();
   private harvestedPlants: Set<string> = new Set();
   private stepTimer: number = 0;
+  private locationLabels: Array<{ x: number; y: number; text: string; color: string }> = [];
+
+  private obstacles: Phaser.Physics.Arcade.StaticGroup | null = null;
 
   constructor() { super({ key: 'GameScene' }); }
 
@@ -115,26 +140,30 @@ export class GameScene extends Phaser.Scene {
     this.isPaused = false;
     this.attackCooldown = 0;
     this.stepTimer = 0;
+    this.uiSceneLaunched = false;
   }
 
   create() {
-    // Duży świat
     this.generateWorld();
 
-    // Gracz startuje na plaży
-    this.player = new Player(this, 750, 2050);
+    // Gracz startuje bezpiecznie na plaży
+    this.player = new Player(this, START_POINT.x, START_POINT.y);
 
     this.cameras.main.startFollow(this.player, true, 0.08, 0.08);
     this.cameras.main.setZoom(1.5);
     this.cameras.main.setBackgroundColor('#0a0a0a');
-    this.cameras.main.setBounds(0, 0, WORLD_W, WORLD_H);
+    this.cameras.main.setBounds(-50, -50, WORLD_W + 100, WORLD_H + 100);
     this.physics.world.setBounds(0, 0, WORLD_W, WORLD_H);
+    this.physics.world.setBoundsCollision(true, true, true, false); // brak kolizji z dolną krawędzią (woda sama w sobie ogranicza)
 
     if (this.gameData.balance?.time) this.timeSystem.configureFromBalance(this.gameData.balance);
 
     this.projectileSystem = new ProjectileSystem(this);
     this.lockpickMinigame = new LockpickMinigame(this);
     this.crimeSystem = new CrimeSystem(this);
+
+    // Obstacles (drzewa, skały, palisady, mury)
+    this.obstacles = this.physics.add.staticGroup();
 
     this.cursors = this.input.keyboard!.createCursorKeys();
     this.keys = {
@@ -153,6 +182,15 @@ export class GameScene extends Phaser.Scene {
 
     this.spawnAllEntities();
 
+    // Kolizja gracza z przeszkodami
+    if (this.obstacles) {
+      this.physics.add.collider(this.player, this.obstacles);
+      this.physics.add.collider(this.npcs, this.obstacles);
+      this.physics.add.collider(this.monsters, this.obstacles);
+    }
+    this.physics.add.collider(this.npcs, this.npcs);
+    this.physics.add.collider(this.monsters, this.monsters);
+
     this.aimLine = this.add.line(0, 0, 0, 0, 0, 0, 0xff4444, 0.5);
     this.aimLine.setLineWidth(1.5);
     this.aimLine.setVisible(false);
@@ -162,6 +200,18 @@ export class GameScene extends Phaser.Scene {
       fontSize: '11px', color: '#ffffff',
       stroke: '#000000', strokeThickness: 3,
     }).setScrollFactor(0).setDepth(1000);
+
+    // Woda overlay (dla efektu wchodzenia do wody)
+    this.waterOverlay = this.add.rectangle(0, 0, 9999, 9999, 0x15283d, 0).setOrigin(0, 0).setDepth(600).setScrollFactor(1);
+
+    // Etykieta biomu (gdzie jesteś)
+    this.biomeLabel = this.add.text(this.cameras.main.width / 2, 80, '', {
+      fontSize: '18px', color: '#ddbb88', fontStyle: 'bold', stroke: '#000', strokeThickness: 4,
+      align: 'center'
+    }).setOrigin(0.5).setScrollFactor(0).setDepth(1001).setAlpha(0);
+
+    // Minimapa
+    this.createMinimap();
 
     if (!this.uiSceneLaunched) {
       this.scene.launch('UIScene', { gameScene: this });
@@ -173,6 +223,7 @@ export class GameScene extends Phaser.Scene {
     this.keys.F5.on('down', () => this.quickSave());
     this.keys.F9.on('down', () => this.quickLoad());
     this.keys.TAB.on('down', () => this.cycleCombatMode());
+    this.keys.M.on('down', () => this.toggleMinimap());
     this.keys.ONE.on('down', () => { this.player.currentCombatMode = 'melee'; this.aimLine.setVisible(false); this.aimVisible=false; this.updateUI(); });
     this.keys.TWO.on('down', () => { this.player.currentCombatMode = 'ranged'; this.aimVisible = true; this.aimLine.setVisible(true); this.updateUI(); });
     this.keys.THREE.on('down', () => { this.player.currentCombatMode = 'magic'; this.aimVisible = true; this.aimLine.setVisible(true); this.updateUI(); });
@@ -202,233 +253,429 @@ export class GameScene extends Phaser.Scene {
     this.input.once('pointerdown', () => audio.init().then(() => audio.startMusic()));
     this.input.keyboard!.on('keydown', () => audio.init().then(() => audio.startMusic()));
 
-    // Załaduj zapis jeśli wskazany
+    // Początkowy label lokacji
+    this.showBiomeLabel('PLAŻA - Wybrzeże');
+
     const initData: any = this.scene.settings.data || {};
     if (initData.loadSlot !== undefined) {
       this.time.delayedCall(50, () => this.quickLoad(initData.loadSlot));
     } else {
-      this.time.delayedCall(200, () => this.questSystem.startQuest('quest_main_arrival'));
+      this.time.delayedCall(500, () => this.questSystem.startQuest('quest_main_arrival'));
     }
   }
 
   // ============================================================
-  // GENERACJA ŚWIATA - duży, zróżnicowany
+  // MINIMAPA
   // ============================================================
-  private getBiomeAt(x: number, y: number): BiomeType {
-    // Sprawdź od najbardziej szczegółowego do ogólnego
-    for (const r of REGIONS) {
-      if (x >= r.x && x < r.x + r.w && y >= r.y && y < r.y + r.h) return r.biome;
+  private createMinimap() {
+    const mmSize = 180;
+    const mmX = this.cameras.main.width - mmSize - 12;
+    const mmY = this.cameras.main.height - mmSize - 12;
+
+    // Rysujemy statyczną minimapę raz na teksturze
+    const tex = this.add.renderTexture(mmX, mmY, mmSize, mmSize).setOrigin(0,0).setScrollFactor(0).setDepth(999);
+    // Tło
+    const mmScale = mmSize / Math.max(WORLD_W, WORLD_H);
+    const mmW = WORLD_W * mmScale;
+    const mmH = WORLD_H * mmScale;
+    const offX = (mmSize - mmW) / 2;
+    const offY = (mmSize - mmH) / 2;
+    tex.fill(0x0a0a0a, 1);
+
+    // Rysuj biom jako kolory
+    const step = 16;
+    const biomColor: Record<BiomeType, number> = {
+      forest: 0x1a3010, beach: 0x8a7040, swamp: 0x2e3a1e, mountain: 0x4a4a4a,
+      road: 0x4a3a28, dark: 0x0a0810, water: 0x15283d, fort: 0x6a4020,
+      camp: 0x503018, grass: 0x253c1a
+    };
+    for (let x = 0; x < WORLD_W; x += step) {
+      for (let y = 0; y < WORLD_H; y += step) {
+        const b = biomeAt(x + step/2, y + step/2);
+        tex.fill(biomColor[b] || 0x000000, 1, offX + x*mmScale, offY + y*mmScale, step*mmScale+1, step*mmScale+1);
+      }
     }
-    return 'forest'; // domyślnie las
+    // Ramka
+    const border = this.add.rectangle(mmX, mmY, mmSize, mmSize).setOrigin(0,0).setScrollFactor(0).setDepth(1000).setStrokeStyle(2,0x8a6020);
+    border.setFillStyle(0,0);
+    this.minimapTexture = tex;
+    (this as any)._mmOffX = offX; (this as any)._mmOffY = offY; (this as any)._mmScale = mmScale;
+    (this as any)._mmSize = mmSize; (this as any)._mmX = mmX; (this as any)._mmY = mmY;
+
+    // Znaczniki lokacji
+    const dots: Array<{x:number;y:number;color:number;r:number}> = [
+      { x: OLD_FORT.x, y: OLD_FORT.y, color: 0xffcc00, r: 4 },
+      { x: NEW_CAMP.x, y: NEW_CAMP.y, color: 0xff4020, r: 4 },
+      { x: START_POINT.x, y: START_POINT.y, color: 0x80ff80, r: 3 },
+    ];
+    for (const d of dots) {
+      tex.fill(d.color, 1, offX + d.x*mmScale - d.r, offY + d.y*mmScale - d.r, d.r*2, d.r*2);
+    }
+
+    this.minimap = this.add.ellipse(mmX + offX + START_POINT.x*mmScale, mmY + offY + START_POINT.y*mmScale, 5, 5, 0xffffff).setScrollFactor(0).setDepth(1001);
   }
 
-  private getTileForBiome(b: BiomeType): string {
-    switch (b) {
-      case 'beach': return 'tile_beach';
-      case 'swamp': return 'tile_swamp';
-      case 'mountain': return 'tile_mountain';
-      case 'road': return 'tile_road';
-      case 'dark': return 'tile_dark';
-      case 'water': return 'tile_water';
-      case 'fort': case 'camp': return 'tile_grass';
-      default: return 'tile_forest';
-    }
+  private toggleMinimap() {
+    this.minimapTexture.setVisible(!this.minimapTexture.visible);
+    this.minimap.setVisible(!this.minimap.visible);
   }
 
+  private updateMinimap() {
+    if (!this.minimap || !this.minimap.visible) return;
+    const scale = (this as any)._mmScale, offX = (this as any)._mmOffX, offY = (this as any)._mmOffY;
+    const mmX = (this as any)._mmX, mmY = (this as any)._mmY;
+    this.minimap.setPosition(mmX + offX + this.player.x*scale, mmY + offY + this.player.y*scale);
+  }
+
+  private lastBiome: string = '';
+  private updateBiomeLabel() {
+    const b = biomeAt(this.player.x, this.player.y);
+    if (b === this.lastBiome) return;
+    this.lastBiome = b;
+    const labels: Record<BiomeType, string> = {
+      beach: 'PLAŻA - Wybrzeże', forest: 'LAS - Bór Bezgłosu',
+      swamp: 'BAGNA - Czerwone Bagna', mountain: 'GÓRY - Szare Grzbiety',
+      road: 'TRAKT PÓŁNOCNY', dark: 'CIEMNOŚĆ - Szczelina',
+      water: 'MORZE', fort: 'GRÓD STRAŻY', camp: 'WOLNE CHATY',
+      grass: 'RÓWNINA'
+    };
+    this.showBiomeLabel(labels[b]);
+  }
+
+  private showBiomeLabel(text: string) {
+    this.biomeLabel.setText(text);
+    this.biomeLabel.setAlpha(0);
+    this.tweens.add({ targets: this.biomeLabel, alpha: 1, duration: 400, yoyo: false,
+      onComplete: () => this.tweens.add({ targets: this.biomeLabel, alpha: 0, duration: 600, delay: 2500 }) });
+  }
+
+  // ============================================================
+  // GENERACJA ŚWIATA
+  // ============================================================
   private generateWorld() {
-    // Podstawa - cała mapa trawa/las
-    const defaultTex = this.textures.exists('tile_forest') ? 'tile_forest' : '__DEFAULT';
-    const bg = this.add.tileSprite(0, 0, WORLD_W, WORLD_H, defaultTex).setOrigin(0,0);
+    // Warstwa bazowa: las jako domyślny
+    const def = this.textures.exists('tile_forest') ? 'tile_forest' : '__DEFAULT';
+    const bg = this.add.tileSprite(0, 0, WORLD_W, WORLD_H, def).setOrigin(0,0).setDepth(0);
 
-    // Nakładanie biomów - warstwami tile'ów
-    for (const r of REGIONS) {
-      const tex = this.getTileForBiome(r.biome);
-      if (!this.textures.exists(tex)) continue;
-      if (r.biome === 'road') {
-        // Droga - węższy pas
-        const road = this.add.tileSprite(r.x+10, r.y, 70, r.h, tex).setOrigin(0,0);
-        road.setDepth(1);
-      } else {
-        const layer = this.add.tileSprite(r.x, r.y, r.w, r.h, tex).setOrigin(0,0);
-        layer.setDepth(0.5);
-      }
-    }
+    // Rysujemy kafelki biomu warstwami po prostokątach (bez nakładania na forcie/campie)
+    // Najpierw woda na samym dole
+    this.paintBiomeRect(0, 2280, WORLD_W, WORLD_H-2280, 'tile_water');
+    // Plaża
+    this.paintBiomeRect(0, 1950, WORLD_W, 2280-1950, 'tile_beach');
+    // Góry na górze
+    this.paintBiomeRect(0, 0, WORLD_W, 500, 'tile_mountain');
+    // Bagna
+    this.paintBiomeRect(2200, 1500, WORLD_W-2200, 1950-1500, 'tile_swamp');
+    // Ciemność (Szczelina + Cmentarz)
+    this.paintBiomeRect(1400, 80, 400, 300, 'tile_dark');
+    this.paintBiomeRect(2500, 500, 400, 400, 'tile_dark');
+    // Droga (węższa)
+    this.paintBiomeRect(730, 0, 60, 1950, 'tile_road');
+    // Fort i camp - podłoga
+    this.paintBiomeCircle(OLD_FORT.x, OLD_FORT.y, OLD_FORT.r, 'tile_grass');
+    this.paintBiomeCircle(NEW_CAMP.x, NEW_CAMP.y, NEW_CAMP.r, 'tile_grass');
 
-    // Labels regionów
-    for (const r of REGIONS) {
-      if (r.label) {
-        this.add.text(r.x+r.w/2, r.y+30, r.label, { fontSize: '14px', color: '#666', fontStyle: 'italic', stroke: '#000', strokeThickness: 3 }).setOrigin(0.5).setDepth(2).setScrollFactor(1);
-      }
-    }
+    // Etykiety lokacji (stałe na świecie)
+    this.addLocationLabels();
 
-    // Old Fort - zabudowania drewniane/stone
-    this.buildFort(OLD_FORT.x, OLD_FORT.y);
-    // New Camp - namioty i szałasy
-    this.buildCamp(NEW_CAMP.x, NEW_CAMP.y);
+    // Budynki/obiekty
+    this.buildFort(OLD_FORT.x, OLD_FORT.y, OLD_FORT.label);
+    this.buildCamp(NEW_CAMP.x, NEW_CAMP.y, NEW_CAMP.label);
 
-    // Rozmieszczenie dekoracji wg biomów
+    // Dekoracje (drzewa, skały itd.)
     this.populateWorld();
 
     // Night overlay
     this.nightOverlay = this.add.rectangle(0,0,WORLD_W,WORLD_H,0x000033,0).setOrigin(0,0).setDepth(500);
   }
 
-  private buildFort(cx: number, cy: number) {
-    // Palisada dookoła
-    for (let i = -3; i <= 3; i++) {
-      this.add.image(cx+i*50, cy-140, 'wall_wood').setDepth(cy-140).setScale(1);
-      this.add.image(cx+i*50, cy+140, 'wall_wood').setDepth(cy+140).setScale(1);
-    }
-    for (let i = -2; i <= 2; i++) {
-      this.add.image(cx-150, cy+i*50, 'wall_wood').setDepth(cy+i*50).setScale(1);
-      this.add.image(cx+150, cy+i*50, 'wall_wood').setDepth(cy+i*50).setScale(1);
-    }
-    // Brama
-    this.add.image(cx, cy-140, 'wall_wood').setScale(1,0.6).setDepth(cy-140);
-
-    // Budynki wewnątrz
-    this.addBuilding(cx-80, cy-40, 90, 70, '#4a3828', '#6a3818', 'KWATERA KOMENDANTA');
-    this.addBuilding(cx+60, cy-60, 80, 60, '#3a3040', '#602010', 'ZBROJOWNIA');
-    this.addBuilding(cx-30, cy+60, 100, 60, '#483820', '#6a4018', 'KUŹNIA I KARCZMA');
-    this.add.image(cx, cy, 'campfire').setDepth(cy);
-
-    this.add.text(cx, cy-170, OLD_FORT.label, { fontSize: '18px', color: '#ffcc00', stroke:'#000', strokeThickness: 4, fontStyle: 'bold' }).setOrigin(0.5).setDepth(cy+50).setScrollFactor(1);
+  private paintBiomeRect(x:number, y:number, w:number, h:number, tex:string) {
+    if (!this.textures.exists(tex)) return;
+    this.add.tileSprite(x, y, w, h, tex).setOrigin(0,0).setDepth(0.3);
   }
 
-  private buildCamp(cx: number, cy: number) {
-    // Namioty wokół ogniska
-    for (let i=0; i<6; i++) {
-      const ang = i * Math.PI/3;
-      const tx = cx + Math.cos(ang)*100;
-      const ty = cy + Math.sin(ang)*80;
-      const flip = i % 2 === 0;
-      const img = this.add.image(tx, ty, 'tent').setDepth(ty).setScale(1.2);
-      if (flip) img.setFlipX(true);
-    }
-    // Szałas herszta
-    this.add.image(cx+150, cy-80, 'hut').setDepth(cy-80).setScale(1.3);
-    this.add.image(cx-140, cy+60, 'hut').setDepth(cy+60).setScale(1);
-    this.add.image(cx, cy, 'campfire').setDepth(cy);
-
-    this.add.text(cx, cy-120, NEW_CAMP.label, { fontSize: '18px', color: '#ff4020', stroke:'#000', strokeThickness: 4, fontStyle: 'bold' }).setOrigin(0.5).setDepth(cy+100).setScrollFactor(1);
+  private paintBiomeCircle(cx:number, cy:number, r:number, tex:string) {
+    if (!this.textures.exists(tex)) return;
+    // Proste wypełnienie kwadratem + maską koła - używamy Graphics jako maski
+    const size = r*2;
+    const g = this.make.graphics({x:cx-r, y:cy-r}, false);
+    g.fillStyle(0xffffff, 1);
+    g.fillCircle(r, r, r);
+    const mask = g.createGeometryMask();
+    const ts = this.add.tileSprite(cx-r, cy-r, size, size, tex).setOrigin(0,0).setDepth(0.4);
+    ts.setMask(mask);
   }
 
-  private addBuilding(x: number, y: number, w: number, h: number, color: string, roof: string, label: string) {
-    const r = this.add.rectangle(x, y, w, h, Phaser.Display.Color.HexStringToColor(color).color).setStrokeStyle(2, 0x1a0c04).setDepth(y);
-    const roofH = 20;
-    const tri = this.add.triangle(x, y-h/2-roofH/2+2, 0, roofH+5, w, roofH+5, w/2, -roofH, Phaser.Display.Color.HexStringToColor(roof).color).setDepth(y-h/2);
+  private addLocationLabels() {
+    this.locationLabels = [
+      { x: OLD_FORT.x, y: OLD_FORT.y - OLD_FORT.r - 30, text: OLD_FORT.label, color: '#ffcc00' },
+      { x: NEW_CAMP.x, y: NEW_CAMP.y - NEW_CAMP.r - 30, text: NEW_CAMP.label, color: '#ff4020' },
+      { x: 1600, y: 200, text: 'SZCZELINA', color: '#8040a0' },
+      { x: 2700, y: 700, text: 'STARY CMENTARZ', color: '#8040a0' },
+      { x: 760, y: 1000, text: 'TRAKT PÓŁNOCNY', color: '#aa8855' },
+      { x: 400, y: 250, text: 'SZARE GRZBIETY', color: '#888888' },
+      { x: 2700, y: 1700, text: 'CZERWONE BAGNA', color: '#6a7a3a' },
+      { x: 500, y: 2000, text: 'WYBRZEŻE', color: '#c0a060' },
+    ];
+    for (const lbl of this.locationLabels) {
+      const t = this.add.text(lbl.x, lbl.y, lbl.text, {
+        fontSize: '16px', color: lbl.color, fontStyle: 'bold', stroke: '#000', strokeThickness: 4
+      }).setOrigin(0.5).setDepth(3).setScrollFactor(1);
+    }
+  }
+
+  private addObstacle(x: number, y: number, w: number, h: number, sprite?: Phaser.GameObjects.Image) {
+    if (!this.obstacles) return;
+    // Statyczna skrzynka kolizyjna
+    const box = this.obstacles.create(x, y, '__DEFAULT') as Phaser.Physics.Arcade.Sprite;
+    if (box && box.body) {
+      box.setVisible(false);
+      box.body.setSize(w, h);
+      box.body.setOffset(-w/2, -h/2);
+      box.refreshBody();
+    }
+  }
+
+  private buildFort(cx: number, cy: number, label: string) {
+    // Palisada dookoła (koło) - większa
+    const radius = 180;
+    const posts = 28;
+    for (let i = 0; i < posts; i++) {
+      const ang = (i / posts) * Math.PI * 2;
+      const px = cx + Math.cos(ang) * radius;
+      const py = cy + Math.sin(ang) * radius;
+      // Brama na południu (od strony drogi/traktu)
+      if (ang > Math.PI*0.7 && ang < Math.PI*0.8) continue;
+      const img = this.add.image(px, py, 'wall_wood').setDepth(py).setScale(1.2);
+      this.addObstacle(px, py, 30, 40);
+    }
+    // Wieżyczki w narożnikach
+    for (let i = 0; i < 4; i++) {
+      const ang = Math.PI/4 + i*Math.PI/2;
+      const px = cx + Math.cos(ang) * radius;
+      const py = cy + Math.sin(ang) * radius;
+      this.add.image(px, py, 'wall_wood').setDepth(py-10).setScale(1.6);
+    }
+
+    // Budynki wewnątrz (większe, używamy hut i prostokątów)
+    this.addBuilding(cx-60, cy-40, 110, 80, '#4a3020', '#5a2010', 'KWATERA KOMENDANTA');
+    this.addBuilding(cx+70, cy-50, 90, 70, '#384050', '#402010', 'ZBROJOWNIA');
+    this.addBuilding(cx, cy+70, 120, 70, '#402818', '#604020', 'KUŹNIA I KARCZMA');
+    // Ognisko na środku
+    const fire = this.add.image(cx, cy, 'campfire').setDepth(cy);
+    this.addObstacle(cx, cy, 20, 20);
+
+    // Etykieta
+    this.add.text(cx, cy - radius - 60, label, { fontSize: '20px', color: '#ffcc00', stroke:'#000', strokeThickness: 5, fontStyle: 'bold' }).setOrigin(0.5).setDepth(cy+200).setScrollFactor(1);
+  }
+
+  private buildCamp(cx: number, cy: number, label: string) {
+    // Luźny krąg namiotów/szałasów wokół ogniska
+    const tentCount = 7;
+    const radius = 110;
+    for (let i=0; i<tentCount; i++) {
+      const ang = (i / tentCount) * Math.PI*2;
+      const tx = cx + Math.cos(ang)*radius;
+      const ty = cy + Math.sin(ang)*radius*0.8;
+      const useHut = i % 3 === 0;
+      const img = this.add.image(tx, ty, useHut ? 'hut' : 'tent').setDepth(ty).setScale(useHut?1.0:1.3);
+      if (useHut) img.setFlipX(i%2===0);
+      this.addObstacle(tx, ty+10, useHut?50:40, useHut?40:30);
+    }
+    // Palisada częściowa od strony lasu/gór (północ i wschód)
+    for (let i=0;i<8;i++) {
+      const ang = Math.PI*1.0 + (i/8)*Math.PI*0.8;
+      const px = cx + Math.cos(ang)*(radius+30);
+      const py = cy + Math.sin(ang)*(radius+30);
+      this.add.image(px, py, 'wall_wood').setDepth(py).setScale(1.1);
+      this.addObstacle(px, py, 30, 40);
+    }
+    const fire = this.add.image(cx, cy, 'campfire').setDepth(cy);
+    this.addObstacle(cx, cy, 20, 20);
+
+    this.add.text(cx, cy - radius - 80, label, { fontSize: '20px', color: '#ff4020', stroke:'#000', strokeThickness: 5, fontStyle: 'bold' }).setOrigin(0.5).setDepth(cy+200).setScrollFactor(1);
+  }
+
+  private addBuilding(x: number, y: number, w: number, h: number, bodyColor: string, roofColor: string, label: string) {
+    // Cień
+    this.add.ellipse(x+8, y+h/2+6, w, 10, 0x000000, 0.35).setDepth(y-h/2);
+    // Korpus
+    const body = this.add.rectangle(x, y, w, h, Phaser.Display.Color.HexStringToColor(bodyColor).color)
+      .setStrokeStyle(3, 0x1a0c04).setDepth(y);
+    // Dach trójkątny
+    const roofH = 28;
+    const tri = this.add.triangle(x, y-h/2-roofH/2+4, 0, roofH+6, w, roofH+6, w/2, -roofH-4,
+      Phaser.Display.Color.HexStringToColor(roofColor).color).setDepth(y-h/2-4);
     // Drzwi
-    this.add.rectangle(x, y+h/4-4, 14, 20, 0x1a0804).setDepth(y+1);
-    this.add.text(x, y-h/2-35, label, { fontSize: '9px', color: '#ccaa66', stroke:'#000', strokeThickness: 2 }).setOrigin(0.5).setDepth(y+h);
+    this.add.rectangle(x, y+h/4-4, 18, 26, 0x1a0804).setDepth(y+2);
+    // Okna
+    this.add.rectangle(x-w/4, y-h/4, 12, 14, 0xffaa20, 0.8).setDepth(y+1).setStrokeStyle(2,0x1a0804);
+    this.add.rectangle(x+w/4, y-h/4, 12, 14, 0xffaa20, 0.8).setDepth(y+1).setStrokeStyle(2,0x1a0804);
+    // Etykieta budynku
+    this.add.text(x, y-h/2-45, label, { fontSize: '9px', color: '#ccaa66', stroke:'#000', strokeThickness: 2, fontStyle:'bold' }).setOrigin(0.5).setDepth(y+h);
+    // Kolizja
+    this.addObstacle(x, y, w-6, h-6);
   }
 
   private populateWorld() {
-    const rng = new Phaser.Math.RandomDataGenerator(['gothic-world-2']);
+    const rng = new Phaser.Math.RandomDataGenerator(['krwawy-szlak-v3']);
 
     // Drzewa w lesie
-    this.scatterInRegion('forest', 800, (x,y) => {
-      const dead = rng.frac() < 0.1;
-      const key = dead ? 'tree_dead' : 'tree';
+    this.scatterInBiome('forest', 600, (x,y) => {
+      if (x > 720 && x < 800) return; // nie na drodze
+      const dead = rng.frac() < 0.08;
+      const pine = rng.frac() < 0.15;
+      let key = 'tree'; if (dead) key = 'tree_dead'; else if (pine) key = 'tree_pine';
       if (!this.textures.exists(key)) return;
       const s = 0.8 + rng.frac()*0.5;
       const t = this.add.image(x,y,key).setDepth(y).setScale(s);
+      this.addObstacle(x, y+10, 24*s, 24*s);
     });
-    // Drzewa na przejściu między lasem a górami
-    this.scatterInRect(1200, 300, 1000, 500, 200, (x,y) => {
-      if (this.textures.exists('tree_pine')) this.add.image(x,y,'tree_pine').setDepth(y).setScale(0.7 + rng.frac()*0.4);
+    // Drzewa na przejściu las-góry (iglaki)
+    this.scatterInRect(600, 400, 2000, 150, 150, (x,y) => {
+      const b = biomeAt(x,y);
+      if (b !== 'mountain' && b !== 'forest') return;
+      if (x > 720 && x < 800) return;
+      if (this.textures.exists('tree_pine')) {
+        const img = this.add.image(x,y,'tree_pine').setDepth(y).setScale(0.8 + rng.frac()*0.4);
+        this.addObstacle(x, y+10, 22, 22);
+      }
     });
     // Skały w górach
-    this.scatterInRegion('mountain', 300, (x,y) => {
-      const b = rng.frac() < 0.2;
-      if (b && this.textures.exists('boulder')) this.add.image(x,y,'boulder').setDepth(y).setScale(0.7+rng.frac()*0.5);
-      else if (this.textures.exists('rock')) this.add.image(x,y,'rock').setDepth(y).setScale(0.8+rng.frac()*0.6);
+    this.scatterInBiome('mountain', 200, (x,y) => {
+      // Nie na Szczelinie/Cmentarzu
+      const b = biomeAt(x,y);
+      if (b !== 'mountain') return;
+      const isBoulder = rng.frac() < 0.35;
+      const key = isBoulder ? 'boulder' : 'rock';
+      if (this.textures.exists(key)) {
+        const s = 0.7 + rng.frac()*0.6;
+        this.add.image(x,y,key).setDepth(y).setScale(s);
+        this.addObstacle(x, y, 30*s, 30*s);
+      }
     });
-    // Skały na bagnach (rzadziej)
-    this.scatterInRegion('swamp', 100, (x,y) => {
+    // Skały na bagnach
+    this.scatterInBiome('swamp', 60, (x,y) => {
       if (this.textures.exists('rock')) this.add.image(x,y,'rock').setDepth(y).setScale(0.6+rng.frac()*0.4);
     });
-    // Grzyby i krzewy w lesie
-    this.scatterInRegion('forest', 150, (x,y) => {
-      if (rng.frac() < 0.4 && this.textures.exists('bush')) this.add.image(x,y,'bush').setDepth(y).setScale(0.6+rng.frac()*0.4);
+    // Krzewy i grzyby w lesie
+    this.scatterInBiome('forest', 200, (x,y) => {
+      if (rng.frac() < 0.5 && this.textures.exists('bush')) this.add.image(x,y,'bush').setDepth(y).setScale(0.6+rng.frac()*0.4);
       if (rng.frac() < 0.3 && this.textures.exists('mushroom')) this.add.image(x,y,'mushroom').setDepth(y+1);
     });
     // Groby na cmentarzysku
-    this.scatterInRect(2300, 600, 400, 400, 25, (x,y) => {
+    this.scatterInRect(2500, 500, 400, 400, 30, (x,y) => {
+      if (biomeAt(x,y) !== 'dark') return;
       if (this.textures.exists('gravestone')) this.add.image(x,y,'gravestone').setDepth(y).setScale(0.8+rng.frac()*0.4);
     });
     // Czaszki w ciemnych biomach
-    this.scatterInRegion('dark', 30, (x,y) => {
+    this.scatterInBiome('dark', 40, (x,y) => {
       if (this.textures.exists('skull')) this.add.image(x,y,'skull').setDepth(y+1);
     });
     // Drogowskazy przy trakcie
-    for (let y = 400; y < 2000; y += 500) {
-      if (this.textures.exists('waypost')) this.add.image(750, y, 'waypost').setDepth(y);
+    if (this.textures.exists('waypost')) {
+      for (let y = 400; y < 1950; y += 400) {
+        this.add.image(790, y, 'waypost').setDepth(y);
+      }
     }
-    // Rozrzucone skrzynie i przedmioty w świecie
-    this.scatterWorldChestsAndItems();
+    // Wrak łodzi na plaży (dekoracja)
+    this.drawWreck(300, 2080);
+    this.drawWreck(1800, 2090);
+    this.drawWreck(2800, 2110);
+
+    // Skrzynie i przedmioty rozrzucone po świecie
+    this.scatterWorldChestsAndItems(rng);
   }
 
-  private scatterInRegion(biome: BiomeType, count: number, cb: (x:number,y:number)=>void) {
-    const rng = new Phaser.Math.RandomDataGenerator(['scatter', biome]);
+  private drawWreck(x:number, y:number) {
+    // Prosty "wrak łodzi" z desek
+    this.add.rectangle(x, y, 60, 18, 0x3a2008).setStrokeStyle(2,0x1a0c04).setDepth(y);
+    this.add.rectangle(x-10, y-8, 40, 6, 0x4a2808).setDepth(y+1);
+    this.add.rectangle(x+10, y+8, 30, 4, 0x2a1808).setDepth(y+1);
+  }
+
+  private scatterInBiome(biome: BiomeType, count: number, cb: (x:number,y:number)=>void) {
+    const seed = 'scatter-' + biome;
+    const rng = new Phaser.Math.RandomDataGenerator([seed]);
     let placed = 0, tries = 0;
-    while (placed < count && tries < count*10) {
+    while (placed < count && tries < count*20) {
       tries++;
       const x = rng.between(30, WORLD_W-30);
       const y = rng.between(30, WORLD_H-30);
-      if (this.getBiomeAt(x,y) === biome) { cb(x,y); placed++; }
+      const b = biomeAt(x,y);
+      if (b === biome) { cb(x,y); placed++; }
     }
   }
 
   private scatterInRect(x:number,y:number,w:number,h:number,count:number,cb:(xx:number,yy:number)=>void) {
-    const seed = 'rect' + x + ',' + y + ',' + w + ',' + h;
+    const seed = 'rect-' + x + ',' + y + ',' + w + ',' + h;
     const rng = new Phaser.Math.RandomDataGenerator([seed]);
     for (let i=0;i<count;i++) cb(rng.between(x,x+w), rng.between(y,y+h));
   }
 
-  private scatterWorldChestsAndItems() {
-    // Skrzynie: w forcie, w obozie, w lesie, na bagnach, w ciemnych strefach
-    const defs: Array<{x:number;y:number;diff:number;loot:string[];owner?:string}> = [
-      { x: OLD_FORT.x-80, y: OLD_FORT.y-40, diff: 2, loot: ['sword_iron_longsword','misc_gold','misc_arrow'], owner: 'old_order' },
-      { x: OLD_FORT.x+60, y: OLD_FORT.y-60, diff: 2, loot: ['armor_guard_chainmail','misc_lockpick_iron','potion_healing_small'], owner: 'old_order' },
-      { x: NEW_CAMP.x+150, y: NEW_CAMP.y-80, diff: 2, loot: ['bow_shortbow','misc_lockpick_iron','potion_healing_small'], owner: 'new_order' },
-      { x: 1000, y: 1200, diff: 1, loot: ['misc_gold','potion_healing_small'], owner: undefined },
-      { x: 2200, y: 1700, diff: 3, loot: ['sword_obsidian_cleaver','misc_gold','potion_mana_small'] },
-      { x: 1400, y: 200, diff: 3, loot: ['misc_trophy_mutant_eye','potion_healing_large','misc_gold'] }, // w Szczelinie
-      { x: 2400, y: 800, diff: 2, loot: ['sword_bone_carver','misc_skins_wolf','misc_gold'] }, // cmentarzysko
-      { x: 750, y: 2100, diff: 1, loot: ['misc_gold','misc_arrow','potion_healing_small'] }, // plaża
-      { x: 2500, y: 1800, diff: 1, loot: ['plant_frost_grass','plant_moonweed','potion_stamina'] }, // bagna
+  private isInSafeZone(x:number,y:number): boolean {
+    for (const s of SAFE_ZONES) {
+      const dx = x-s.x, dy = y-s.y;
+      if (dx*dx + dy*dy < s.r*s.r) return true;
+    }
+    return false;
+  }
+
+  private scatterWorldChestsAndItems(rng: Phaser.Math.RandomDataGenerator) {
+    type CDef = {x:number;y:number;diff:number;loot:string[];owner?:string};
+    const defs: CDef[] = [
+      { x: OLD_FORT.x-60, y: OLD_FORT.y-40, diff: 2, loot: ['sword_iron_longsword','misc_gold','misc_arrow'], owner: 'old_order' },
+      { x: OLD_FORT.x+70, y: OLD_FORT.y-50, diff: 2, loot: ['armor_guard_chainmail','misc_lockpick_iron','potion_healing_small'], owner: 'old_order' },
+      { x: NEW_CAMP.x+70, y: NEW_CAMP.y-60, diff: 2, loot: ['bow_shortbow','misc_lockpick_iron','potion_healing_small'], owner: 'new_order' },
+      { x: 1200, y: 1000, diff: 1, loot: ['misc_gold','potion_healing_small'] },
+      { x: 2400, y: 1700, diff: 3, loot: ['sword_obsidian_cleaver','misc_gold','potion_mana_small'] },
+      { x: 1600, y: 220, diff: 3, loot: ['misc_trophy_mutant_eye','potion_healing_large','misc_gold'] },
+      { x: 2700, y: 700, diff: 2, loot: ['sword_bone_carver','misc_skins_wolf','misc_gold'] },
+      { x: 400, y: 2100, diff: 1, loot: ['misc_gold','misc_arrow','potion_healing_small'] },
+      { x: 2700, y: 1800, diff: 1, loot: ['plant_frost_grass','plant_moonweed','potion_stamina'] },
     ];
     for (const def of defs) {
-      const cont = this.add.container(def.x, def.y);
-      const box = this.add.rectangle(0,0,28,22,0x4a2808).setStrokeStyle(2,0x201004);
-      const lock = this.add.rectangle(0,2,4,6,0xccaa40);
-      cont.add([box,lock]);
-      cont.setDepth(def.y);
-      this.chests.push({ id: `chest_${def.x}_${def.y}`, x:def.x, y:def.y, difficulty:def.diff, opened:false, loot:def.loot, owner_faction:def.owner, container:cont });
+      // Używamy tekstury skrzyni jeśli jest
+      let cont: Phaser.GameObjects.Container | Phaser.GameObjects.Image;
+      if (this.textures.exists('chest_closed')) {
+        const img = this.add.image(def.x, def.y, 'chest_closed').setDepth(def.y);
+        cont = img;
+        this.addObstacle(def.x, def.y+5, 22, 18);
+      } else {
+        const c = this.add.container(def.x, def.y);
+        const box = this.add.rectangle(0,0,28,22,0x4a2808).setStrokeStyle(2,0x201004);
+        const lock = this.add.rectangle(0,2,4,6,0xccaa40);
+        c.add([box,lock]); c.setDepth(def.y);
+        cont = c;
+      }
+      this.chests.push({ id: `chest_${def.x}_${def.y}`, x:def.x, y:def.y, difficulty:def.diff, opened:false, loot:def.loot, owner_faction:def.owner, container: cont as any });
     }
 
-    // Rośliny i luźne przedmioty rozsiane w odpowiednich biomach
-    const rng = new Phaser.Math.RandomDataGenerator(['items-world']);
+    // Rośliny
     const plants = this.gameData.items_plants || [];
     let plantIdx = 0;
     for (let i=0;i<80;i++) {
       const x = rng.between(100, WORLD_W-100);
       const y = rng.between(100, WORLD_H-100);
-      const b = this.getBiomeAt(x,y);
+      const b = biomeAt(x,y);
       if (b === 'water') continue;
+      if (this.isInSafeZone(x,y) && rng.frac() < 0.5) continue;
       const pickPlant = plants[plantIdx % plants.length];
       plantIdx++;
+      if (!this.textures.exists('herb')) continue;
       const sprite = this.add.image(x,y,'herb').setDepth(y);
       if (b === 'dark') sprite.setTint(0x6655aa);
       else if (b === 'swamp') sprite.setTint(0x6a7a3a);
       else if (b === 'mountain') sprite.setTint(0x888888);
+      else if (b === 'beach') sprite.setTint(0xc0a060);
       this.worldItems.push({ id: `plant_${x}_${y}`, x, y, itemId: pickPlant.id, collected:false, container: sprite });
     }
-    // Luźne strzały i złoto
-    for (let i=0;i<30;i++) {
+    // Luźne itemy
+    for (let i=0;i<25;i++) {
       const x = rng.between(100, WORLD_W-100);
       const y = rng.between(100, WORLD_H-100);
-      if (this.getBiomeAt(x,y) === 'water') continue;
+      if (biomeAt(x,y) === 'water') continue;
+      if (this.isInSafeZone(x,y) && rng.frac() < 0.5) continue;
       const dot = this.add.rectangle(x,y,6,6,rng.frac()<0.5?0xccaa40:0xbbbb90).setDepth(y+1);
       const id = rng.frac()<0.5 ? 'misc_gold' : 'misc_arrow';
       this.worldItems.push({ id: `loose_${x}_${y}`, x, y, itemId: id, collected:false, container: dot });
@@ -445,93 +692,115 @@ export class GameScene extends Phaser.Scene {
 
   private spawnNPCsByFaction() {
     if (!this.gameData.npcs) return;
-    // Podziel NPC wg frakcji
     const oldNpcs = this.gameData.npcs.filter(n => n.faction === 'old_order');
     const newNpcs = this.gameData.npcs.filter(n => n.faction === 'new_order');
     const neutralNpcs = this.gameData.npcs.filter(n => n.faction === 'neutral');
     const bandits = this.gameData.npcs.filter(n => n.faction === 'bandit');
 
-    // Rozmieszczenie w obozie Straży
-    this.placeNpcsInArea(oldNpcs, OLD_FORT.x-120, OLD_FORT.y-120, 240, 240, true);
-    // Rozmieszczenie w Wolnych Chatach
-    this.placeNpcsInArea(newNpcs, NEW_CAMP.x-140, NEW_CAMP.y-120, 280, 240, true);
-    // Neutralni rozrzuceni po świecie (przy trakcie, na plaży, w lesie)
+    // Gród Straży - większy obszar, rozstawienie bez nakładania
+    this.placeNpcsInArea(oldNpcs, OLD_FORT.x, OLD_FORT.y, OLD_FORT.r*1.6, OLD_FORT.r*1.6, true, 30);
+    // Wolne Chaty
+    this.placeNpcsInArea(newNpcs, NEW_CAMP.x, NEW_CAMP.y, NEW_CAMP.r*1.6, NEW_CAMP.r*1.6, true, 30);
+
+    // Neutralni: rozrzuceni w klastrach
     this.placeNpcsScattered(neutralNpcs, [
-      { x: 750, y: 2050, r: 150 }, // plaża/rozbitek
-      { x: 750, y: 1300, r: 200 }, // przy trakcie
-      { x: 750, y: 1700, r: 100 },
-      { x: 1100, y: 1600, r: 200 },
-      { x: 2000, y: 1100, r: 250 },
-      { x: 2500, y: 1900, r: 200 },
-      { x: 2500, y: 500, r: 150 },
+      { x: BEACH_SURVIVOR.x, y: BEACH_SURVIVOR.y, r: 20 },   // Gniewosz (stała pozycja jest w kodzie)
+      { x: 750, y: 1200, r: 180 },    // przy trakcie
+      { x: 750, y: 1600, r: 120 },
+      { x: 1100, y: 1400, r: 180 },
+      { x: 1800, y: 1000, r: 220 },
+      { x: 2800, y: 1700, r: 200 },   // bagna
+      { x: 2700, y: 500, r: 180 },    // góry (Cmentarz)
+      { x: 300, y: 2050, r: 150 },    // plaża (rybak itp.)
     ]);
-    // Bandyci w lesie i na bagnach
+    // Bandyci w lesie i na bagnach - Z DALA od startu
     this.placeNpcsScattered(bandits, [
-      { x: 1200, y: 1000, r: 300 },
-      { x: 2100, y: 1700, r: 300 },
-      { x: 1800, y: 500, r: 200 },
+      { x: 1300, y: 900, r: 250 },    // głęboko w lesie
+      { x: 2300, y: 1500, r: 250 },   // wejście na bagna
+      { x: 1800, y: 400, r: 180 },    // w górach
     ]);
   }
 
-  private placeNpcsInArea(list: any[], cx:number, cy:number, w:number, h:number, cluster:boolean) {
-    const seed = 'npc-area' + cx + ',' + cy;
+  private placeNpcsInArea(list: any[], cx:number, cy:number, w:number, h:number, cluster:boolean, spacing:number) {
+    const seed = 'npc-area-' + cx + ',' + cy;
     const rng = new Phaser.Math.RandomDataGenerator([seed]);
     let i = 0;
+    const placed: Array<{x:number;y:number}> = [];
     for (const data of list) {
-      let x, y;
-      if (cluster) {
-        // Rozsyp wewnątrz obszaru w siatce + szum
-        const col = i % 4; const row = Math.floor(i/4);
-        x = cx + col * (w/4) + rng.between(-20,20);
-        y = cy + row * (h/4) + rng.between(-20,20);
-      } else {
-        x = cx + rng.between(-w/2,w/2); y = cy + rng.between(-h/2,h/2);
+      let x=0, y=0, ok = false;
+      for (let attempt=0; attempt<30; attempt++) {
+        if (cluster) {
+          const col = i % 4; const row = Math.floor(i/4);
+          x = cx - w/2 + col * (w/4) + rng.between(-15,15);
+          y = cy - h/2 + row * (h/4) + rng.between(-15,15);
+        } else {
+          x = cx + rng.between(-w/2,w/2); y = cy + rng.between(-h/2,h/2);
+        }
+        // Sprawdź czy miejsce nie jest zajęte
+        let free = true;
+        for (const p of placed) {
+          if (Phaser.Math.Distance.Between(x,y,p.x,p.y) < spacing) { free = false; break; }
+        }
+        if (free) { ok = true; break; }
       }
+      placed.push({x,y});
       i++;
       this.npcs.push(new NPC(this, x, y, data));
     }
   }
 
   private placeNpcsScattered(list: any[], areas: Array<{x:number;y:number;r:number}>) {
-    const rng = new Phaser.Math.RandomDataGenerator(['npc-scatter']);
+    const rng = new Phaser.Math.RandomDataGenerator(['npc-scatter-v3']);
     let idx = 0;
     for (const data of list) {
-      // Rozbitek - plaża, ustalona pozycja
+      // Gniewosz - plaża, ściśle określona pozycja obok gracza
       if (data.id === 'npc_beach_survivor') {
-        this.npcs.push(new NPC(this, 750, 2050, data));
+        this.npcs.push(new NPC(this, BEACH_SURVIVOR.x, BEACH_SURVIVOR.y, data));
         idx++; continue;
       }
       const area = areas[idx % areas.length];
-      const ang = rng.frac()*Math.PI*2;
-      const dist = rng.frac()*area.r;
-      const x = area.x + Math.cos(ang)*dist;
-      const y = area.y + Math.sin(ang)*dist;
-      this.npcs.push(new NPC(this, Phaser.Math.Clamp(x,60,WORLD_W-60), Phaser.Math.Clamp(y,60,WORLD_H-60), data));
+      let x=0,y=0;
+      for (let attempt=0; attempt<10; attempt++) {
+        const ang = rng.frac()*Math.PI*2;
+        const dist = Math.sqrt(rng.frac())*area.r;
+        x = Phaser.Math.Clamp(area.x + Math.cos(ang)*dist, 60, WORLD_W-60);
+        y = Phaser.Math.Clamp(area.y + Math.sin(ang)*dist, 60, WORLD_H-60);
+        const b = biomeAt(x,y);
+        if (b !== 'water') break;
+      }
+      this.npcs.push(new NPC(this, x, y, data));
       idx++;
     }
   }
 
   private spawnMonstersByBiome() {
     if (!this.gameData.monsters) return;
-    const rng = new Phaser.Math.RandomDataGenerator(['monsters']);
-    // Zasady spawnu biom -> typ potwora
+    const rng = new Phaser.Math.RandomDataGenerator(['monsters-v3']);
+    // Biome -> potwory (UWAGA: plaża NIE ma wilków - to startowa lokacja)
     const biomeMonster: Record<BiomeType, string[]> = {
       forest: ['monster_grey_wolf', 'monster_forest_boar'],
       swamp: ['monster_marsh_crawler'],
       mountain: ['monster_sand_wyrm', 'monster_forest_boar'],
       dark: ['monster_mutant', 'monster_shade'],
-      beach: ['monster_grey_wolf'],
-      road: ['monster_grey_wolf'],
-      water: [],
-      fort: [], camp: []
+      beach: [],          // PLAŻA BEZPIECZNA
+      road: [],           // TRAKT BEZPIECZNY (handlowy)
+      water: [], fort: [], camp: [], grass: []
     };
-    // Punkty spawnu
+    // Nocą pojawiają się cienie w lesie i droga staje się niebezpieczna
+    // (dodamy w prosty sposób: spawn 60 pkt)
     const spawnPoints: Array<{x:number;y:number;biome:BiomeType}> = [];
-    for (let i=0;i<80;i++) {
-      const x = rng.between(100, WORLD_W-100);
-      const y = rng.between(100, WORLD_H-200);
-      const b = this.getBiomeAt(x,y);
-      if (b === 'fort' || b === 'camp' || b === 'water') continue;
+    let tries = 0;
+    while (spawnPoints.length < 60 && tries < 2000) {
+      tries++;
+      const x = rng.between(120, WORLD_W-120);
+      const y = rng.between(120, WORLD_H-200);
+      const b = biomeAt(x,y);
+      // Bez potworów w bezpiecznych strefach i w wodzie
+      if (this.isInSafeZone(x,y)) continue;
+      if (b === 'water' || b === 'fort' || b === 'camp') continue;
+      // Oddal od startu
+      const ds = Phaser.Math.Distance.Between(x,y,START_POINT.x,START_POINT.y);
+      if (ds < 500) continue;
       spawnPoints.push({x,y,biome:b});
     }
     for (const sp of spawnPoints) {
@@ -540,17 +809,20 @@ export class GameScene extends Phaser.Scene {
       const mid = options[Math.floor(rng.frac()*options.length)];
       const data = this.gameData.monsters.find(m => m.id === mid);
       if (!data) continue;
-      const count = (data.behavior||[]).includes('pack') ? rng.between(2,3) : 1;
+      const pack = (data.behavior||[]).includes('pack');
+      const count = pack ? rng.between(2,3) : 1;
       for (let j=0;j<count;j++) {
-        const jx = sp.x + rng.between(-60,60);
-        const jy = sp.y + rng.between(-60,60);
+        const jx = Phaser.Math.Clamp(sp.x + rng.between(-50,50), 60, WORLD_W-60);
+        const jy = Phaser.Math.Clamp(sp.y + rng.between(-50,50), 60, WORLD_H-100);
+        if (this.isInSafeZone(jx,jy)) continue;
+        if (biomeAt(jx,jy) === 'water') continue;
         this.monsters.push(new Monster(this, jx, jy, data));
       }
     }
   }
 
   // ============================================================
-  // UPDATE I PĘTLA GRY
+  // UPDATE
   // ============================================================
   update(_time: number, delta: number) {
     if (this.isPaused || this.gameOver) return;
@@ -558,7 +830,19 @@ export class GameScene extends Phaser.Scene {
 
     this.timeSystem.update(d);
     const light = this.timeSystem.getLightFactor();
-    this.nightOverlay.setFillStyle(0x000033, Phaser.Math.Linear(0.6, 0, light));
+    this.nightOverlay.setFillStyle(0x000033, Phaser.Math.Linear(0.55, 0, light));
+
+    // Sprawdź czy gracz w wodzie (obrażenia + slow)
+    const b = biomeAt(this.player.x, this.player.y);
+    if (b === 'water') {
+      if (!this.player.body || (this.player.body as Phaser.Physics.Arcade.Body).touching.none === false) {
+        // Spowolnienie
+        this.player.speed = 40;
+        this.waterOverlay.setFillStyle(0x15283d, 0.5);
+      }
+    } else {
+      this.waterOverlay.setFillStyle(0x15283d, 0);
+    }
 
     // Ruch
     let vx=0, vy=0;
@@ -567,14 +851,15 @@ export class GameScene extends Phaser.Scene {
     if (this.keys.W.isDown || this.cursors.up.isDown) vy = -1;
     else if (this.keys.S.isDown || this.cursors.down.isDown) vy = 1;
     if (vx!==0 && vy!==0) { vx*=0.707; vy*=0.707; }
+    const wantSprint = this.keys.SHIFT.isDown && b !== 'water';
+    const baseSpeed = wantSprint ? 180 : 120;
+    this.player.speed = b === 'water' ? 40 : baseSpeed;
+
     if (vx!==0 || vy!==0) {
       this.player.move(vx,vy);
-      // Kroki
       this.stepTimer += d;
-      if (this.stepTimer > 350 && !this.keys.SHIFT.isDown) { this.stepTimer = 0; try { audio.sfxStep(); } catch{} }
-      else if (this.stepTimer > 230 && this.keys.SHIFT.isDown) { this.stepTimer = 0; try { audio.sfxStep(); } catch{} }
+      if (this.stepTimer > (wantSprint?230:350)) { this.stepTimer = 0; try { audio.sfxStep(); } catch{} }
     } else this.player.stopMoving();
-    this.player.speed = this.keys.SHIFT.isDown ? 180 : 120;
 
     if (this.aimVisible && (this.player.currentCombatMode==='ranged'||this.player.currentCombatMode==='magic')) {
       const angle = Phaser.Math.Angle.Between(this.player.x,this.player.y,this.mouseX,this.mouseY);
@@ -654,9 +939,12 @@ export class GameScene extends Phaser.Scene {
       `HP:${Math.floor(this.player.hp)}/${this.player.maxHp} MP:${Math.floor(this.player.mana)}/${this.player.maxMana} | `+
       `XP:${this.player.xp}/${this.player.xpToNext} | Zł:${this.player.gold} | Pkt:${this.player.skillPoints}\n`+
       `${this.timeSystem.getFormattedTime()} Dzień ${this.timeSystem.getGameDay()} | NPC:${this.npcs.filter(n=>n.isAlive).length} Pot:${this.monsters.filter(m=>m.isAlive).length} | `+
-      `${this.getBiomeAt(this.player.x,this.player.y)}\n`+
-      `[1]Miecz [2]Łuk [3]Magia | E-interakcja | CTRL+E kradzież | Najbliższy: ${this.getInteractableLabel()}`
+      `${biomeAt(this.player.x,this.player.y)}\n`+
+      `[1]Miecz [2]Łuk [3]Magia | E-interakcja | M-mapa | CTRL+E kradzież | Najbliższy: ${this.getInteractableLabel()}`
     );
+
+    this.updateMinimap();
+    this.updateBiomeLabel();
 
     if (this.attackCooldown > 0) this.attackCooldown -= d;
   }
@@ -745,7 +1033,11 @@ export class GameScene extends Phaser.Scene {
     const onComplete = (success:boolean) => {
       if (success) {
         chest.opened=true; this.openedChestIds.add(chest.id);
-        if (chest.container) chest.container.setAlpha(0.5);
+        if (chest.container) {
+          const c: any = chest.container;
+          if (c.setTexture) c.setTexture('chest_open');
+          else c.setAlpha?.(0.5);
+        }
         for (const id of chest.loot) this.player.addToInventory(id);
         audio.sfxChestOpen(); audio.sfxLockpickSuccess(); audio.sfxGold();
         window.dispatchEvent(new CustomEvent('game:message',{detail:`Skrzynia otwarta! ${chest.loot.length} przedmiotów.`}));
@@ -760,8 +1052,7 @@ export class GameScene extends Phaser.Scene {
     };
     if (chest.difficulty === 1 && level === 0) { onComplete(true); return; }
     if (this.player.getItemCount('misc_lockpick_iron')+this.player.getItemCount('misc_lockpick_steel')+this.player.getItemCount('misc_lockpick_master')===0) {
-      window.dispatchEvent(new CustomEvent('game:message',{detail:'Potrzebujesz wytrychu.'})); audio.sfxError();
-      return;
+      window.dispatchEvent(new CustomEvent('game:message',{detail:'Potrzebujesz wytrychu.'})); audio.sfxError(); return;
     }
     audio.sfxLockpick();
     this.lockpickMinigame.start(chest.difficulty, level, onComplete);
@@ -831,7 +1122,7 @@ export class GameScene extends Phaser.Scene {
       else { cd=weapon.speed||500; wDmg=weapon.damage||8; range=weapon.range||this.attackRange; scaling=weapon.strength_scaling??0.5; }
     }
     this.attackCooldown = cd;
-    this.tweens.add({targets:this.player,scaleX:1.3,scaleY:0.8,duration:80,yoyo:true});
+    this.tweens.add({targets:this.player,scaleX:1.2,scaleY:0.85,duration:80,yoyo:true});
     let target: Monster|NPC|null = null; let td=range;
     for (const m of this.monsters) {
       if (!m.isAlive) continue;
