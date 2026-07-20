@@ -58,9 +58,10 @@ export class NPC extends Phaser.GameObjects.Container {
       this.sprite = rect;
     }
     this.add(this.sprite);
+    this.setScale(1.3);
 
-    this.label = scene.add.text(0, -28, data.name, {
-      fontSize: '9px', color: '#ffffff', stroke: '#000000', strokeThickness: 2
+    this.label = scene.add.text(0, -34, data.name, {
+      fontSize: '10px', color: '#ffffff', stroke: '#000000', strokeThickness: 3
     }).setOrigin(0.5);
     this.add(this.label);
 
@@ -68,8 +69,8 @@ export class NPC extends Phaser.GameObjects.Container {
     scene.physics.add.existing(this);
 
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setSize(18, 26);
-    body.setOffset(-9, -13);
+    body.setSize(18, 22);
+    body.setOffset(-9, -14);
     body.setCollideWorldBounds(true);
 
     this.setSize(32, 32);

@@ -69,8 +69,8 @@ export class Player extends Phaser.GameObjects.Container {
     scene.physics.add.existing(this);
 
     const body = this.body as Phaser.Physics.Arcade.Body;
-    body.setSize(20, 28);
-    body.setOffset(-10, -14);
+    body.setSize(18, 26);
+    body.setOffset(-9, -18);
     body.setCollideWorldBounds(true);
 
     // Initialize starting inventory (BUG-004, BUG-023)
